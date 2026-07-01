@@ -4,414 +4,158 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <meta name="description"
-      content="FOUDI Mohammed Islam — Systems programmer, mobile developer, and freelance software engineer. Explore projects, skills, and get in touch.">
-   <title>FOUDI Mohammed Islam — Software Engineer</title>
+   <title>Mohammed Islam Foudi — Developer</title>
+   <link rel="icon" type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23050505'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Oswald,sans-serif' font-weight='700' font-size='28' fill='%23E53E3E'%3EM%3C/text%3E%3Ctext x='72%25' y='66%25' dominant-baseline='middle' text-anchor='middle' font-family='Oswald,sans-serif' font-weight='400' font-size='16' fill='rgba(255,255,255,0.5)'%3EF%3C/text%3E%3C/svg%3E">
+   <script src="https://cdn.tailwindcss.com"></script>
+   <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   <script>
+      tailwind.config = {
+         theme: {
+            extend: {
+               fontFamily: {
+                  sans: ['Inter', 'sans-serif'],
+                  display: ['Oswald', 'sans-serif'],
+               }
+            }
+         }
+      }
+   </script>
    <style>
-      /* ===== RESET & BASE ===== */
-      *,
-      *::before,
-      *::after {
+      * {
          margin: 0;
          padding: 0;
          box-sizing: border-box;
       }
 
-      :root {
-         --bg-primary: #09090b;
-         --bg-secondary: #111113;
-         --bg-card: #16161a;
-         --bg-card-hover: #1c1c21;
-         --border: #27272a;
-         --border-hover: #3f3f46;
-         --text-primary: #fafafa;
-         --text-secondary: #a1a1aa;
-         --text-tertiary: #71717a;
-         --accent: #a78bfa;
-         --accent-dim: rgba(167, 139, 250, 0.12);
-         --accent-glow: rgba(167, 139, 250, 0.06);
-         --gradient-start: #a78bfa;
-         --gradient-end: #818cf8;
-         --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-         --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', monospace;
-         --max-width: 1100px;
-         --nav-height: 64px;
-         --radius: 12px;
-         --radius-sm: 8px;
-      }
-
       html {
          scroll-behavior: smooth;
-         -webkit-font-smoothing: antialiased;
-         -moz-osx-font-smoothing: grayscale;
       }
 
       body {
-         font-family: var(--font-sans);
-         background: var(--bg-primary);
-         color: var(--text-primary);
-         line-height: 1.7;
-         overflow-x: hidden;
+         font-family: 'Inter', sans-serif;
+         background: #050505;
+         color: #fff;
       }
 
-      a {
-         color: inherit;
-         text-decoration: none;
-      }
-
-      /* ===== SCROLLBAR ===== */
       ::-webkit-scrollbar {
          width: 6px;
       }
 
       ::-webkit-scrollbar-track {
-         background: var(--bg-primary);
+         background: #0A0A0A;
       }
 
       ::-webkit-scrollbar-thumb {
-         background: var(--border);
+         background: #333;
          border-radius: 3px;
       }
 
-      /* ===== NAVBAR ===== */
-      .navbar {
-         position: fixed;
-         top: 0;
-         left: 0;
-         right: 0;
-         height: var(--nav-height);
-         background: rgba(9, 9, 11, 0.8);
-         backdrop-filter: blur(16px);
-         -webkit-backdrop-filter: blur(16px);
-         border-bottom: 1px solid var(--border);
-         z-index: 1000;
-         display: flex;
-         align-items: center;
-         justify-content: center;
+      ::-webkit-scrollbar-thumb:hover {
+         background: #9D1A10;
       }
 
-      .navbar-inner {
-         width: 100%;
-         max-width: var(--max-width);
-         padding: 0 24px;
-         display: flex;
-         align-items: center;
-         justify-content: space-between;
+      @keyframes fadeUp {
+         from {
+            opacity: 0;
+            transform: translateY(30px);
+         }
+
+         to {
+            opacity: 1;
+            transform: translateY(0);
+         }
       }
 
-      .nav-logo {
-         font-size: 1.05rem;
-         font-weight: 600;
-         letter-spacing: -0.02em;
-         color: var(--text-primary);
+      @keyframes fadeIn {
+         from {
+            opacity: 0;
+         }
+
+         to {
+            opacity: 1;
+         }
       }
 
-      .nav-logo span {
-         color: var(--accent);
-      }
-
-      .nav-links {
-         display: flex;
-         gap: 32px;
-         list-style: none;
-      }
-
-      .nav-links a {
-         font-size: 0.875rem;
-         font-weight: 450;
-         color: var(--text-secondary);
-         transition: color 0.2s;
-         letter-spacing: -0.01em;
-      }
-
-      .nav-links a:hover {
-         color: var(--text-primary);
-      }
-
-      .nav-toggle {
-         display: none;
-         flex-direction: column;
-         gap: 5px;
-         cursor: pointer;
-         background: none;
-         border: none;
-         padding: 4px;
-      }
-
-      .nav-toggle span {
-         display: block;
-         width: 20px;
-         height: 1.5px;
-         background: var(--text-secondary);
-         transition: all 0.3s;
-      }
-
-      /* ===== SECTIONS ===== */
-      section {
-         padding: 100px 24px;
-      }
-
-      .container {
-         max-width: var(--max-width);
-         margin: 0 auto;
-      }
-
-      .section-label {
-         font-size: 0.75rem;
-         font-weight: 600;
-         text-transform: uppercase;
-         letter-spacing: 0.1em;
-         color: var(--accent);
-         margin-bottom: 12px;
-      }
-
-      .section-title {
-         font-size: 2rem;
-         font-weight: 700;
-         letter-spacing: -0.03em;
-         line-height: 1.2;
-         margin-bottom: 48px;
-         color: var(--text-primary);
-      }
-
-      /* ===== HERO ===== */
-      .hero {
-         min-height: 100vh;
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         position: relative;
-         padding-top: var(--nav-height);
-      }
-
-      .hero-bg {
-         position: absolute;
-         inset: 0;
-         overflow: hidden;
-         z-index: 0;
-      }
-
-      .hero-bg::before {
-         content: '';
-         position: absolute;
-         top: -40%;
-         left: 50%;
-         transform: translateX(-50%);
-         width: 800px;
-         height: 800px;
-         background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
-         pointer-events: none;
-      }
-
-      .hero-content {
-         text-align: center;
-         position: relative;
-         z-index: 1;
-         max-width: 700px;
-      }
-
-      .hero-badge {
-         display: inline-flex;
-         align-items: center;
-         gap: 8px;
-         padding: 6px 16px;
-         border: 1px solid var(--border);
-         border-radius: 100px;
-         font-size: 0.8rem;
-         color: var(--text-secondary);
-         margin-bottom: 32px;
-         background: var(--bg-secondary);
-      }
-
-      .hero-badge-dot {
-         width: 6px;
-         height: 6px;
-         border-radius: 50%;
-         background: #34d399;
-         animation: pulse-dot 2s infinite;
-      }
-
-      @keyframes pulse-dot {
+      @keyframes bounce {
 
          0%,
          100% {
-            opacity: 1;
+            transform: translateY(0);
          }
 
          50% {
-            opacity: 0.4;
+            transform: translateY(6px);
          }
       }
 
-      .hero h1 {
-         font-size: clamp(2.5rem, 6vw, 4rem);
-         font-weight: 750;
-         letter-spacing: -0.04em;
-         line-height: 1.1;
-         margin-bottom: 20px;
+      @keyframes subtlePulse {
+
+         0%,
+         100% {
+            opacity: 0.05;
+         }
+
+         50% {
+            opacity: 0.1;
+         }
       }
 
-      .hero h1 .gradient-text {
-         background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-         -webkit-background-clip: text;
-         -webkit-text-fill-color: transparent;
-         background-clip: text;
+      @keyframes gridFade {
+
+         0%,
+         100% {
+            opacity: 0.03;
+         }
+
+         50% {
+            opacity: 0.06;
+         }
       }
 
-      .hero-tagline {
-         font-size: 1.15rem;
-         color: var(--text-secondary);
-         max-width: 520px;
-         margin: 0 auto 40px;
-         line-height: 1.7;
-         font-weight: 400;
+      .animate-fade-up {
+         animation: fadeUp 0.8s ease-out forwards;
+         opacity: 0;
       }
 
-      .hero-cta {
-         display: flex;
-         gap: 16px;
-         justify-content: center;
-         flex-wrap: wrap;
+      .animate-fade-in {
+         animation: fadeIn 1s ease-out forwards;
+         opacity: 0;
       }
 
-      .btn {
-         display: inline-flex;
-         align-items: center;
-         gap: 8px;
-         padding: 12px 28px;
-         border-radius: var(--radius-sm);
-         font-size: 0.9rem;
-         font-weight: 500;
-         cursor: pointer;
-         transition: all 0.2s;
-         border: none;
-         font-family: var(--font-sans);
-         letter-spacing: -0.01em;
+      .delay-100 {
+         animation-delay: 0.1s;
       }
 
-      .btn-primary {
-         background: var(--text-primary);
-         color: var(--bg-primary);
+      .delay-200 {
+         animation-delay: 0.2s;
       }
 
-      .btn-primary:hover {
-         background: #e4e4e7;
-         transform: translateY(-1px);
+      .delay-300 {
+         animation-delay: 0.3s;
       }
 
-      .btn-secondary {
-         background: transparent;
-         color: var(--text-primary);
-         border: 1px solid var(--border);
+      .delay-400 {
+         animation-delay: 0.4s;
       }
 
-      .btn-secondary:hover {
-         border-color: var(--border-hover);
-         background: var(--bg-secondary);
-         transform: translateY(-1px);
+      .delay-500 {
+         animation-delay: 0.5s;
       }
 
-      /* ===== ABOUT ===== */
-      #about {
-         border-top: 1px solid var(--border);
-      }
-
-      .about-grid {
-         display: grid;
-         grid-template-columns: 1fr 1fr;
-         gap: 64px;
-         align-items: start;
-      }
-
-      .about-text p {
-         color: var(--text-secondary);
-         font-size: 1.05rem;
-         margin-bottom: 24px;
-         line-height: 1.8;
-      }
-
-      .about-stats {
-         display: grid;
-         grid-template-columns: 1fr 1fr;
-         gap: 20px;
-      }
-
-      .stat-card {
-         padding: 24px;
-         background: var(--bg-card);
-         border: 1px solid var(--border);
-         border-radius: var(--radius);
-         transition: border-color 0.2s;
-      }
-
-      .stat-card:hover {
-         border-color: var(--border-hover);
-      }
-
-      .stat-number {
-         font-size: 1.75rem;
-         font-weight: 700;
-         letter-spacing: -0.03em;
-         color: var(--text-primary);
-         margin-bottom: 4px;
-      }
-
-      .stat-label {
-         font-size: 0.8rem;
-         color: var(--text-tertiary);
-         font-weight: 450;
-      }
-
-      /* ===== SKILLS ===== */
-      #skills {
-         border-top: 1px solid var(--border);
-      }
-
-      .skills-grid {
-         display: flex;
-         flex-wrap: wrap;
-         gap: 10px;
-      }
-
-      .skill-tag {
-         padding: 10px 20px;
-         background: var(--bg-card);
-         border: 1px solid var(--border);
-         border-radius: 100px;
-         font-size: 0.85rem;
-         font-weight: 450;
-         color: var(--text-secondary);
-         transition: all 0.25s;
-         cursor: default;
-      }
-
-      .skill-tag:hover {
-         border-color: var(--accent);
-         color: var(--text-primary);
-         background: var(--accent-dim);
-      }
-
-      /* ===== PROJECTS ===== */
-      #projects {
-         border-top: 1px solid var(--border);
-      }
-
-      .projects-grid {
-         display: grid;
-         grid-template-columns: 1fr 1fr;
-         gap: 20px;
+      .delay-600 {
+         animation-delay: 0.6s;
       }
 
       .project-card {
-         background: var(--bg-card);
-         border: 1px solid var(--border);
-         border-radius: var(--radius);
-         padding: 32px;
-         display: flex;
-         flex-direction: column;
-         transition: all 0.3s;
          position: relative;
+         background: linear-gradient(145deg, rgba(26, 26, 26, 0.7) 0%, rgba(12, 12, 12, 0.9) 100%);
+         border: 1px solid rgba(255, 255, 255, 0.08);
+         border-radius: 16px;
          overflow: hidden;
+         transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
       }
 
       .project-card::before {
@@ -421,720 +165,837 @@
          left: 0;
          right: 0;
          height: 1px;
-         background: linear-gradient(90deg, transparent, var(--accent), transparent);
-         opacity: 0;
-         transition: opacity 0.3s;
-      }
-
-      .project-card:hover {
-         border-color: var(--border-hover);
-         background: var(--bg-card-hover);
-         transform: translateY(-2px);
+         background: linear-gradient(90deg, transparent, rgba(157, 26, 16, 0), transparent);
+         transition: all 0.5s ease;
       }
 
       .project-card:hover::before {
-         opacity: 1;
+         background: linear-gradient(90deg, transparent, rgba(157, 26, 16, 0.6), transparent);
       }
 
-      .project-header {
-         display: flex;
-         align-items: flex-start;
-         justify-content: space-between;
-         margin-bottom: 16px;
+      .project-card:hover {
+         border-color: rgba(157, 26, 16, 0.25);
+         transform: translateY(-4px);
+         box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 30px -10px rgba(157, 26, 16, 0.08);
       }
 
-      .project-icon {
-         width: 40px;
-         height: 40px;
-         border-radius: var(--radius-sm);
-         background: var(--accent-dim);
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         font-size: 1.1rem;
+      .project-card .card-number {
+         font-family: 'Oswald', sans-serif;
+         font-size: 5rem;
+         font-weight: 700;
+         line-height: 1;
+         color: rgba(255, 255, 255, 0.025);
+         position: absolute;
+         top: -10px;
+         right: 16px;
+         transition: color 0.5s ease;
       }
 
-      .project-rating {
-         font-size: 0.75rem;
-         font-weight: 600;
-         color: var(--accent);
-         padding: 4px 10px;
-         border: 1px solid var(--accent);
-         border-radius: 100px;
-         background: var(--accent-dim);
+      .project-card:hover .card-number {
+         color: rgba(157, 26, 16, 0.06);
       }
 
-      .project-name {
-         font-size: 1.2rem;
-         font-weight: 650;
-         letter-spacing: -0.02em;
-         margin-bottom: 10px;
-         color: var(--text-primary);
+      .project-logo {
+         width: 48px;
+         height: 48px;
+         border-radius: 12px;
+         object-fit: cover;
+         border: 1px solid rgba(255, 255, 255, 0.1);
+         flex-shrink: 0;
+         background: rgba(255, 255, 255, 0.05);
       }
 
-      .project-desc {
-         font-size: 0.9rem;
-         color: var(--text-secondary);
-         line-height: 1.7;
-         margin-bottom: 20px;
-         flex: 1;
-      }
-
-      .project-badges {
-         display: flex;
-         flex-wrap: wrap;
-         gap: 6px;
-         margin-bottom: 20px;
-      }
-
-      .project-badge {
-         font-size: 0.7rem;
-         font-weight: 500;
-         padding: 4px 10px;
-         border-radius: 100px;
-         background: var(--bg-primary);
-         color: var(--text-tertiary);
-         border: 1px solid var(--border);
-         letter-spacing: 0.02em;
-      }
-
-      .project-links {
-         display: flex;
-         gap: 10px;
-         flex-wrap: wrap;
-      }
-
-      .project-link {
+      .link-btn {
          display: inline-flex;
          align-items: center;
          gap: 6px;
-         font-size: 0.82rem;
+         padding: 7px 14px;
+         border-radius: 8px;
+         font-size: 0.75rem;
          font-weight: 500;
-         color: var(--text-secondary);
-         padding: 8px 16px;
-         border: 1px solid var(--border);
-         border-radius: var(--radius-sm);
-         transition: all 0.2s;
+         letter-spacing: 0.025em;
+         transition: all 0.3s ease;
+         text-decoration: none;
       }
 
-      .project-link:hover {
-         color: var(--text-primary);
-         border-color: var(--border-hover);
-         background: var(--bg-primary);
+      .link-btn-live {
+         background: rgba(157, 26, 16, 0.15);
+         color: #F87171;
+         border: 1px solid rgba(157, 26, 16, 0.25);
       }
 
-      .project-link svg {
-         width: 14px;
-         height: 14px;
+      .link-btn-live:hover {
+         background: #9D1A10;
+         color: #fff;
+         box-shadow: 0 0 20px -3px rgba(157, 26, 16, 0.4);
       }
 
-      /* ===== CONTACT ===== */
-      #contact {
-         border-top: 1px solid var(--border);
+      .link-btn-code {
+         background: rgba(255, 255, 255, 0.06);
+         color: rgba(255, 255, 255, 0.7);
+         border: 1px solid rgba(255, 255, 255, 0.1);
       }
 
-      .contact-content {
-         max-width: 560px;
+      .link-btn-code:hover {
+         background: rgba(255, 255, 255, 0.12);
+         color: #fff;
+         border-color: rgba(255, 255, 255, 0.2);
       }
 
-      .contact-text {
-         font-size: 1.05rem;
-         color: var(--text-secondary);
-         margin-bottom: 40px;
-         line-height: 1.8;
+      .tag {
+         display: inline-block;
+         padding: 4px 10px;
+         font-size: 0.65rem;
+         font-weight: 500;
+         letter-spacing: 0.05em;
+         text-transform: uppercase;
+         border-radius: 6px;
+         background: rgba(255, 255, 255, 0.06);
+         color: rgba(255, 255, 255, 0.55);
+         border: 1px solid rgba(255, 255, 255, 0.08);
       }
 
-      .contact-links {
-         display: flex;
-         flex-direction: column;
-         gap: 16px;
+      .nav-link {
+         position: relative;
+         color: rgba(255, 255, 255, 0.55);
+         font-size: 0.8rem;
+         font-weight: 500;
+         letter-spacing: 0.05em;
+         text-transform: uppercase;
+         text-decoration: none;
+         transition: color 0.3s ease;
+         padding: 4px 0;
       }
 
-      .contact-item {
-         display: flex;
+      .nav-link::after {
+         content: '';
+         position: absolute;
+         bottom: -2px;
+         left: 0;
+         height: 1px;
+         width: 0;
+         background: #9D1A10;
+         transition: width 0.3s ease;
+      }
+
+      .nav-link:hover {
+         color: #fff;
+      }
+
+      .nav-link:hover::after {
+         width: 100%;
+      }
+
+      .hero-line {
+         overflow: hidden;
+      }
+
+      .hero-line span {
+         display: inline-block;
+         animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+         opacity: 0;
+      }
+
+      .section-label {
+         font-family: 'Oswald', sans-serif;
+         font-size: 0.75rem;
+         font-weight: 500;
+         letter-spacing: 0.2em;
+         text-transform: uppercase;
+         color: #E53E3E;
+      }
+
+      .glow-orb {
+         position: absolute;
+         border-radius: 50%;
+         filter: blur(120px);
+         animation: subtlePulse 6s ease-in-out infinite;
+         pointer-events: none;
+      }
+
+      .social-link {
+         display: inline-flex;
          align-items: center;
-         gap: 16px;
-         padding: 20px 24px;
-         background: var(--bg-card);
-         border: 1px solid var(--border);
-         border-radius: var(--radius);
-         transition: all 0.2s;
+         justify-content: center;
+         width: 52px;
+         height: 52px;
+         border-radius: 14px;
+         border: 1px solid rgba(255, 255, 255, 0.12);
+         background: rgba(255, 255, 255, 0.04);
+         color: rgba(255, 255, 255, 0.7);
+         transition: all 0.3s ease;
+         text-decoration: none;
       }
 
-      .contact-item:hover {
-         border-color: var(--border-hover);
-         background: var(--bg-card-hover);
+      .social-link:hover {
+         border-color: rgba(157, 26, 16, 0.4);
+         color: #F87171;
+         background: rgba(157, 26, 16, 0.1);
+         transform: translateY(-3px);
+         box-shadow: 0 8px 25px -8px rgba(157, 26, 16, 0.3);
       }
 
-      .contact-icon {
+      .divider {
+         height: 1px;
+         background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+      }
+
+      .dot-grid {
+         position: absolute;
+         right: 5%;
+         top: 50%;
+         transform: translateY(-50%);
+         width: 300px;
+         height: 300px;
+         background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+         background-size: 24px 24px;
+         animation: gridFade 5s ease-in-out infinite;
+         pointer-events: none;
+      }
+
+      .contact-section {
+         position: relative;
+         overflow: hidden;
+      }
+
+      .contact-section::before {
+         content: '';
+         position: absolute;
+         top: 0;
+         left: 50%;
+         transform: translateX(-50%);
+         width: 600px;
+         height: 600px;
+         background: radial-gradient(circle, rgba(157, 26, 16, 0.08) 0%, transparent 70%);
+         pointer-events: none;
+      }
+
+      .contact-link {
+         display: inline-flex;
+         align-items: center;
+         gap: 14px;
+         padding: 18px 32px;
+         border-radius: 16px;
+         border: 1px solid rgba(255, 255, 255, 0.12);
+         background: rgba(255, 255, 255, 0.04);
+         color: #fff;
+         text-decoration: none;
+         font-size: 0.95rem;
+         font-weight: 500;
+         transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .contact-link:hover {
+         border-color: rgba(157, 26, 16, 0.35);
+         background: rgba(157, 26, 16, 0.08);
+         transform: translateY(-3px);
+         box-shadow: 0 12px 35px -10px rgba(157, 26, 16, 0.25);
+      }
+
+      .contact-link .contact-icon {
          width: 40px;
          height: 40px;
-         border-radius: var(--radius-sm);
-         background: var(--accent-dim);
+         border-radius: 10px;
          display: flex;
          align-items: center;
          justify-content: center;
          flex-shrink: 0;
       }
 
-      .contact-icon svg {
-         width: 18px;
-         height: 18px;
-         color: var(--accent);
-      }
-
-      .contact-info {
-         flex: 1;
-      }
-
-      .contact-label {
-         font-size: 0.75rem;
-         color: var(--text-tertiary);
-         text-transform: uppercase;
-         letter-spacing: 0.08em;
-         font-weight: 600;
-         margin-bottom: 2px;
-      }
-
-      .contact-value {
-         font-size: 0.95rem;
-         color: var(--text-primary);
-         font-weight: 450;
-      }
-
-      .contact-arrow {
-         color: var(--text-tertiary);
-         transition: transform 0.2s;
-      }
-
-      .contact-item:hover .contact-arrow {
-         transform: translateX(4px);
-         color: var(--text-secondary);
-      }
-
-      /* ===== FOOTER ===== */
-      .footer {
-         border-top: 1px solid var(--border);
-         padding: 40px 24px;
-         text-align: center;
-      }
-
-      .footer p {
-         font-size: 0.8rem;
-         color: var(--text-tertiary);
-         font-weight: 400;
-      }
-
-      /* ===== ANIMATIONS ===== */
-      .fade-in {
+      .mobile-menu {
+         position: fixed;
+         inset: 0;
+         background: rgba(5, 5, 5, 0.97);
+         backdrop-filter: blur(20px);
+         z-index: 90;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+         gap: 2rem;
          opacity: 0;
-         transform: translateY(24px);
-         transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-            transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+         pointer-events: none;
+         transition: opacity 0.4s ease;
       }
 
-      .fade-in.visible {
+      .mobile-menu.active {
          opacity: 1;
-         transform: translateY(0);
+         pointer-events: all;
       }
 
-      .fade-in-delay-1 {
-         transition-delay: 0.1s;
+      .mobile-menu a {
+         font-family: 'Oswald', sans-serif;
+         font-size: 2rem;
+         font-weight: 300;
+         color: rgba(255, 255, 255, 0.5);
+         text-decoration: none;
+         letter-spacing: 0.05em;
+         transition: color 0.3s ease;
       }
 
-      .fade-in-delay-2 {
-         transition-delay: 0.2s;
+      .mobile-menu a:hover {
+         color: #fff;
       }
 
-      .fade-in-delay-3 {
-         transition-delay: 0.3s;
+      .scroll-indicator {
+         position: absolute;
+         bottom: 2.5rem;
+         left: 50%;
+         transform: translateX(-50%);
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         gap: 0.5rem;
+         animation: fadeIn 1.5s ease-out 1.2s forwards;
+         opacity: 0;
       }
 
-      /* ===== RESPONSIVE ===== */
-      @media (max-width: 768px) {
-         section {
-            padding: 72px 20px;
-         }
-
-         .section-title {
-            font-size: 1.6rem;
-            margin-bottom: 36px;
-         }
-
-         .nav-links {
-            display: none;
-            position: absolute;
-            top: var(--nav-height);
-            left: 0;
-            right: 0;
-            flex-direction: column;
-            background: rgba(9, 9, 11, 0.96);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border);
-            padding: 20px 24px;
-            gap: 16px;
-         }
-
-         .nav-links.active {
-            display: flex;
-         }
-
-         .nav-toggle {
-            display: flex;
-         }
-
-         .about-grid {
-            grid-template-columns: 1fr;
-            gap: 40px;
-         }
-
-         .projects-grid {
-            grid-template-columns: 1fr;
-         }
-
-         .hero h1 {
-            font-size: 2.2rem;
-         }
-
-         .hero-tagline {
-            font-size: 1rem;
-         }
-
-         .project-card {
-            padding: 24px;
-         }
-
-         .stat-card {
-            padding: 20px;
-         }
+      .scroll-indicator span {
+         font-size: 0.6rem;
+         letter-spacing: 0.15em;
+         text-transform: uppercase;
+         color: rgba(255, 255, 255, 0.25);
       }
 
-      @media (max-width: 480px) {
-         .about-stats {
-            grid-template-columns: 1fr;
-         }
-
-         .hero-cta {
-            flex-direction: column;
-            align-items: center;
-         }
-
-         .btn {
-            width: 100%;
-            justify-content: center;
-            max-width: 260px;
-         }
+      .scroll-indicator .arrow {
+         width: 1px;
+         height: 30px;
+         background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+         animation: bounce 2s ease-in-out infinite;
       }
    </style>
 </head>
 
 <body>
 
-   <!-- NAVBAR -->
-   <nav class="navbar" id="navbar">
-      <div class="navbar-inner">
-         <a href="#" class="nav-logo">Shiyuki<span>.</span></a>
-         <ul class="nav-links" id="navLinks">
-            <li><a href="#about" onclick="closeMenu()">About</a></li>
-            <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
-            <li><a href="#projects" onclick="closeMenu()">Projects</a></li>
-            <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
-         </ul>
-         <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-            <span></span>
-            <span></span>
-            <span></span>
+   <div class="glow-orb"
+      style="width: 500px; height: 500px; background: #9D1A10; top: -200px; right: -100px; opacity: 0.04;"></div>
+   <div class="glow-orb"
+      style="width: 400px; height: 400px; background: #9D1A10; bottom: 30%; left: -150px; opacity: 0.03; animation-delay: 3s;">
+   </div>
+
+   <div class="mobile-menu" id="mobileMenu">
+      <a href="#projects" onclick="closeMobileMenu()">Projects</a>
+      <a href="#about" onclick="closeMobileMenu()">About</a>
+      <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+   </div>
+
+   <nav
+      style="position:fixed; top:0; left:0; right:0; height:72px; z-index:100; background:rgba(5,5,5,0.85); backdrop-filter:blur(14px); border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div
+         style="max-width:1280px; margin:0 auto; padding:0 1.5rem; height:100%; display:flex; align-items:center; justify-content:space-between;">
+         <a href="#"
+            style="font-family:'Oswald',sans-serif; font-size:1.3rem; font-weight:600; color:#fff; text-decoration:none; letter-spacing:0.02em;">
+            M<span style="color:#E53E3E;">.</span>F
+         </a>
+         <div style="display:flex; align-items:center; gap:2.5rem;" class="hidden md:flex">
+            <a href="#projects" class="nav-link">Projects</a>
+            <a href="#about" class="nav-link">About</a>
+            <a href="#contact" class="nav-link">Contact</a>
+         </div>
+         <button onclick="toggleMobileMenu()" class="md:hidden"
+            style="background:none; border:none; color:rgba(255,255,255,0.7); cursor:pointer; padding:4px;">
+            <span class="iconify" data-icon="lucide:menu" data-width="22"></span>
          </button>
       </div>
    </nav>
 
-   <!-- HERO -->
-   <section class="hero" id="hero">
-      <div class="hero-bg"></div>
-      <div class="hero-content">
-         <div class="hero-badge">
-            <span class="hero-badge-dot"></span>
-            Open to opportunities
-         </div>
-         <h1>
-            Building software<br>
-            that <span class="gradient-text">actually ships.</span>
-         </h1>
-         <p class="hero-tagline">
-            I'm Mohammed Islam — a systems programmer and mobile developer who turns ideas into production-ready code.
-         </p>
-         <div class="hero-cta">
-            <a href="#projects" class="btn btn-primary">
-               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="3" width="7" height="7"></rect>
-                  <rect x="14" y="3" width="7" height="7"></rect>
-                  <rect x="3" y="14" width="7" height="7"></rect>
-                  <rect x="14" y="14" width="7" height="7"></rect>
-               </svg>
-               View Projects
-            </a>
-            <a href="#contact" class="btn btn-secondary">
-               Contact Me
-               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <line x1="5" y1="12" x2="19" y2="12"></line>
-                  <polyline points="12 5 19 12 12 19"></polyline>
-               </svg>
-            </a>
-         </div>
-      </div>
-   </section>
-
-   <!-- ABOUT -->
-   <section id="about">
-      <div class="container">
-         <div class="about-grid">
-            <div class="about-text fade-in">
-               <p class="section-label">About</p>
-               <h2 class="section-title">Turning complex problems into clean, reliable code.</h2>
-               <p>
-                  I'm a Computer Science student with a sharp focus on systems programming and mobile development.
-                  Unlike most students, I've shipped production software used by real people — not just classroom demos.
-               </p>
-               <p>
-                  I hold certifications in Data Science and Unsupervised Machine Learning, and I bring that analytical
-                  mindset to every project I build. Whether it's low-level cryptography in C++ or a polished Flutter app
-                  with NFC support, I obsess over getting the details right.
-               </p>
-               <p>
-                  Currently open to freelance contracts and junior developer roles where I can make an immediate impact.
-               </p>
+   <!-- Hero -->
+   <section
+      style="min-height:100vh; display:flex; align-items:center; position:relative; padding: 0 1.5rem; overflow:hidden;">
+      <div class="dot-grid hidden md:block"></div>
+      <div style="max-width:1280px; margin:0 auto; width:100%; padding-top:72px;">
+         <div style="max-width:780px;">
+            <div class="animate-fade-in delay-100" style="margin-bottom:2rem;">
+               <span class="section-label">Full-Stack Developer</span>
             </div>
-            <div class="about-stats fade-in fade-in-delay-1">
-               <div class="stat-card">
-                  <div class="stat-number">4+</div>
-                  <div class="stat-label">Shipped Projects</div>
-               </div>
-               <div class="stat-card">
-                  <div class="stat-number">C++23</div>
-                  <div class="stat-label">Latest Standard</div>
-               </div>
-               <div class="stat-card">
-                  <div class="stat-number">2</div>
-                  <div class="stat-label">Certifications</div>
-               </div>
-               <div class="stat-card">
-                  <div class="stat-number">Full</div>
-                  <div class="stat-label">Stack Capable</div>
-               </div>
+            <div class="hero-line" style="margin-bottom:0.25rem;">
+               <span style="animation-delay:0.15s;" class="font-display">Hi, I'm</span>
             </div>
-         </div>
-      </div>
-   </section>
-
-   <!-- SKILLS -->
-   <section id="skills">
-      <div class="container">
-         <p class="section-label fade-in">Skills</p>
-         <h2 class="section-title fade-in">Technologies I work with.</h2>
-         <div class="skills-grid fade-in fade-in-delay-1">
-            <span class="skill-tag">Flutter & Dart</span>
-            <span class="skill-tag">Android</span>
-            <span class="skill-tag">C++17/23</span>
-            <span class="skill-tag">OpenSSL</span>
-            <span class="skill-tag">libsodium</span>
-            <span class="skill-tag">Node.js</span>
-            <span class="skill-tag">Express</span>
-            <span class="skill-tag">REST APIs</span>
-            <span class="skill-tag">Python</span>
-            <span class="skill-tag">Flask</span>
-            <span class="skill-tag">UI/UX Design</span>
-            <span class="skill-tag">Machine Learning</span>
-            <span class="skill-tag">Data Science</span>
-            <span class="skill-tag">GitHub</span>
-            <span class="skill-tag">GitHub Actions</span>
-            <span class="skill-tag">CI/CD</span>
-            <span class="skill-tag">HTML / CSS / JS</span>
-         </div>
-      </div>
-   </section>
-
-   <!-- PROJECTS -->
-   <section id="projects">
-      <div class="container">
-         <p class="section-label fade-in">Projects</p>
-         <h2 class="section-title fade-in">Things I've built.</h2>
-         <div class="projects-grid">
-
-            <!-- Project 1: SHPD -->
-            <div class="project-card fade-in">
-               <div class="project-header">
-                  <div class="project-icon">🔐</div>
-               </div>
-               <h3 class="project-name">C++(WebUI) Password Manager</h3>
-               <p class="project-desc">
-                  Local-first encrypted password manager built with ChaCha20-Poly1305 and Argon2id key derivation.
-                  Single binary, no external database, RAII-based resource management, and a comprehensive test suite.
-                  Demonstrates senior-level cryptography knowledge.
-               </p>
-               <div class="project-badges">
-                  <span class="project-badge">C++23</span>
-                  <span class="project-badge">Security</span>
-                  <span class="project-badge">Crypto</span>
-                  <span class="project-badge">libsodium</span>
-                  <span class="project-badge">Web UI</span>
-               </div>
-               <div class="project-links">
-                  <a href="https://github.com/Shiyuki99/Password-Manager" target="_blank" rel="noopener noreferrer"
-                     class="project-link">
-                     <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                           d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                     </svg>
-                     GitHub
-                  </a>
-               </div>
+            <div class="hero-line" style="margin-bottom:0.5rem;">
+               <span
+                  style="animation-delay:0.25s; font-family:'Oswald',sans-serif; font-size:clamp(3.2rem,8vw,6.5rem); font-weight:700; line-height:0.92; letter-spacing:-0.025em;">
+                  Mohammed Islam
+               </span>
             </div>
-
-            <!-- Project 2: SWAP -->
-            <div class="project-card fade-in fade-in-delay-1">
-               <div class="project-header">
-                  <div class="project-icon">📱</div>
-               </div>
-               <h3 class="project-name">SWAP — Social Profile Exchange</h3>
-               <p class="project-desc">
-                  Production-deployed Android app for instant social profile exchange via NFC tap, QR scan, or WiFi
-                  Direct. Features a full CI/CD pipeline with automated signed APK releases. Real users, real
-                  deployment.
-               </p>
-               <div class="project-badges">
-                  <span class="project-badge">Flutter</span>
-                  <span class="project-badge">Mobile</span>
-                  <span class="project-badge">Production</span>
-                  <span class="project-badge">Full-Stack</span>
-                  <span class="project-badge">Node.js</span>
-               </div>
-               <div class="project-links">
-                  <a href="https://swapapp.ddns.net" target="_blank" rel="noopener noreferrer" class="project-link">
-                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="2" y1="12" x2="22" y2="12"></line>
-                        <path
-                           d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                        </path>
-                     </svg>
-                     Live Demo
-                  </a>
-                  <a href="https://github.com/Shiyuki99/swap-app" target="_blank" rel="noopener noreferrer"
-                     class="project-link">
-                     <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                           d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                     </svg>
-                     GitHub
-                  </a>
-               </div>
+            <div class="hero-line" style="margin-bottom:2.5rem;">
+               <span
+                  style="animation-delay:0.35s; font-family:'Oswald',sans-serif; font-size:clamp(3.2rem,8vw,6.5rem); font-weight:300; line-height:0.92; letter-spacing:-0.025em; color:rgba(255,255,255,0.25);">
+                  Foudi<span style="color:#E53E3E;">.</span>
+               </span>
             </div>
-
-            <!-- Project 3: Blockchain -->
-            <div class="project-card fade-in">
-               <div class="project-header">
-                  <div class="project-icon">⛓️</div>
-               </div>
-               <h3 class="project-name">Blockchain Showcase</h3>
-               <p class="project-desc">
-                  Peer-to-peer blockchain implementation deployed across 4 VMs for a cloud computing course. Features a
-                  consensus mechanism, multi-threading, and real network latency testing in a distributed environment.
-               </p>
-               <div class="project-badges">
-                  <span class="project-badge">Python</span>
-                  <span class="project-badge">Distributed Systems</span>
-                  <span class="project-badge">Cloud</span>
-                  <span class="project-badge">Flask</span>
-               </div>
-               <div class="project-links">
-                  <a href="https://github.com/Shiyuki99/simple-blockchain-showcase" target="_blank"
-                     rel="noopener noreferrer" class="project-link">
-                     <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                           d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                     </svg>
-                     GitHub
-                  </a>
-               </div>
-            </div>
-
-            <!-- Project 4: Banking System -->
-            <div class="project-card fade-in fade-in-delay-1">
-               <div class="project-header">
-                  <div class="project-icon">🏦</div>
-               </div>
-               <h3 class="project-name">Banking System</h3>
-               <p class="project-desc">
-                  CLI banking application with SQL injection prevention via prepared statements, SHA-256 password
-                  hashing, unit testing with Google Test, and a clean CMake build system. Focused on security best
-                  practices.
-               </p>
-               <div class="project-badges">
-                  <span class="project-badge">C++17</span>
-                  <span class="project-badge">Database</span>
-                  <span class="project-badge">Security</span>
-                  <span class="project-badge">MariaDB</span>
-                  <span class="project-badge">Google Test</span>
-               </div>
-               <div class="project-links">
-                  <a href="https://github.com/Shiyuki99/Banking-System" target="_blank" rel="noopener noreferrer"
-                     class="project-link">
-                     <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                           d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                     </svg>
-                     GitHub
-                  </a>
-               </div>
-            </div>
-
-         </div>
-      </div>
-   </section>
-
-   <!-- CONTACT -->
-   <section id="contact">
-      <div class="container">
-         <div class="contact-content">
-            <p class="section-label fade-in">Contact</p>
-            <h2 class="section-title fade-in">Let's work together.</h2>
-            <p class="contact-text fade-in">
-               I'm currently available for freelance projects and junior developer positions. If you have something in
-               mind, don't hesitate to reach out.
+            <p class="animate-fade-up delay-500"
+               style="font-size:1.1rem; font-weight:300; line-height:1.75; color:rgba(255,255,255,0.55); max-width:520px; margin-bottom:2.5rem;">
+               I build things for the web — full-stack apps, automation bots, and everything in between. Clean code,
+               thoughtful design, real solutions.
             </p>
-            <div class="contact-links fade-in fade-in-delay-1">
-
-               <a href="mailto:m_foudi@estin.dz" class="contact-item">
-                  <div class="contact-icon">
-                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-                     </svg>
-                  </div>
-                  <div class="contact-info">
-                     <div class="contact-label">Email</div>
-                     <div class="contact-value">m_foudi@estin.dz</div>
-                  </div>
-                  <svg class="contact-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                     <line x1="5" y1="12" x2="19" y2="12"></line>
-                     <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
+            <div class="animate-fade-up delay-600" style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+               <a href="#projects"
+                  style="display:inline-flex; align-items:center; gap:8px; padding:13px 30px; background:#9D1A10; color:#fff; font-size:0.8rem; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; border-radius:12px; text-decoration:none; transition:all 0.3s ease; border:none; cursor:pointer;"
+                  onmouseover="this.style.background='#b91c1c'; this.style.boxShadow='0 0 35px -5px rgba(157,26,16,0.5)'"
+                  onmouseout="this.style.background='#9D1A10'; this.style.boxShadow='none'">
+                  View Projects
+                  <span class="iconify" data-icon="lucide:arrow-down" data-width="14"></span>
                </a>
-
-               <a href="https://github.com/Shiyuki99" target="_blank" rel="noopener noreferrer" class="contact-item">
-                  <div class="contact-icon">
-                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path
-                           d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4">
-                        </path>
-                        <path d="M9 18c-4.51 2-5-2-7-2"></path>
-                     </svg>
-                  </div>
-                  <div class="contact-info">
-                     <div class="contact-label">GitHub</div>
-                     <div class="contact-value">github.com/Shiyuki99</div>
-                  </div>
-                  <svg class="contact-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                     <line x1="5" y1="12" x2="19" y2="12"></line>
-                     <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
+               <a href="https://github.com/Shiyuki99" target="_blank" class="link-btn link-btn-code"
+                  style="padding:13px 24px; font-size:0.8rem; border-radius:12px;">
+                  <span class="iconify" data-icon="mdi:github" data-width="16"></span>
+                  GitHub
                </a>
+            </div>
+         </div>
+      </div>
+      <div class="scroll-indicator hidden md:flex">
+         <span>Scroll</span>
+         <div class="arrow"></div>
+      </div>
+   </section>
 
-               <a href="https://instagram.com/shiyuki_99" target="_blank" rel="noopener noreferrer"
-                  class="contact-item">
-                  <div class="contact-icon">
-                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-                     </svg>
-                  </div>
-                  <div class="contact-info">
-                     <div class="contact-label">Instagram</div>
-                     <div class="contact-value">@shiyuki_99</div>
-                  </div>
-                  <svg class="contact-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                     <line x1="5" y1="12" x2="19" y2="12"></line>
-                     <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-               </a>
+   <!-- Projects -->
+   <section id="projects" style="padding:5rem 1.5rem 6rem; position:relative;">
+      <div style="max-width:1280px; margin:0 auto;">
+         <div class="animate-fade-up" style="margin-bottom:3.5rem;">
+            <span class="section-label">Selected Work</span>
+            <h2 class="font-display"
+               style="font-size:clamp(2rem,4vw,3rem); font-weight:300; margin-top:0.75rem; letter-spacing:-0.01em; color:rgba(255,255,255,0.95);">
+               Projects<span style="color:#E53E3E;">.</span>
+            </h2>
+         </div>
+         <div style="display:grid; grid-template-columns:1fr; gap:1.25rem;" class="project-grid">
 
+            <!-- Swap -->
+            <div class="project-card" style="padding:2rem 2rem 2rem 2.5rem;">
+               <span class="card-number">01</span>
+               <div style="position:relative; z-index:1;">
+                  <div
+                     style="display:flex; align-items:start; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem;">
+                     <div style="display:flex; align-items:start; gap:1rem;">
+                        <img src="app-icon.png" alt="Swap" class="project-logo">
+                        <div>
+                           <h3
+                              style="font-family:'Oswald',sans-serif; font-size:1.5rem; font-weight:500; letter-spacing:0.01em; margin-bottom:0.5rem;">
+                              Swap</h3>
+                           <p
+                              style="font-size:0.85rem; font-weight:300; color:rgba(255,255,255,0.55); line-height:1.65; max-width:480px;">
+                              A web-based swap/trading application with real-time interactions and a clean user
+                              interface.
+                           </p>
+                        </div>
+                     </div>
+                     <div style="display:flex; gap:0.5rem; flex-shrink:0; align-self:center;">
+                        <a href="https://swapapp-web.onrender.com" target="_blank" class="link-btn link-btn-live">
+                           <span class="iconify" data-icon="lucide:external-link" data-width="12"></span>
+                           Live
+                        </a>
+                        <a href="https://github.com/Shiyuki99/swap" target="_blank" class="link-btn link-btn-code">
+                           <span class="iconify" data-icon="mdi:github" data-width="13"></span>
+                           Code
+                        </a>
+                     </div>
+                  </div>
+                  <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                     <span class="tag">Web App</span>
+                     <span class="tag">Full-Stack</span>
+                  </div>
+               </div>
+            </div>
+
+            <!-- DiceCam -->
+            <div class="project-card" style="padding:2rem 2rem 2rem 2.5rem;">
+               <span class="card-number">02</span>
+               <div style="position:relative; z-index:1;">
+                  <div
+                     style="display:flex; align-items:start; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem;">
+                     <div style="display:flex; align-items:start; gap:1rem;">
+                        <img src="dicecam-logo.png" alt="DiceCam" class="project-logo">
+                        <div>
+                           <h3
+                              style="font-family:'Oswald',sans-serif; font-size:1.5rem; font-weight:500; letter-spacing:0.01em; margin-bottom:0.5rem;">
+                              DiceCam</h3>
+                           <p
+                              style="font-size:0.85rem; font-weight:300; color:rgba(255,255,255,0.55); line-height:1.65; max-width:480px;">
+                              An interactive dice application with camera integration, randomization mechanics, and a
+                              playful experience.
+                           </p>
+                        </div>
+                     </div>
+                     <div style="display:flex; gap:0.5rem; flex-shrink:0; align-self:center;">
+                        <a href="https://diceapp.vercel.app" target="_blank" class="link-btn link-btn-live">
+                           <span class="iconify" data-icon="lucide:external-link" data-width="12"></span>
+                           Live
+                        </a>
+                        <a href="https://github.com/Shiyuki99/dicecam" target="_blank" class="link-btn link-btn-code">
+                           <span class="iconify" data-icon="mdi:github" data-width="13"></span>
+                           Code
+                        </a>
+                     </div>
+                  </div>
+                  <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                     <span class="tag">Web App</span>
+                     <span class="tag">Camera API</span>
+                  </div>
+               </div>
+            </div>
+
+            <!-- AutoStoreDZ -->
+            <div class="project-card" style="padding:2rem 2rem 2rem 2.5rem;">
+               <span class="card-number">03</span>
+               <div style="position:relative; z-index:1;">
+                  <div
+                     style="display:flex; align-items:start; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem;">
+                     <div style="display:flex; align-items:start; gap:1rem;">
+                        <img src="autostore_icon.png" alt="AutoStoreDZ" class="project-logo">
+                        <div>
+                           <h3
+                              style="font-family:'Oswald',sans-serif; font-size:1.5rem; font-weight:500; letter-spacing:0.01em; margin-bottom:0.5rem;">
+                              AutoStoreDZ</h3>
+                           <p
+                              style="font-size:0.85rem; font-weight:300; color:rgba(255,255,255,0.55); line-height:1.65; max-width:480px;">
+                              An automated store bot for seamless purchasing — includes a testing chat interface to
+                              explore the workflow.
+                           </p>
+                        </div>
+                     </div>
+                     <div style="display:flex; gap:0.5rem; flex-shrink:0; align-self:center;">
+                        <a href="https://autostoredz.online" target="_blank" class="link-btn link-btn-live">
+                           <span class="iconify" data-icon="lucide:external-link" data-width="12"></span>
+                           Live
+                        </a>
+                     </div>
+                  </div>
+                  <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                     <span class="tag">Bot</span>
+                     <span class="tag">Automation</span>
+                  </div>
+               </div>
+            </div>
+
+            <!-- Password Manager -->
+            <div class="project-card" style="padding:2rem 2rem 2rem 2.5rem;">
+               <span class="card-number">04</span>
+               <div style="position:relative; z-index:1;">
+                  <div
+                     style="display:flex; align-items:start; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem;">
+                     <div style="display:flex; align-items:start; gap:1rem;">
+                        <div
+                           style="width:48px; height:48px; border-radius:12px; background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                           <span class="iconify" data-icon="lucide:shield-check" data-width="22"
+                              style="color:#FBBF24;"></span>
+                        </div>
+                        <div>
+                           <h3
+                              style="font-family:'Oswald',sans-serif; font-size:1.5rem; font-weight:500; letter-spacing:0.01em; margin-bottom:0.5rem;">
+                              Password Manager</h3>
+                           <p
+                              style="font-size:0.85rem; font-weight:300; color:rgba(255,255,255,0.55); line-height:1.65; max-width:480px;">
+                              A secure password management tool with encryption, storage, and retrieval of credentials.
+                           </p>
+                        </div>
+                     </div>
+                     <div style="display:flex; gap:0.5rem; flex-shrink:0; align-self:center;">
+                        <a href="https://github.com/Shiyuki99/Password-Manager" target="_blank"
+                           class="link-btn link-btn-code">
+                           <span class="iconify" data-icon="mdi:github" data-width="13"></span>
+                           Code
+                        </a>
+                     </div>
+                  </div>
+                  <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                     <span class="tag">Security</span>
+                     <span class="tag">Encryption</span>
+                  </div>
+               </div>
+            </div>
+
+            <!-- Heart Disease -->
+            <div class="project-card" style="padding:2rem 2rem 2rem 2.5rem;">
+               <span class="card-number">05</span>
+               <div style="position:relative; z-index:1;">
+                  <div
+                     style="display:flex; align-items:start; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem;">
+                     <div style="display:flex; align-items:start; gap:1rem;">
+                        <div
+                           style="width:48px; height:48px; border-radius:12px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                           <span class="iconify" data-icon="lucide:heart-pulse" data-width="22"
+                              style="color:#EF4444;"></span>
+                        </div>
+                        <div>
+                           <h3
+                              style="font-family:'Oswald',sans-serif; font-size:1.5rem; font-weight:500; letter-spacing:0.01em; margin-bottom:0.5rem;">
+                              Heart Disease Prediction</h3>
+                           <p
+                              style="font-size:0.85rem; font-weight:300; color:rgba(255,255,255,0.55); line-height:1.65; max-width:480px;">
+                              Machine learning model for predicting heart disease risk based on clinical parameters and
+                              patient data.
+                           </p>
+                        </div>
+                     </div>
+                     <div style="display:flex; gap:0.5rem; flex-shrink:0; align-self:center;">
+                        <a href="https://github.com/Shiyuki99/Heart_disease" target="_blank"
+                           class="link-btn link-btn-code">
+                           <span class="iconify" data-icon="mdi:github" data-width="13"></span>
+                           Code
+                        </a>
+                     </div>
+                  </div>
+                  <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                     <span class="tag">Python</span>
+                     <span class="tag">Machine Learning</span>
+                  </div>
+               </div>
+            </div>
+
+            <!-- Blockchain Showcase -->
+            <div class="project-card" style="padding:2rem 2rem 2rem 2.5rem;">
+               <span class="card-number">06</span>
+               <div style="position:relative; z-index:1;">
+                  <div
+                     style="display:flex; align-items:start; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem;">
+                     <div style="display:flex; align-items:start; gap:1rem;">
+                        <div
+                           style="width:48px; height:48px; border-radius:12px; background:rgba(99,102,241,0.1); border:1px solid rgba(99,102,241,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                           <span class="iconify" data-icon="lucide:blocks" data-width="22"
+                              style="color:#818CF8;"></span>
+                        </div>
+                        <div>
+                           <h3
+                              style="font-family:'Oswald',sans-serif; font-size:1.5rem; font-weight:500; letter-spacing:0.01em; margin-bottom:0.5rem;">
+                              Blockchain Showcase</h3>
+                           <p
+                              style="font-size:0.85rem; font-weight:300; color:rgba(255,255,255,0.55); line-height:1.65; max-width:480px;">
+                              A simple visual demonstration of blockchain fundamentals — hashing, chaining, and
+                              consensus concepts.
+                           </p>
+                        </div>
+                     </div>
+                     <div style="display:flex; gap:0.5rem; flex-shrink:0; align-self:center;">
+                        <a href="https://github.com/Shiyuki99/simple-blockchain-showcase" target="_blank"
+                           class="link-btn link-btn-code">
+                           <span class="iconify" data-icon="mdi:github" data-width="13"></span>
+                           Code
+                        </a>
+                     </div>
+                  </div>
+                  <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                     <span class="tag">Blockchain</span>
+                     <span class="tag">Educational</span>
+                  </div>
+               </div>
+            </div>
+
+            <!-- Banking System -->
+            <div class="project-card" style="padding:2rem 2rem 2rem 2.5rem;">
+               <span class="card-number">07</span>
+               <div style="position:relative; z-index:1;">
+                  <div
+                     style="display:flex; align-items:start; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.25rem;">
+                     <div style="display:flex; align-items:start; gap:1rem;">
+                        <div
+                           style="width:48px; height:48px; border-radius:12px; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.15); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                           <span class="iconify" data-icon="lucide:landmark" data-width="22"
+                              style="color:#4ADE80;"></span>
+                        </div>
+                        <div>
+                           <h3
+                              style="font-family:'Oswald',sans-serif; font-size:1.5rem; font-weight:500; letter-spacing:0.01em; margin-bottom:0.5rem;">
+                              Banking System</h3>
+                           <p
+                              style="font-size:0.85rem; font-weight:300; color:rgba(255,255,255,0.55); line-height:1.65; max-width:480px;">
+                              A simulated banking system handling accounts, transactions, and balance management with
+                              proper validation.
+                           </p>
+                        </div>
+                     </div>
+                     <div style="display:flex; gap:0.5rem; flex-shrink:0; align-self:center;">
+                        <a href="https://github.com/Shiyuki99/Banking-System" target="_blank"
+                           class="link-btn link-btn-code">
+                           <span class="iconify" data-icon="mdi:github" data-width="13"></span>
+                           Code
+                        </a>
+                     </div>
+                  </div>
+                  <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                     <span class="tag">System Design</span>
+                     <span class="tag">Backend</span>
+                  </div>
+               </div>
+            </div>
+
+         </div>
+      </div>
+   </section>
+
+   <!-- About -->
+   <section id="about" style="padding:2rem 1.5rem 6rem;">
+      <div style="max-width:1280px; margin:0 auto;">
+         <div class="divider" style="margin-bottom:5rem;"></div>
+         <div style="display:grid; grid-template-columns:1fr; gap:4rem;" class="about-grid">
+            <div style="max-width:600px;">
+               <span class="section-label" style="margin-bottom:1rem; display:block;">About</span>
+               <h2 class="font-display"
+                  style="font-size:clamp(1.75rem,3.5vw,2.5rem); font-weight:300; margin-bottom:1.5rem; letter-spacing:-0.01em; color:rgba(255,255,255,0.95);">
+                  A bit about me<span style="color:#E53E3E;">.</span>
+               </h2>
+               <p
+                  style="font-size:0.95rem; font-weight:300; line-height:1.8; color:rgba(255,255,255,0.55); margin-bottom:1rem;">
+                  I'm a developer who enjoys building things that live on the internet — whether that's web
+                  applications, automation bots, or exploring new technologies to solve real problems.
+               </p>
+               <p style="font-size:0.95rem; font-weight:300; line-height:1.8; color:rgba(255,255,255,0.55);">
+                  I focus on writing clean, maintainable code and creating experiences that are functional first. I've
+                  dabbled in machine learning and blockchain as side explorations, but my core is building for the web.
+               </p>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:1.25rem;" class="stats-grid">
+               <div
+                  style="padding:1.75rem; border-radius:14px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);">
+                  <div class="font-display" style="font-size:2.25rem; font-weight:600; color:#E53E3E;">7+</div>
+                  <div
+                     style="font-size:0.75rem; color:rgba(255,255,255,0.5); font-weight:500; margin-top:0.25rem; text-transform:uppercase; letter-spacing:0.08em;">
+                     Projects Built</div>
+               </div>
+               <div
+                  style="padding:1.75rem; border-radius:14px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);">
+                  <div class="font-display" style="font-size:2.25rem; font-weight:600; color:#E53E3E;">3</div>
+                  <div
+                     style="font-size:0.75rem; color:rgba(255,255,255,0.5); font-weight:500; margin-top:0.25rem; text-transform:uppercase; letter-spacing:0.08em;">
+                     Live Deploys</div>
+               </div>
+               <div
+                  style="padding:1.75rem; border-radius:14px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);">
+                  <div class="font-display" style="font-size:1.75rem; font-weight:600; color:rgba(255,255,255,0.9);">
+                     Full-Stack</div>
+                  <div
+                     style="font-size:0.75rem; color:rgba(255,255,255,0.5); font-weight:500; margin-top:0.25rem; text-transform:uppercase; letter-spacing:0.08em;">
+                     Core Focus</div>
+               </div>
+               <div
+                  style="padding:1.75rem; border-radius:14px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08);">
+                  <div class="font-display" style="font-size:1.75rem; font-weight:600; color:rgba(255,255,255,0.9);">
+                     Python</div>
+                  <div
+                     style="font-size:0.75rem; color:rgba(255,255,255,0.5); font-weight:500; margin-top:0.25rem; text-transform:uppercase; letter-spacing:0.08em;">
+                     ML & Scripting</div>
+               </div>
             </div>
          </div>
       </div>
    </section>
 
-   <!-- FOOTER -->
-   <footer class="footer">
-      <p>&copy; 2026 FOUDI Mohammed Islam. Built with precision.</p>
+   <!-- Contact -->
+   <section id="contact" class="contact-section" style="padding:5rem 1.5rem 4rem;">
+      <div style="max-width:1280px; margin:0 auto; position:relative; z-index:1;">
+         <div class="divider" style="margin-bottom:5rem;"></div>
+         <div style="text-align:center; max-width:600px; margin:0 auto;">
+            <span class="section-label" style="margin-bottom:1.25rem; display:block;">Get in Touch</span>
+            <h2 class="font-display"
+               style="font-size:clamp(2rem,5vw,3.25rem); font-weight:400; margin-bottom:1rem; letter-spacing:-0.01em; color:#fff; line-height:1.1;">
+               Let's work together<span style="color:#E53E3E;">.</span>
+            </h2>
+            <p
+               style="font-size:1rem; font-weight:300; line-height:1.7; color:rgba(255,255,255,0.55); margin-bottom:2.5rem;">
+               I'm always open to new opportunities, collaborations, or just a good conversation. Feel free to reach
+               out.
+            </p>
+            <div style="display:flex; align-items:center; justify-content:center; gap:1rem; flex-wrap:wrap;">
+               <a href="https://github.com/Shiyuki99" target="_blank" class="contact-link">
+                  <div class="contact-icon" style="background:rgba(255,255,255,0.06);">
+                     <span class="iconify" data-icon="mdi:github" data-width="22" style="color:#fff;"></span>
+                  </div>
+                  <div style="text-align:left;">
+                     <div
+                        style="font-size:0.7rem; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.08em; font-weight:500;">
+                        GitHub</div>
+                     <div style="font-size:0.85rem; color:rgba(255,255,255,0.8);">@Shiyuki99</div>
+                  </div>
+               </a>
+               <a href="https://www.linkedin.com/in/mohammed-islam-foudi/" target="_blank" class="contact-link">
+                  <div class="contact-icon" style="background:rgba(10,102,194,0.15);">
+                     <span class="iconify" data-icon="mdi:linkedin" data-width="22" style="color:#60A5FA;"></span>
+                  </div>
+                  <div style="text-align:left;">
+                     <div
+                        style="font-size:0.7rem; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.08em; font-weight:500;">
+                        LinkedIn</div>
+                     <div style="font-size:0.85rem; color:rgba(255,255,255,0.8);">Mohammed Islam Foudi</div>
+                  </div>
+               </a>
+            </div>
+         </div>
+      </div>
+   </section>
+
+   <!-- Footer -->
+   <footer style="padding:2rem 1.5rem; border-top:1px solid rgba(255,255,255,0.06);">
+      <div
+         style="max-width:1280px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+         <div
+            style="font-family:'Oswald',sans-serif; font-size:1rem; font-weight:500; color:rgba(255,255,255,0.3); letter-spacing:0.02em;">
+            M<span style="color:rgba(157,26,16,0.5);">.</span>F
+         </div>
+         <div style="font-size:0.7rem; color:rgba(255,255,255,0.25); font-weight:400;">
+            © 2025 Mohammed Islam Foudi · Built with care
+         </div>
+      </div>
    </footer>
 
-   <!-- JAVASCRIPT -->
    <script>
-      // Mobile nav toggle
-      const navToggle = document.getElementById('navToggle');
-      const navLinks = document.getElementById('navLinks');
-
-      navToggle.addEventListener('click', () => {
-         navLinks.classList.toggle('active');
-      });
-
-      function closeMenu() {
-         navLinks.classList.remove('active');
+      function toggleMobileMenu() {
+         document.getElementById('mobileMenu').classList.toggle('active');
+      }
+      function closeMobileMenu() {
+         document.getElementById('mobileMenu').classList.remove('active');
       }
 
-      // Scroll-based fade-in animation
       const observerOptions = {
          threshold: 0.1,
-         rootMargin: '0px 0px -40px 0px'
+         rootMargin: '0px 0px -50px 0px'
       };
 
       const observer = new IntersectionObserver((entries) => {
          entries.forEach(entry => {
             if (entry.isIntersecting) {
-               entry.target.classList.add('visible');
+               entry.target.style.animation = 'fadeUp 0.7s ease-out forwards';
                observer.unobserve(entry.target);
             }
          });
       }, observerOptions);
 
-      document.querySelectorAll('.fade-in').forEach(el => {
-         observer.observe(el);
+      document.querySelectorAll('.project-card').forEach((card, index) => {
+         card.style.opacity = '0';
+         card.style.animationDelay = `${index * 0.08}s`;
+         observer.observe(card);
       });
 
-      // Active nav link highlight
       const sections = document.querySelectorAll('section[id]');
-      const navItems = document.querySelectorAll('.nav-links a');
+      const navLinks = document.querySelectorAll('.nav-link');
 
       window.addEventListener('scroll', () => {
-         const scrollY = window.scrollY + 100;
-
+         let current = '';
          sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-
-            if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
-               navItems.forEach(item => {
-                  item.style.color = '';
-                  if (item.getAttribute('href') === '#' + sectionId) {
-                     item.style.color = 'var(--text-primary)';
-                  }
-               });
+            const sectionTop = section.offsetTop - 120;
+            if (window.scrollY >= sectionTop) {
+               current = section.getAttribute('id');
+            }
+         });
+         navLinks.forEach(link => {
+            link.style.color = 'rgba(255,255,255,0.55)';
+            if (link.getAttribute('href') === `#${current}`) {
+               link.style.color = '#fff';
             }
          });
       });
-   </script>
 
+      const style = document.createElement('style');
+      style.textContent = `
+            @media (min-width: 768px) {
+                .project-grid { grid-template-columns: repeat(2, 1fr) !important; }
+                .about-grid { grid-template-columns: 1fr 1fr !important; }
+                .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            }
+        `;
+      document.head.appendChild(style);
+   </script>
 </body>
 
 </html>
