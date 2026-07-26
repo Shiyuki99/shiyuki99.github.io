@@ -5,7 +5,8 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Mohammed Islam Foudi — Developer</title>
-   <meta name="description" content="Mohammed Islam Foudi — Full-stack developer building web apps, automation bots, and everything in between.">
+   <meta name="description"
+      content="Mohammed Islam Foudi — Full-stack developer building web apps, automation bots, and everything in between.">
    <link rel="icon" type="image/svg+xml"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23050505'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Oswald,sans-serif' font-weight='700' font-size='28' fill='%23E53E3E'%3EM%3C/text%3E%3Ctext x='72%25' y='66%25' dominant-baseline='middle' text-anchor='middle' font-family='Oswald,sans-serif' font-weight='400' font-size='16' fill='rgba(255,255,255,0.5)'%3EF%3C/text%3E%3C/svg%3E">
 
@@ -48,11 +49,26 @@
       /* ============================================================
          BASE
          ============================================================ */
-      *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+      *,
+      *::before,
+      *::after {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+      }
 
-      html { scroll-behavior: smooth; }
-      html.lenis { scroll-behavior: auto !important; }
-      html.lenis, .lenis.lenis-smooth { height: auto; }
+      html {
+         scroll-behavior: smooth;
+      }
+
+      html.lenis {
+         scroll-behavior: auto !important;
+      }
+
+      html.lenis,
+      .lenis.lenis-smooth {
+         height: auto;
+      }
 
       body {
          font-family: var(--font-body);
@@ -62,12 +78,27 @@
          -webkit-font-smoothing: antialiased;
       }
 
-      ::selection { background: rgba(229, 62, 62, 0.35); color: #fff; }
+      ::selection {
+         background: rgba(229, 62, 62, 0.35);
+         color: #fff;
+      }
 
-      ::-webkit-scrollbar { width: 6px; }
-      ::-webkit-scrollbar-track { background: #0A0A0A; }
-      ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
-      ::-webkit-scrollbar-thumb:hover { background: var(--red-deep); }
+      ::-webkit-scrollbar {
+         width: 6px;
+      }
+
+      ::-webkit-scrollbar-track {
+         background: #0A0A0A;
+      }
+
+      ::-webkit-scrollbar-thumb {
+         background: #333;
+         border-radius: 3px;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+         background: var(--red-deep);
+      }
 
       :focus-visible {
          outline: 2px solid var(--red);
@@ -75,23 +106,46 @@
          border-radius: 4px;
       }
 
-      img { user-select: none; }
+      img {
+         user-select: none;
+      }
 
-      .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
-      .text-red { color: var(--red); }
+      .container {
+         max-width: 1280px;
+         margin: 0 auto;
+         padding: 0 1.5rem;
+      }
+
+      .text-red {
+         color: var(--red);
+      }
 
       .skip-link {
-         position: fixed; top: -60px; left: 1rem; z-index: 9999;
-         padding: 10px 18px; background: var(--red-deep); color: #fff;
-         font-family: var(--font-mono); font-size: 0.75rem; text-decoration: none;
-         border-radius: 8px; transition: top 0.25s ease;
+         position: fixed;
+         top: -60px;
+         left: 1rem;
+         z-index: 9999;
+         padding: 10px 18px;
+         background: var(--red-deep);
+         color: #fff;
+         font-family: var(--font-mono);
+         font-size: 0.75rem;
+         text-decoration: none;
+         border-radius: 8px;
+         transition: top 0.25s ease;
       }
-      .skip-link:focus { top: 1rem; }
+
+      .skip-link:focus {
+         top: 1rem;
+      }
 
       /* Hide native cursor only on precise pointers (custom cursor takes over) */
       @media (hover: hover) and (pointer: fine) {
-         body.has-custom-cursor, body.has-custom-cursor a,
-         body.has-custom-cursor button, body.has-custom-cursor .tag {
+
+         body.has-custom-cursor,
+         body.has-custom-cursor a,
+         body.has-custom-cursor button,
+         body.has-custom-cursor .tag {
             cursor: none;
          }
       }
@@ -100,97 +154,187 @@
          AMBIENT BACKGROUND LAYERS
          ============================================================ */
       #bg-particles {
-         position: fixed; inset: 0; z-index: 1;
+         position: fixed;
+         inset: 0;
+         z-index: 1;
          pointer-events: none;
       }
 
       .bg-vignette {
-         position: fixed; inset: 0; z-index: 1; pointer-events: none;
+         position: fixed;
+         inset: 0;
+         z-index: 1;
+         pointer-events: none;
          background: radial-gradient(ellipse at 50% 42%, transparent 52%, rgba(0, 0, 0, 0.52) 100%);
       }
 
       #bg-grain {
-         position: fixed; top: -100%; left: -100%; z-index: 2000;
-         width: 300%; height: 300%;
-         pointer-events: none; opacity: 0.038;
+         position: fixed;
+         top: -100%;
+         left: -100%;
+         z-index: 2000;
+         width: 300%;
+         height: 300%;
+         pointer-events: none;
+         opacity: 0.03;
          animation: grain-shift 9s steps(10) infinite;
       }
 
       @keyframes grain-shift {
-         0%, 100% { transform: translate(0, 0); }
-         10% { transform: translate(-3%, -6%); }
-         20% { transform: translate(-9%, 3%); }
-         30% { transform: translate(5%, -9%); }
-         40% { transform: translate(-3%, 9%); }
-         50% { transform: translate(-9%, -4%); }
-         60% { transform: translate(6%, 4%); }
-         70% { transform: translate(0, 7%); }
-         80% { transform: translate(-7%, 0); }
-         90% { transform: translate(8%, 2%); }
+
+         0%,
+         100% {
+            transform: translate(0, 0);
+         }
+
+         10% {
+            transform: translate(-3%, -6%);
+         }
+
+         20% {
+            transform: translate(-9%, 3%);
+         }
+
+         30% {
+            transform: translate(5%, -9%);
+         }
+
+         40% {
+            transform: translate(-3%, 9%);
+         }
+
+         50% {
+            transform: translate(-9%, -4%);
+         }
+
+         60% {
+            transform: translate(6%, 4%);
+         }
+
+         70% {
+            transform: translate(0, 7%);
+         }
+
+         80% {
+            transform: translate(-7%, 0);
+         }
+
+         90% {
+            transform: translate(8%, 2%);
+         }
       }
 
       .glow-orb {
-         position: fixed; border-radius: 50%; z-index: 0;
-         filter: blur(120px); pointer-events: none;
-      }
-      .orb-1 {
-         width: 500px; height: 500px; background: var(--red-deep);
-         top: -200px; right: -100px; opacity: 0.045;
-         animation: orb-drift-1 22s ease-in-out infinite alternate;
-      }
-      .orb-2 {
-         width: 400px; height: 400px; background: var(--red-deep);
-         bottom: 20%; left: -160px; opacity: 0.035;
-         animation: orb-drift-2 28s ease-in-out infinite alternate;
-      }
-      @keyframes orb-drift-1 {
-         from { transform: translate(0, 0); }
-         to { transform: translate(-70px, 60px); }
-      }
-      @keyframes orb-drift-2 {
-         from { transform: translate(0, 0); }
-         to { transform: translate(80px, -50px); }
+         position: fixed;
+         border-radius: 50%;
+         z-index: 0;
+         filter: blur(120px);
+         pointer-events: none;
       }
 
-      main { position: relative; z-index: 2; }
+      .orb-1 {
+         width: 500px;
+         height: 500px;
+         background: var(--red-deep);
+         top: -200px;
+         right: -100px;
+         opacity: 0.045;
+         animation: orb-drift-1 22s ease-in-out infinite alternate;
+      }
+
+      .orb-2 {
+         width: 400px;
+         height: 400px;
+         background: var(--red-deep);
+         bottom: 20%;
+         left: -160px;
+         opacity: 0.035;
+         animation: orb-drift-2 28s ease-in-out infinite alternate;
+      }
+
+      @keyframes orb-drift-1 {
+         from {
+            transform: translate(0, 0);
+         }
+
+         to {
+            transform: translate(-70px, 60px);
+         }
+      }
+
+      @keyframes orb-drift-2 {
+         from {
+            transform: translate(0, 0);
+         }
+
+         to {
+            transform: translate(80px, -50px);
+         }
+      }
+
+      main {
+         position: relative;
+         z-index: 2;
+      }
 
       /* ============================================================
          CUSTOM CURSOR
          ============================================================ */
-      #cursor, #cursor-dot {
-         position: fixed; top: 0; left: 0; z-index: 9999;
-         pointer-events: none; display: none;
+      #cursor,
+      #cursor-dot {
+         position: fixed;
+         top: 0;
+         left: 0;
+         z-index: 9999;
+         pointer-events: none;
+         display: none;
       }
-      html.cursor-active #cursor, html.cursor-active #cursor-dot { display: block; }
 
-      #cursor { width: 14px; height: 14px; }
+      html.cursor-active #cursor,
+      html.cursor-active #cursor-dot {
+         display: block;
+      }
+
+      #cursor {
+         width: 14px;
+         height: 14px;
+      }
+
       #cursor .cursor-cube {
-         width: 100%; height: 100%;
+         width: 100%;
+         height: 100%;
          border: 1.5px solid rgba(229, 62, 62, 0.9);
          background: rgba(229, 62, 62, 0.14);
          box-shadow: 0 0 12px rgba(229, 62, 62, 0.45), inset 0 0 4px rgba(229, 62, 62, 0.3);
          transform: rotate(45deg);
          transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                     background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
       }
+
       #cursor.hovering .cursor-cube {
          transform: rotate(45deg) scale(1.55);
          background: rgba(229, 62, 62, 0.28);
          box-shadow: 0 0 18px rgba(229, 62, 62, 0.6), inset 0 0 6px rgba(229, 62, 62, 0.4);
       }
+
       #cursor.hovering-card .cursor-cube {
          transform: rotate(45deg) scale(2.1);
          background: transparent;
          border-color: rgba(229, 62, 62, 0.55);
          box-shadow: 0 0 22px rgba(229, 62, 62, 0.35);
       }
+
       #cursor-dot {
-         width: 4px; height: 4px; background: #fff;
+         width: 4px;
+         height: 4px;
+         background: #fff;
          box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
       }
 
       .glitch-fragment {
-         position: fixed; z-index: 9998; pointer-events: none;
+         position: fixed;
+         z-index: 9998;
+         pointer-events: none;
          image-rendering: pixelated;
       }
 
@@ -198,115 +342,244 @@
          NAVIGATION
          ============================================================ */
       .nav {
-         position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h);
+         position: fixed;
+         top: 0;
+         left: 0;
+         right: 0;
+         height: var(--nav-h);
          z-index: 100;
          border-bottom: 1px solid transparent;
          transition: background 0.45s ease, border-color 0.45s ease;
       }
+
       .nav.scrolled {
          background: rgba(5, 5, 5, 0.72);
          -webkit-backdrop-filter: blur(16px);
          backdrop-filter: blur(16px);
          border-bottom-color: rgba(255, 255, 255, 0.06);
       }
+
       .nav::after {
-         content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
+         content: '';
+         position: absolute;
+         bottom: -1px;
+         left: 0;
+         right: 0;
+         height: 1px;
          background: linear-gradient(90deg, transparent, rgba(229, 62, 62, 0.35), transparent);
-         opacity: 0; transition: opacity 0.6s ease;
+         opacity: 0;
+         transition: opacity 0.6s ease;
       }
-      .nav.scrolled::after { opacity: 1; }
+
+      .nav.scrolled::after {
+         opacity: 1;
+      }
 
       .nav-inner {
-         max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; height: 100%;
-         display: flex; align-items: center; justify-content: space-between;
+         max-width: 1280px;
+         margin: 0 auto;
+         padding: 0 1.5rem;
+         height: 100%;
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
       }
 
       .nav-logo {
-         font-family: var(--font-display); font-size: 1.3rem; font-weight: 600;
-         color: #fff; text-decoration: none; letter-spacing: 0.02em;
+         font-family: var(--font-display);
+         font-size: 1.3rem;
+         font-weight: 600;
+         color: #fff;
+         text-decoration: none;
+         letter-spacing: 0.02em;
       }
 
-      .nav-links { display: flex; align-items: center; gap: 2.5rem; }
+      .nav-links {
+         display: flex;
+         align-items: center;
+         gap: 2.5rem;
+      }
 
       .nav-link {
-         position: relative; color: rgba(255, 255, 255, 0.55);
-         font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
-         letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
-         transition: color 0.3s ease; padding: 6px 0;
+         position: relative;
+         color: rgba(255, 255, 255, 0.55);
+         font-family: var(--font-mono);
+         font-size: 0.72rem;
+         font-weight: 500;
+         letter-spacing: 0.14em;
+         text-transform: uppercase;
+         text-decoration: none;
+         transition: color 0.3s ease;
+         padding: 6px 0;
       }
+
       .nav-link::after {
-         content: ''; position: absolute; bottom: 0; left: 0; height: 1px; width: 100%;
+         content: '';
+         position: absolute;
+         bottom: 0;
+         left: 0;
+         height: 1px;
+         width: 100%;
          background: var(--red);
-         transform: scaleX(0); transform-origin: left;
+         transform: scaleX(0);
+         transform-origin: left;
          transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       }
-      .nav-link:hover { color: #fff; }
+
+      .nav-link:hover {
+         color: #fff;
+      }
+
       .nav-link:hover::after,
-      .nav-link.active::after { transform: scaleX(1); }
-      .nav-link.active { color: #fff; }
+      .nav-link.active::after {
+         transform: scaleX(1);
+      }
+
+      .nav-link.active {
+         color: #fff;
+      }
 
       .burger {
-         display: none; background: none; border: none; color: rgba(255, 255, 255, 0.75);
-         padding: 6px; align-items: center; justify-content: center;
+         display: none;
+         background: none;
+         border: none;
+         color: rgba(255, 255, 255, 0.75);
+         padding: 6px;
+         align-items: center;
+         justify-content: center;
       }
-      .burger .icon-close { display: none; }
-      .burger.open .icon-close { display: block; }
-      .burger.open .icon-menu { display: none; }
+
+      .burger .icon-close {
+         display: none;
+      }
+
+      .burger.open .icon-close {
+         display: block;
+      }
+
+      .burger.open .icon-menu {
+         display: none;
+      }
 
       /* Mobile menu */
       .mobile-menu {
-         position: fixed; inset: 0; z-index: 3000;
+         position: fixed;
+         inset: 0;
+         z-index: 3000;
          background: rgba(5, 5, 5, 0.96);
-         -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px);
-         display: flex; flex-direction: column; align-items: center; justify-content: center;
+         -webkit-backdrop-filter: blur(20px);
+         backdrop-filter: blur(20px);
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
          gap: 2.25rem;
-         opacity: 0; visibility: hidden; pointer-events: none;
+         opacity: 0;
+         visibility: hidden;
+         pointer-events: none;
          transition: opacity 0.4s ease, visibility 0.4s;
       }
-      .mobile-menu.active { opacity: 1; visibility: visible; pointer-events: all; }
+
+      .mobile-menu.active {
+         opacity: 1;
+         visibility: visible;
+         pointer-events: all;
+      }
+
       .mobile-menu a {
-         font-family: var(--font-display); font-size: 2.1rem; font-weight: 300;
-         color: rgba(255, 255, 255, 0.5); text-decoration: none; letter-spacing: 0.03em;
-         display: flex; align-items: baseline; gap: 0.9rem;
-         opacity: 0; transform: translateY(16px);
+         font-family: var(--font-display);
+         font-size: 2.1rem;
+         font-weight: 300;
+         color: rgba(255, 255, 255, 0.5);
+         text-decoration: none;
+         letter-spacing: 0.03em;
+         display: flex;
+         align-items: baseline;
+         gap: 0.9rem;
+         opacity: 0;
+         transform: translateY(16px);
          transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease;
       }
+
       .mobile-menu a .menu-index {
-         font-family: var(--font-mono); font-size: 0.7rem; color: var(--red);
+         font-family: var(--font-mono);
+         font-size: 0.7rem;
+         color: var(--red);
          letter-spacing: 0.1em;
       }
-      .mobile-menu a:hover { color: #fff; }
-      .mobile-menu.active a { opacity: 1; transform: translateY(0); }
-      .mobile-menu.active a:nth-child(1) { transition-delay: 0.08s; }
-      .mobile-menu.active a:nth-child(2) { transition-delay: 0.16s; }
-      .mobile-menu.active a:nth-child(3) { transition-delay: 0.24s; }
+
+      .mobile-menu a:hover {
+         color: #fff;
+      }
+
+      .mobile-menu.active a {
+         opacity: 1;
+         transform: translateY(0);
+      }
+
+      .mobile-menu.active a:nth-child(1) {
+         transition-delay: 0.08s;
+      }
+
+      .mobile-menu.active a:nth-child(2) {
+         transition-delay: 0.16s;
+      }
+
+      .mobile-menu.active a:nth-child(3) {
+         transition-delay: 0.24s;
+      }
 
       /* ============================================================
          SHARED / TYPOGRAPHY
          ============================================================ */
-      .mono { font-family: var(--font-mono); }
+      .mono {
+         font-family: var(--font-mono);
+      }
 
       .section-label {
-         display: inline-flex; align-items: center;
-         font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
-         letter-spacing: 0.22em; text-transform: uppercase; color: var(--red);
+         display: inline-flex;
+         align-items: center;
+         font-family: var(--font-mono);
+         font-size: 0.72rem;
+         font-weight: 500;
+         letter-spacing: 0.22em;
+         text-transform: uppercase;
+         color: var(--red);
       }
+
       .section-label::before {
-         content: ''; width: 6px; height: 6px; background: var(--red);
-         margin-right: 12px; flex-shrink: 0;
+         content: '';
+         width: 6px;
+         height: 6px;
+         background: var(--red);
+         margin-right: 12px;
+         flex-shrink: 0;
       }
 
       .section-title {
          font-family: var(--font-display);
-         font-size: clamp(2rem, 4vw, 3rem); font-weight: 300;
-         letter-spacing: -0.01em; color: rgba(255, 255, 255, 0.95);
-         margin-top: 0.75rem; line-height: 1.05;
+         font-size: clamp(2rem, 4vw, 3rem);
+         font-weight: 300;
+         letter-spacing: -0.01em;
+         color: rgba(255, 255, 255, 0.95);
+         margin-top: 0.75rem;
+         line-height: 1.05;
       }
-      .st-mask { display: block; overflow: hidden; padding-bottom: 0.08em; }
-      .st-inner { display: inline-block; will-change: transform; }
+
+      .st-mask {
+         display: block;
+         overflow: hidden;
+         padding-bottom: 0.08em;
+      }
+
+      .st-inner {
+         display: inline-block;
+         will-change: transform;
+      }
 
       .divider {
-         height: 1px; transform-origin: left;
+         height: 1px;
+         transform-origin: left;
          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09), transparent);
       }
 
@@ -314,252 +587,533 @@
          BUTTONS
          ============================================================ */
       .btn {
-         position: relative; overflow: hidden;
-         display: inline-flex; align-items: center; gap: 9px;
-         padding: 14px 30px; border-radius: 12px; border: none;
-         font-family: var(--font-mono); font-size: 0.75rem; font-weight: 500;
-         letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none;
+         position: relative;
+         overflow: hidden;
+         display: inline-flex;
+         align-items: center;
+         gap: 9px;
+         padding: 14px 30px;
+         border-radius: 12px;
+         border: none;
+         font-family: var(--font-mono);
+         font-size: 0.75rem;
+         font-weight: 500;
+         letter-spacing: 0.1em;
+         text-transform: uppercase;
+         text-decoration: none;
          transition: background 0.3s ease, box-shadow 0.3s ease,
-                     border-color 0.3s ease, color 0.3s ease;
+            border-color 0.3s ease, color 0.3s ease;
       }
-      .btn svg { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 
-      .btn-primary { background: var(--red-deep); color: #fff; }
-      .btn-primary:hover { background: #b91c1c; box-shadow: 0 0 35px -5px rgba(157, 26, 16, 0.55); }
-      .btn-primary:hover svg { transform: translateY(3px); }
+      .btn svg {
+         transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .btn-primary {
+         background: var(--red-deep);
+         color: #fff;
+      }
+
+      .btn-primary:hover {
+         background: #b91c1c;
+         box-shadow: 0 0 35px -5px rgba(157, 26, 16, 0.55);
+      }
+
+      .btn-primary:hover svg {
+         transform: translateY(3px);
+      }
 
       .btn-ghost {
-         background: rgba(255, 255, 255, 0.05); color: rgba(255, 255, 255, 0.75);
+         background: rgba(255, 255, 255, 0.05);
+         color: rgba(255, 255, 255, 0.75);
          border: 1px solid rgba(255, 255, 255, 0.12);
       }
+
       .btn-ghost:hover {
-         background: rgba(255, 255, 255, 0.1); color: #fff;
+         background: rgba(255, 255, 255, 0.1);
+         color: #fff;
          border-color: rgba(255, 255, 255, 0.24);
       }
 
       .link-btn {
-         position: relative; overflow: hidden;
-         display: inline-flex; align-items: center; gap: 6px;
-         padding: 7px 14px; border-radius: 8px;
-         font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500;
-         letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none;
+         position: relative;
+         overflow: hidden;
+         display: inline-flex;
+         align-items: center;
+         gap: 6px;
+         padding: 7px 14px;
+         border-radius: 8px;
+         font-family: var(--font-mono);
+         font-size: 0.68rem;
+         font-weight: 500;
+         letter-spacing: 0.06em;
+         text-transform: uppercase;
+         text-decoration: none;
          transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
       }
-      .link-btn-live { background: rgba(157, 26, 16, 0.15); color: #F87171; border: 1px solid rgba(157, 26, 16, 0.25); }
-      .link-btn-live:hover { background: var(--red-deep); color: #fff; box-shadow: 0 0 20px -3px rgba(157, 26, 16, 0.4); }
-      .link-btn-code { background: rgba(255, 255, 255, 0.06); color: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); }
-      .link-btn-code:hover { background: rgba(255, 255, 255, 0.12); color: #fff; border-color: rgba(255, 255, 255, 0.2); }
+
+      .link-btn-live {
+         background: rgba(157, 26, 16, 0.15);
+         color: #F87171;
+         border: 1px solid rgba(157, 26, 16, 0.25);
+      }
+
+      .link-btn-live:hover {
+         background: var(--red-deep);
+         color: #fff;
+         box-shadow: 0 0 20px -3px rgba(157, 26, 16, 0.4);
+      }
+
+      .link-btn-code {
+         background: rgba(255, 255, 255, 0.06);
+         color: rgba(255, 255, 255, 0.7);
+         border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .link-btn-code:hover {
+         background: rgba(255, 255, 255, 0.12);
+         color: #fff;
+         border-color: rgba(255, 255, 255, 0.2);
+      }
 
       .ripple-ink {
-         position: absolute; border-radius: 50%; pointer-events: none;
+         position: absolute;
+         border-radius: 50%;
+         pointer-events: none;
          background: rgba(255, 255, 255, 0.22);
-         transform: scale(0); animation: ripple-anim 0.55s ease-out forwards;
+         transform: scale(0);
+         animation: ripple-anim 0.55s ease-out forwards;
       }
-      @keyframes ripple-anim { to { transform: scale(1); opacity: 0; } }
+
+      @keyframes ripple-anim {
+         to {
+            transform: scale(1);
+            opacity: 0;
+         }
+      }
 
       /* ============================================================
          HERO
          ============================================================ */
       .hero {
-         min-height: 100vh; display: flex; align-items: center;
-         position: relative; overflow: hidden;
+         min-height: 100vh;
+         display: flex;
+         align-items: center;
+         position: relative;
+         overflow: hidden;
       }
 
       #hero-canvas {
-         position: absolute; inset: 0; width: 100%; height: 100%;
-         z-index: 0; opacity: 0; transition: opacity 1.6s ease;
+         position: absolute;
+         inset: 0;
+         width: 100%;
+         height: 100%;
+         z-index: 0;
+         opacity: 0;
+         transition: opacity 1.6s ease;
       }
-      #hero-canvas.visible { opacity: 1; }
+
+      #hero-canvas.visible {
+         opacity: 1;
+      }
 
       .hero-light {
-         position: absolute; z-index: 0; width: 640px; height: 640px;
-         top: 12%; left: -8%; border-radius: 50%; pointer-events: none;
+         position: absolute;
+         z-index: 0;
+         width: 640px;
+         height: 640px;
+         top: 12%;
+         left: -8%;
+         border-radius: 50%;
+         pointer-events: none;
          background: radial-gradient(circle, rgba(255, 255, 255, 0.045) 0%, rgba(229, 62, 62, 0.03) 40%, transparent 70%);
          opacity: 0;
       }
 
       .hero-inner {
-         position: relative; z-index: 1;
-         max-width: 1280px; margin: 0 auto; width: 100%;
+         position: relative;
+         z-index: 1;
+         max-width: 1280px;
+         margin: 0 auto;
+         width: 100%;
          padding: calc(var(--nav-h) + 2rem) 1.5rem 5rem;
       }
-      .hero-content { max-width: 860px; }
+
+      .hero-content {
+         max-width: 860px;
+      }
 
       .hero-label {
-         min-height: 1.2em; margin-bottom: 1.75rem;
-         font-size: 0.72rem; font-weight: 500; letter-spacing: 0.24em;
-         text-transform: uppercase; color: var(--red);
+         min-height: 1.2em;
+         margin-bottom: 1.75rem;
+         font-size: 0.72rem;
+         font-weight: 500;
+         letter-spacing: 0.24em;
+         text-transform: uppercase;
+         color: var(--red);
       }
 
       .hero-kicker {
-         font-family: var(--font-display); font-size: clamp(1.1rem, 2vw, 1.5rem);
-         font-weight: 300; color: var(--text-muted); margin-bottom: 0.5rem;
+         font-family: var(--font-display);
+         font-size: clamp(1.1rem, 2vw, 1.5rem);
+         font-weight: 300;
+         color: var(--text-muted);
+         margin-bottom: 0.5rem;
       }
 
-      .hero-title-wrap { position: relative; display: inline-block; }
+      .hero-title-wrap {
+         position: relative;
+         display: inline-block;
+      }
 
       .hero-title {
          font-family: var(--font-display);
          font-size: clamp(2.55rem, 8vw, 6rem);
-         line-height: 0.94; letter-spacing: -0.025em;
-         margin-bottom: 2.4rem; position: relative;
+         line-height: 0.94;
+         letter-spacing: -0.025em;
+         margin-bottom: 2.4rem;
+         position: relative;
       }
+
       .hero-title.aberration {
          text-shadow: 2px 0 rgba(229, 62, 62, 0.65), -2px 0 rgba(255, 255, 255, 0.35);
       }
-      .hero-line { display: block; font-weight: 700; white-space: nowrap; }
-      #heroLine1, #heroLine2 { display: inline-block; }
-      .hero-line-dim { font-weight: 300; color: rgba(255, 255, 255, 0.28); }
-      .hero-title .char { display: inline-block; will-change: transform, filter; }
-      .hero-period { display: inline-block; }
+
+      .hero-line {
+         display: block;
+         font-weight: 700;
+         white-space: nowrap;
+      }
+
+      #heroLine1,
+      #heroLine2 {
+         display: inline-block;
+      }
+
+      .hero-line-dim {
+         font-weight: 300;
+         color: rgba(255, 255, 255, 0.28);
+      }
+
+      .hero-title .char {
+         display: inline-block;
+         will-change: transform, filter;
+      }
+
+      .hero-period {
+         display: inline-block;
+      }
 
       .hero-scanline {
-         position: absolute; left: -6%; right: -6%; top: 0; height: 2px; z-index: 3;
+         position: absolute;
+         left: -6%;
+         right: -6%;
+         top: 0;
+         height: 2px;
+         z-index: 3;
          background: linear-gradient(90deg, transparent, rgba(229, 62, 62, 0.85), transparent);
          box-shadow: 0 0 24px rgba(229, 62, 62, 0.55);
-         opacity: 0; pointer-events: none;
+         opacity: 0;
+         pointer-events: none;
       }
 
       .hero-desc {
-         font-size: 1.05rem; font-weight: 300; line-height: 1.75;
-         color: var(--text-muted); max-width: 520px; margin-bottom: 2.5rem;
+         font-size: 1.05rem;
+         font-weight: 300;
+         line-height: 1.75;
+         color: var(--text-muted);
+         max-width: 520px;
+         margin-bottom: 2.5rem;
       }
 
-      .hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+      .hero-actions {
+         display: flex;
+         align-items: center;
+         gap: 1rem;
+         flex-wrap: wrap;
+      }
 
       .scroll-indicator {
-         position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
-         z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+         position: absolute;
+         bottom: 2.5rem;
+         left: 50%;
+         transform: translateX(-50%);
+         z-index: 1;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         gap: 0.6rem;
       }
+
       .scroll-indicator span {
-         font-family: var(--font-mono); font-size: 0.6rem;
-         letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255, 255, 255, 0.25);
+         font-family: var(--font-mono);
+         font-size: 0.6rem;
+         letter-spacing: 0.2em;
+         text-transform: uppercase;
+         color: rgba(255, 255, 255, 0.25);
       }
+
       .scroll-indicator .arrow {
-         width: 1px; height: 32px;
+         width: 1px;
+         height: 32px;
          background: linear-gradient(to bottom, rgba(255, 255, 255, 0.25), transparent);
          animation: scroll-hint 2.2s ease-in-out infinite;
       }
+
       @keyframes scroll-hint {
-         0%, 100% { transform: translateY(0); opacity: 1; }
-         50% { transform: translateY(7px); opacity: 0.4; }
+
+         0%,
+         100% {
+            transform: translateY(0);
+            opacity: 1;
+         }
+
+         50% {
+            transform: translateY(7px);
+            opacity: 0.4;
+         }
       }
 
       /* Hidden-until-boot states (JS-enabled only) */
-      .js .hero-title { visibility: hidden; }
-      .js .hero-fade { opacity: 0; }
-      .js .nav { opacity: 0; }
+      .js .hero-title {
+         visibility: hidden;
+      }
+
+      .js .hero-fade {
+         opacity: 0;
+      }
+
+      .js .nav {
+         opacity: 0;
+      }
 
       /* Failsafe: force everything visible if animation never ran */
-      .no-anim .hero-title { visibility: visible !important; }
+      .no-anim .hero-title {
+         visibility: visible !important;
+      }
+
       .no-anim .hero-fade,
-      .no-anim .nav { opacity: 1 !important; transform: none !important; }
+      .no-anim .nav {
+         opacity: 1 !important;
+         transform: none !important;
+      }
+
       .no-anim [data-reveal],
       .no-anim .project-card,
       .no-anim .stat-card {
-         opacity: 1 !important; transform: none !important; filter: none !important;
+         opacity: 1 !important;
+         transform: none !important;
+         filter: none !important;
       }
-      .no-anim .st-inner, .no-anim .ct-inner { transform: none !important; }
-      .no-anim #bg-grain, .no-anim #bg-particles { display: none; }
+
+      .no-anim .st-inner,
+      .no-anim .ct-inner {
+         transform: none !important;
+      }
+
+      .no-anim #bg-grain,
+      .no-anim #bg-particles {
+         display: none;
+      }
 
       /* ============================================================
          PROJECTS
          ============================================================ */
-      .projects-section { padding: 6rem 0 7rem; position: relative; }
-      .section-head { margin-bottom: 3.5rem; }
+      .projects-section {
+         padding: 6rem 0 7rem;
+         position: relative;
+      }
+
+      .section-head {
+         margin-bottom: 3.5rem;
+      }
 
       .project-grid {
-         display: grid; grid-template-columns: 1fr; gap: 1.25rem;
+         display: grid;
+         grid-template-columns: 1fr;
+         gap: 1.25rem;
          perspective: 1200px;
       }
 
-      .project-card { position: relative; border-radius: 18px; }
+      .project-card {
+         position: relative;
+         border-radius: 18px;
+      }
 
       .card-inner {
-         position: relative; height: 100%; border-radius: 18px;
+         position: relative;
+         height: 100%;
+         border-radius: 18px;
          will-change: transform;
       }
 
       .card-surface {
-         position: absolute; inset: 0; border-radius: 18px; z-index: 1;
+         position: absolute;
+         inset: 0;
+         border-radius: 18px;
+         z-index: 1;
          background: linear-gradient(145deg, rgba(26, 26, 26, 0.72) 0%, rgba(12, 12, 12, 0.92) 100%);
          border: 1px solid var(--border-subtle);
          overflow: hidden;
          transition: border-color 0.5s ease, box-shadow 0.5s ease;
       }
+
       .card-surface::before {
-         content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+         content: '';
+         position: absolute;
+         top: 0;
+         left: 0;
+         right: 0;
+         height: 1px;
          background: linear-gradient(90deg, transparent, rgba(157, 26, 16, 0), transparent);
          transition: background 0.5s ease;
       }
+
       .card-surface::after {
-         content: ''; position: absolute; inset: 0;
+         content: '';
+         position: absolute;
+         inset: 0;
          background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%),
-                     rgba(229, 62, 62, 0.07), transparent 45%);
-         opacity: 0; transition: opacity 0.5s ease;
+               rgba(229, 62, 62, 0.07), transparent 45%);
+         opacity: 0;
+         transition: opacity 0.5s ease;
       }
+
       .project-card:hover .card-surface {
          border-color: rgba(157, 26, 16, 0.3);
          box-shadow: 0 24px 48px -18px rgba(0, 0, 0, 0.65), 0 0 44px -12px rgba(157, 26, 16, 0.12);
       }
+
       .project-card:hover .card-surface::before {
          background: linear-gradient(90deg, transparent, rgba(229, 62, 62, 0.55), transparent);
       }
-      .project-card:hover .card-surface::after { opacity: 1; }
 
-      .card-content { position: relative; z-index: 1; height: 100%; padding: 2rem 2rem 2rem 2.5rem; }
+      .project-card:hover .card-surface::after {
+         opacity: 1;
+      }
+
+      .card-content {
+         position: relative;
+         z-index: 1;
+         height: 100%;
+         padding: 2rem 2rem 2rem 2.5rem;
+      }
 
       .card-number {
-         position: absolute; top: -12px; right: 16px; z-index: 1;
-         font-family: var(--font-display); font-size: 5rem; font-weight: 700;
-         line-height: 1; color: rgba(255, 255, 255, 0.028);
-         transition: color 0.5s ease; pointer-events: none; user-select: none;
+         position: absolute;
+         top: -12px;
+         right: 16px;
+         z-index: 1;
+         font-family: var(--font-display);
+         font-size: 5rem;
+         font-weight: 700;
+         line-height: 1;
+         color: rgba(255, 255, 255, 0.028);
+         transition: color 0.5s ease;
+         pointer-events: none;
+         user-select: none;
       }
-      .project-card:hover .card-number { color: rgba(229, 62, 62, 0.07); }
+
+      .project-card:hover .card-number {
+         color: rgba(229, 62, 62, 0.07);
+      }
 
       .card-head {
-         display: flex; align-items: flex-start; justify-content: space-between;
-         flex-wrap: wrap; gap: 1rem; margin-bottom: 1.4rem;
+         display: flex;
+         align-items: flex-start;
+         justify-content: space-between;
+         flex-wrap: wrap;
+         gap: 1rem;
+         margin-bottom: 1.4rem;
       }
-      .card-title-wrap { display: flex; align-items: flex-start; gap: 1rem; }
+
+      .card-title-wrap {
+         display: flex;
+         align-items: flex-start;
+         gap: 1rem;
+      }
+
       .card-title {
-         font-family: var(--font-display); font-size: 1.5rem; font-weight: 500;
-         letter-spacing: 0.01em; margin-bottom: 0.5rem;
+         font-family: var(--font-display);
+         font-size: 1.5rem;
+         font-weight: 500;
+         letter-spacing: 0.01em;
+         margin-bottom: 0.5rem;
       }
+
       .card-desc {
-         font-size: 0.85rem; font-weight: 300; color: var(--text-muted);
-         line-height: 1.65; max-width: 480px;
+         font-size: 0.85rem;
+         font-weight: 300;
+         color: var(--text-muted);
+         line-height: 1.65;
+         max-width: 480px;
       }
-      .card-links { display: flex; gap: 0.5rem; flex-shrink: 0; align-self: center; }
+
+      .card-links {
+         display: flex;
+         gap: 0.5rem;
+         flex-shrink: 0;
+         align-self: center;
+      }
 
       .project-logo {
-         width: 48px; height: 48px; border-radius: 12px; object-fit: cover;
-         border: 1px solid rgba(255, 255, 255, 0.1); flex-shrink: 0;
+         width: 48px;
+         height: 48px;
+         border-radius: 12px;
+         object-fit: cover;
+         border: 1px solid rgba(255, 255, 255, 0.1);
+         flex-shrink: 0;
          background: rgba(255, 255, 255, 0.05);
       }
+
       .icon-tile {
-         width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
-         background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
-         display: flex; align-items: center; justify-content: center;
+         width: 48px;
+         height: 48px;
+         border-radius: 12px;
+         flex-shrink: 0;
+         background: rgba(255, 255, 255, 0.05);
+         border: 1px solid rgba(255, 255, 255, 0.1);
+         display: flex;
+         align-items: center;
+         justify-content: center;
          color: rgba(255, 255, 255, 0.75);
          transition: color 0.4s ease, border-color 0.4s ease, background 0.4s ease;
       }
+
       .project-card:hover .icon-tile {
-         color: var(--red); border-color: rgba(157, 26, 16, 0.3);
+         color: var(--red);
+         border-color: rgba(157, 26, 16, 0.3);
          background: rgba(157, 26, 16, 0.08);
       }
 
-      .card-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-      .tag {
-         display: inline-block; padding: 4px 10px; white-space: nowrap;
-         font-family: var(--font-mono); font-size: 0.62rem; font-weight: 500;
-         letter-spacing: 0.07em; text-transform: uppercase;
-         border-radius: 6px; background: rgba(255, 255, 255, 0.06);
-         color: rgba(255, 255, 255, 0.55); border: 1px solid rgba(255, 255, 255, 0.09);
+      .card-tags {
+         display: flex;
+         gap: 0.5rem;
+         flex-wrap: wrap;
       }
+
+      .tag {
+         display: inline-block;
+         padding: 4px 10px;
+         white-space: nowrap;
+         font-family: var(--font-mono);
+         font-size: 0.62rem;
+         font-weight: 500;
+         letter-spacing: 0.07em;
+         text-transform: uppercase;
+         border-radius: 6px;
+         background: rgba(255, 255, 255, 0.06);
+         color: rgba(255, 255, 255, 0.55);
+         border: 1px solid rgba(255, 255, 255, 0.09);
+      }
+
       .tag.orbiting {
-         position: absolute; top: 0; left: 0; margin: 0;
-         pointer-events: none; will-change: transform, opacity;
+         position: absolute;
+         top: 0;
+         left: 0;
+         margin: 0;
+         pointer-events: none;
+         will-change: transform, opacity;
          background: rgba(10, 10, 10, 0.9);
          border-color: rgba(229, 62, 62, 0.28);
          color: rgba(255, 255, 255, 0.8);
@@ -568,183 +1122,419 @@
       /* ============================================================
          ABOUT
          ============================================================ */
-      .about-section { padding: 2rem 0 7rem; }
-      .about-grid { display: grid; grid-template-columns: 1fr; gap: 4rem; }
-      .about-text { max-width: 600px; }
-      .about-text p {
-         font-size: 0.95rem; font-weight: 300; line-height: 1.8;
-         color: var(--text-muted); margin-bottom: 1rem;
+      .about-section {
+         padding: 2rem 0 7rem;
       }
 
-      .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; align-content: center; }
+      .about-grid {
+         display: grid;
+         grid-template-columns: 1fr;
+         gap: 4rem;
+      }
 
-      @property --ang { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+      .about-text {
+         max-width: 600px;
+      }
+
+      .about-text p {
+         font-size: 0.95rem;
+         font-weight: 300;
+         line-height: 1.8;
+         color: var(--text-muted);
+         margin-bottom: 1rem;
+      }
+
+      .stats-grid {
+         display: grid;
+         grid-template-columns: repeat(2, 1fr);
+         gap: 1.25rem;
+         align-content: center;
+      }
+
+      @property --ang {
+         syntax: '<angle>';
+         initial-value: 0deg;
+         inherits: false;
+      }
 
       .stat-card {
-         position: relative; padding: 1.75rem; border-radius: 14px;
+         position: relative;
+         padding: 1.75rem;
+         border-radius: 14px;
          background: rgba(255, 255, 255, 0.03);
          border: 1px solid rgba(255, 255, 255, 0.06);
          transition: box-shadow 0.45s ease;
       }
+
       .stat-card::before {
-         content: ''; position: absolute; inset: -1px; border-radius: 15px; padding: 1px;
+         content: '';
+         position: absolute;
+         inset: -1px;
+         border-radius: 15px;
+         padding: 1px;
          background: conic-gradient(from var(--ang),
-            rgba(255, 255, 255, 0.05) 0%, rgba(229, 62, 62, 0.4) 12%,
-            rgba(255, 255, 255, 0.05) 26%, rgba(255, 255, 255, 0.05) 100%);
+               rgba(255, 255, 255, 0.05) 0%, rgba(229, 62, 62, 0.4) 12%,
+               rgba(255, 255, 255, 0.05) 26%, rgba(255, 255, 255, 0.05) 100%);
          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-         -webkit-mask-composite: xor; mask-composite: exclude;
+         -webkit-mask-composite: xor;
+         mask-composite: exclude;
          animation: ang-spin 7s linear infinite;
          pointer-events: none;
       }
-      @keyframes ang-spin { to { --ang: 360deg; } }
-      .stat-card:hover { box-shadow: 0 0 34px -8px rgba(229, 62, 62, 0.16); }
 
-      .stat-inner { animation: stat-breathe 3.6s ease-in-out infinite; }
-      .stat-card:nth-child(2) .stat-inner { animation-delay: 0.6s; }
-      .stat-card:nth-child(3) .stat-inner { animation-delay: 1.2s; }
-      .stat-card:nth-child(4) .stat-inner { animation-delay: 1.8s; }
+      @keyframes ang-spin {
+         to {
+            --ang: 360deg;
+         }
+      }
+
+      .stat-card:hover {
+         box-shadow: 0 0 34px -8px rgba(229, 62, 62, 0.16);
+      }
+
+      .stat-inner {
+         animation: stat-breathe 3.6s ease-in-out infinite;
+      }
+
+      .stat-card:nth-child(2) .stat-inner {
+         animation-delay: 0.6s;
+      }
+
+      .stat-card:nth-child(3) .stat-inner {
+         animation-delay: 1.2s;
+      }
+
+      .stat-card:nth-child(4) .stat-inner {
+         animation-delay: 1.8s;
+      }
+
       @keyframes stat-breathe {
-         0%, 100% { transform: scale(1); }
-         50% { transform: scale(1.018); }
+
+         0%,
+         100% {
+            transform: scale(1);
+         }
+
+         50% {
+            transform: scale(1.018);
+         }
       }
 
       .stat-value {
-         font-family: var(--font-display); font-size: 2.25rem; font-weight: 600;
-         color: var(--red); line-height: 1.1; min-height: 1.1em;
+         font-family: var(--font-display);
+         font-size: 2.25rem;
+         font-weight: 600;
+         color: var(--red);
+         line-height: 1.1;
+         min-height: 1.1em;
       }
-      .stat-value.stat-text { font-size: 1.7rem; color: rgba(255, 255, 255, 0.9); }
+
+      .stat-value.stat-text {
+         font-size: 1.7rem;
+         color: rgba(255, 255, 255, 0.9);
+      }
+
       .stat-label {
-         font-family: var(--font-mono); font-size: 0.68rem; color: rgba(255, 255, 255, 0.5);
-         font-weight: 500; margin-top: 0.35rem; text-transform: uppercase; letter-spacing: 0.1em;
+         font-family: var(--font-mono);
+         font-size: 0.68rem;
+         color: rgba(255, 255, 255, 0.5);
+         font-weight: 500;
+         margin-top: 0.35rem;
+         text-transform: uppercase;
+         letter-spacing: 0.1em;
       }
 
       /* ============================================================
          CONTACT
          ============================================================ */
-      .contact-section { position: relative; overflow: hidden; padding: 5rem 0 6rem; }
+      .contact-section {
+         position: relative;
+         overflow: hidden;
+         padding: 5rem 0 6rem;
+      }
+
       .contact-section::before {
-         content: ''; position: absolute; top: -10%; left: 50%; transform: translateX(-50%);
-         width: 700px; height: 700px; pointer-events: none;
+         content: '';
+         position: absolute;
+         top: -10%;
+         left: 50%;
+         transform: translateX(-50%);
+         width: 700px;
+         height: 700px;
+         pointer-events: none;
          background: radial-gradient(circle, rgba(157, 26, 16, 0.09) 0%, transparent 68%);
       }
-      .contact-inner { position: relative; z-index: 1; text-align: center; }
+
+      .contact-inner {
+         position: relative;
+         z-index: 1;
+         text-align: center;
+      }
 
       .contact-title {
          font-family: var(--font-display);
-         font-size: clamp(2.5rem, 7.5vw, 5.6rem); font-weight: 700;
-         letter-spacing: -0.03em; line-height: 0.98;
+         font-size: clamp(2.5rem, 7.5vw, 5.6rem);
+         font-weight: 700;
+         letter-spacing: -0.03em;
+         line-height: 0.98;
          margin: 1.75rem 0 1.5rem;
       }
-      .ct-line { display: block; overflow: hidden; padding-bottom: 0.06em; }
-      .ct-inner { display: inline-block; will-change: transform; }
+
+      .ct-line {
+         display: block;
+         overflow: hidden;
+         padding-bottom: 0.06em;
+      }
+
+      .ct-inner {
+         display: inline-block;
+         will-change: transform;
+      }
 
       .contact-sub {
-         font-size: 1rem; font-weight: 300; line-height: 1.7;
-         color: var(--text-muted); max-width: 480px; margin: 0 auto 3rem;
+         font-size: 1rem;
+         font-weight: 300;
+         line-height: 1.7;
+         color: var(--text-muted);
+         max-width: 480px;
+         margin: 0 auto 3rem;
       }
 
       .contact-cards {
-         display: flex; align-items: stretch; justify-content: center;
-         gap: 1rem; flex-wrap: wrap;
+         display: flex;
+         align-items: stretch;
+         justify-content: center;
+         gap: 1rem;
+         flex-wrap: wrap;
       }
+
       .contact-card {
-         position: relative; overflow: hidden;
-         display: inline-flex; align-items: center; gap: 14px;
-         padding: 18px 28px; border-radius: 16px;
+         position: relative;
+         overflow: hidden;
+         display: inline-flex;
+         align-items: center;
+         gap: 14px;
+         padding: 18px 28px;
+         border-radius: 16px;
          border: 1px solid rgba(255, 255, 255, 0.12);
          background: rgba(255, 255, 255, 0.04);
-         color: #fff; text-decoration: none;
+         color: #fff;
+         text-decoration: none;
          transition: border-color 0.4s ease, background 0.4s ease, box-shadow 0.4s ease;
       }
+
       .contact-card:hover {
          border-color: rgba(157, 26, 16, 0.4);
          background: rgba(157, 26, 16, 0.08);
          box-shadow: 0 14px 38px -12px rgba(157, 26, 16, 0.28);
       }
+
       .contact-card .contact-icon {
-         width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0;
-         display: flex; align-items: center; justify-content: center;
-         background: rgba(255, 255, 255, 0.06); color: rgba(255, 255, 255, 0.85);
+         width: 42px;
+         height: 42px;
+         border-radius: 11px;
+         flex-shrink: 0;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         background: rgba(255, 255, 255, 0.06);
+         color: rgba(255, 255, 255, 0.85);
          transition: color 0.35s ease, background 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       }
+
       .contact-card:hover .contact-icon {
-         color: var(--red); background: rgba(157, 26, 16, 0.14);
+         color: var(--red);
+         background: rgba(157, 26, 16, 0.14);
          transform: translateY(-2px) rotate(-4deg);
       }
-      .contact-card-meta { text-align: left; }
-      .contact-card-label {
-         font-family: var(--font-mono); font-size: 0.64rem;
-         color: rgba(255, 255, 255, 0.4); text-transform: uppercase;
-         letter-spacing: 0.1em; font-weight: 500;
+
+      .contact-card-meta {
+         text-align: left;
       }
-      .contact-card-value { font-size: 0.9rem; color: rgba(255, 255, 255, 0.85); margin-top: 2px; }
+
+      .contact-card-label {
+         font-family: var(--font-mono);
+         font-size: 0.64rem;
+         color: rgba(255, 255, 255, 0.4);
+         text-transform: uppercase;
+         letter-spacing: 0.1em;
+         font-weight: 500;
+      }
+
+      .contact-card-value {
+         font-size: 0.9rem;
+         color: rgba(255, 255, 255, 0.85);
+         margin-top: 2px;
+      }
 
       /* ============================================================
          FOOTER
          ============================================================ */
-      footer { padding: 2rem 0; border-top: 1px solid rgba(255, 255, 255, 0.06); position: relative; z-index: 2; }
-      .footer-inner {
-         max-width: 1280px; margin: 0 auto; padding: 0 1.5rem;
-         display: flex; align-items: center; justify-content: space-between;
-         flex-wrap: wrap; gap: 1rem;
+      footer {
+         padding: 2rem 0;
+         border-top: 1px solid rgba(255, 255, 255, 0.06);
+         position: relative;
+         z-index: 2;
       }
-      .footer-logo { font-family: var(--font-display); font-size: 1rem; font-weight: 500; color: rgba(255, 255, 255, 0.3); }
-      .footer-note { font-family: var(--font-mono); font-size: 0.66rem; color: rgba(255, 255, 255, 0.25); letter-spacing: 0.04em; }
+
+      .footer-inner {
+         max-width: 1280px;
+         margin: 0 auto;
+         padding: 0 1.5rem;
+         display: flex;
+         align-items: center;
+         justify-content: space-between;
+         flex-wrap: wrap;
+         gap: 1rem;
+      }
+
+      .footer-logo {
+         font-family: var(--font-display);
+         font-size: 1rem;
+         font-weight: 500;
+         color: rgba(255, 255, 255, 0.3);
+      }
+
+      .footer-note {
+         font-family: var(--font-mono);
+         font-size: 0.66rem;
+         color: rgba(255, 255, 255, 0.25);
+         letter-spacing: 0.04em;
+      }
 
       /* ============================================================
          AUDIO TOGGLE
          ============================================================ */
       #audioToggle {
-         position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 4000;
-         width: 44px; height: 44px; border-radius: 50%;
+         position: fixed;
+         bottom: 1.5rem;
+         right: 1.5rem;
+         z-index: 4000;
+         width: 44px;
+         height: 44px;
+         border-radius: 50%;
          border: 1px solid rgba(255, 255, 255, 0.12);
          background: rgba(5, 5, 5, 0.6);
-         -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+         -webkit-backdrop-filter: blur(10px);
+         backdrop-filter: blur(10px);
          color: rgba(255, 255, 255, 0.55);
-         display: flex; align-items: center; justify-content: center;
+         display: flex;
+         align-items: center;
+         justify-content: center;
          transition: color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
       }
-      #audioToggle:hover { color: #fff; border-color: rgba(229, 62, 62, 0.4); }
+
+      #audioToggle:hover {
+         color: #fff;
+         border-color: rgba(229, 62, 62, 0.4);
+      }
+
       #audioToggle.playing {
-         color: var(--red); border-color: rgba(229, 62, 62, 0.35);
+         color: var(--red);
+         border-color: rgba(229, 62, 62, 0.35);
          box-shadow: 0 0 18px -4px rgba(229, 62, 62, 0.35);
       }
-      #audioToggle .icon-on { display: none; }
-      #audioToggle.playing .icon-on { display: block; }
-      #audioToggle.playing .icon-off { display: none; }
+
+      #audioToggle .icon-on {
+         display: none;
+      }
+
+      #audioToggle.playing .icon-on {
+         display: block;
+      }
+
+      #audioToggle.playing .icon-off {
+         display: none;
+      }
 
       /* ============================================================
          RESPONSIVE
          ============================================================ */
       @media (min-width: 900px) {
-         .project-grid { grid-template-columns: repeat(2, 1fr); }
-         .about-grid { grid-template-columns: 1fr 1fr; }
+         .project-grid {
+            grid-template-columns: repeat(2, 1fr);
+         }
+
+         .about-grid {
+            grid-template-columns: 1fr 1fr;
+         }
       }
 
       @media (max-width: 767px) {
-         .nav-links { display: none; }
-         .burger { display: flex; }
-         #hero-canvas.visible { opacity: 0.55; }
-         .hero-inner { padding-bottom: 6.5rem; }
-         .card-content { padding: 1.6rem 1.5rem 1.6rem 1.75rem; }
-         .card-number { font-size: 3.6rem; top: -8px; }
-         .stats-grid { gap: 0.85rem; }
-         .stat-card { padding: 1.25rem; }
-         .stat-value { font-size: 1.8rem; }
-         .stat-value.stat-text { font-size: 1.35rem; }
-         .scroll-indicator { display: none; }
-         #audioToggle { bottom: 1.1rem; right: 1.1rem; }
+         .nav-links {
+            display: none;
+         }
+
+         .burger {
+            display: flex;
+         }
+
+         #hero-canvas.visible {
+            opacity: 0.55;
+         }
+
+         .hero-inner {
+            padding-bottom: 6.5rem;
+         }
+
+         .card-content {
+            padding: 1.6rem 1.5rem 1.6rem 1.75rem;
+         }
+
+         .card-number {
+            font-size: 3.6rem;
+            top: -8px;
+         }
+
+         .stats-grid {
+            gap: 0.85rem;
+         }
+
+         .stat-card {
+            padding: 1.25rem;
+         }
+
+         .stat-value {
+            font-size: 1.8rem;
+         }
+
+         .stat-value.stat-text {
+            font-size: 1.35rem;
+         }
+
+         .scroll-indicator {
+            display: none;
+         }
+
+         #audioToggle {
+            bottom: 1.1rem;
+            right: 1.1rem;
+         }
       }
 
       /* ============================================================
          REDUCED MOTION
          ============================================================ */
       @media (prefers-reduced-motion: reduce) {
-         html { scroll-behavior: auto; }
-         #bg-grain, #bg-particles { display: none; }
-         .glow-orb, .stat-inner, .scroll-indicator .arrow,
-         .stat-card::before { animation: none !important; }
-         *, *::before, *::after {
+         html {
+            scroll-behavior: auto;
+         }
+
+         #bg-grain,
+         #bg-particles {
+            display: none;
+         }
+
+         .glow-orb,
+         .stat-inner,
+         .scroll-indicator .arrow,
+         .stat-card::before {
+            animation: none !important;
+         }
+
+         *,
+         *::before,
+         *::after {
             transition-duration: 0.01ms !important;
             animation-duration: 0.01ms !important;
             animation-iteration-count: 1 !important;
@@ -764,7 +1554,9 @@
    <div id="bg-grain" aria-hidden="true"></div>
 
    <!-- Custom cursor -->
-   <div id="cursor" aria-hidden="true"><div class="cursor-cube"></div></div>
+   <div id="cursor" aria-hidden="true">
+      <div class="cursor-cube"></div>
+   </div>
    <div id="cursor-dot" aria-hidden="true"></div>
 
    <!-- Mobile menu -->
@@ -784,8 +1576,17 @@
             <a href="#contact" class="nav-link">Contact</a>
          </div>
          <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false">
-            <svg class="icon-menu" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
-            <svg class="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            <svg class="icon-menu" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+               <line x1="4" x2="20" y1="6" y2="6" />
+               <line x1="4" x2="20" y1="12" y2="12" />
+               <line x1="4" x2="20" y1="18" y2="18" />
+            </svg>
+            <svg class="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+               <path d="M18 6 6 18" />
+               <path d="m6 6 12 12" />
+            </svg>
          </button>
       </div>
    </nav>
@@ -803,7 +1604,8 @@
                <div class="hero-title-wrap">
                   <h1 class="hero-title" id="heroTitle" aria-label="Mohammed Islam Foudi.">
                      <span class="hero-line" id="heroLine1">Mohammed Islam</span>
-                     <span class="hero-line hero-line-dim"><span id="heroLine2">Foudi</span><span class="hero-period text-red" aria-hidden="true">.</span></span>
+                     <span class="hero-line hero-line-dim"><span id="heroLine2">Foudi</span><span
+                           class="hero-period text-red" aria-hidden="true">.</span></span>
                   </h1>
                   <div class="hero-scanline" aria-hidden="true"></div>
                </div>
@@ -814,10 +1616,19 @@
                <div class="hero-actions hero-fade">
                   <a href="#projects" class="btn btn-primary magnetic">
                      View Projects
-                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14"/><path d="m19 12-7 7-7-7"/></svg>
+                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 5v14" />
+                        <path d="m19 12-7 7-7-7" />
+                     </svg>
                   </a>
                   <a href="https://github.com/Shiyuki99" target="_blank" rel="noopener" class="btn btn-ghost magnetic">
-                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>
+                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path
+                           d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                        <path d="M9 18c-4.51 2-5-2-7-2" />
+                     </svg>
                      GitHub
                   </a>
                </div>
@@ -832,15 +1643,72 @@
       <!-- SVG icon sprite (Lucide icons, stroke inherits currentColor) -->
       <svg width="0" height="0" style="position:absolute" aria-hidden="true">
          <defs>
-            <symbol id="i-github" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></g></symbol>
-            <symbol id="i-external" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></g></symbol>
-            <symbol id="i-shield" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></g></symbol>
-            <symbol id="i-heart" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/><path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/></g></symbol>
-            <symbol id="i-blocks" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="14" y="3" rx="1"/><path d="M10 21V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H3"/></g></symbol>
-            <symbol id="i-landmark" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" x2="21" y1="22" y2="22"/><line x1="6" x2="6" y1="18" y2="11"/><line x1="10" x2="10" y1="18" y2="11"/><line x1="14" x2="14" y1="18" y2="11"/><line x1="18" x2="18" y1="18" y2="11"/><polygon points="12 2 20 7 4 7"/></g></symbol>
-            <symbol id="i-linkedin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></g></symbol>
-            <symbol id="i-vol-on" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></g></symbol>
-            <symbol id="i-vol-off" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4V5Z"/><line x1="22" x2="16" y1="9" y2="15"/><line x1="16" x2="22" y1="9" y2="15"/></g></symbol>
+            <symbol id="i-github" viewBox="0 0 24 24">
+               <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                     d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+                  <path d="M9 18c-4.51 2-5-2-7-2" />
+               </g>
+            </symbol>
+            <symbol id="i-external" viewBox="0 0 24 24">
+               <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M15 3h6v6" />
+                  <path d="M10 14 21 3" />
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+               </g>
+            </symbol>
+            <symbol id="i-shield" viewBox="0 0 24 24">
+               <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                     d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" />
+                  <path d="m9 12 2 2 4-4" />
+               </g>
+            </symbol>
+            <symbol id="i-heart" viewBox="0 0 24 24">
+               <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path
+                     d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+                  <path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27" />
+               </g>
+            </symbol>
+            <symbol id="i-blocks" viewBox="0 0 24 24">
+               <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="7" height="7" x="14" y="3" rx="1" />
+                  <path
+                     d="M10 21V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H3" />
+               </g>
+            </symbol>
+            <symbol id="i-landmark" viewBox="0 0 24 24">
+               <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="3" x2="21" y1="22" y2="22" />
+                  <line x1="6" x2="6" y1="18" y2="11" />
+                  <line x1="10" x2="10" y1="18" y2="11" />
+                  <line x1="14" x2="14" y1="18" y2="11" />
+                  <line x1="18" x2="18" y1="18" y2="11" />
+                  <polygon points="12 2 20 7 4 7" />
+               </g>
+            </symbol>
+            <symbol id="i-linkedin" viewBox="0 0 24 24">
+               <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                  <rect width="4" height="12" x="2" y="9" />
+                  <circle cx="4" cy="4" r="2" />
+               </g>
+            </symbol>
+            <symbol id="i-vol-on" viewBox="0 0 24 24">
+               <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 5 6 9H2v6h4l5 4V5Z" />
+                  <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                  <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+               </g>
+            </symbol>
+            <symbol id="i-vol-off" viewBox="0 0 24 24">
+               <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M11 5 6 9H2v6h4l5 4V5Z" />
+                  <line x1="22" x2="16" y1="9" y2="15" />
+                  <line x1="16" x2="22" y1="9" y2="15" />
+               </g>
+            </symbol>
          </defs>
       </svg>
 
@@ -850,7 +1718,8 @@
             <div class="section-head">
                <span class="section-label" data-reveal>Selected Work</span>
                <h2 class="section-title">
-                  <span class="st-mask"><span class="st-inner" data-split-line>Projects<span class="text-red">.</span></span></span>
+                  <span class="st-mask"><span class="st-inner" data-split-line>Projects<span
+                           class="text-red">.</span></span></span>
                </h2>
             </div>
 
@@ -864,19 +1733,27 @@
                      <div class="card-content">
                         <div class="card-head">
                            <div class="card-title-wrap">
-                              <img src="app-icon.png" alt="Swap app logo" class="project-logo" width="48" height="48" loading="lazy" decoding="async">
+                              <img src="app-icon.png" alt="Swap app logo" class="project-logo" width="48" height="48"
+                                 loading="lazy" decoding="async">
                               <div>
                                  <h3 class="card-title">Swap</h3>
-                                 <p class="card-desc">A web-based swap/trading application with real-time interactions and a clean user interface.</p>
+                                 <p class="card-desc">A web-based swap/trading application with real-time interactions
+                                    and a clean user interface.</p>
                               </div>
                            </div>
                            <div class="card-links">
-                              <a href="https://swapapp-web.onrender.com" target="_blank" rel="noopener" class="link-btn link-btn-live magnetic">
-                                 <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-external"/></svg>
+                              <a href="https://swapapp-web.onrender.com" target="_blank" rel="noopener"
+                                 class="link-btn link-btn-live magnetic">
+                                 <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="#i-external" />
+                                 </svg>
                                  Live
                               </a>
-                              <a href="https://github.com/Shiyuki99/swap" target="_blank" rel="noopener" class="link-btn link-btn-code magnetic">
-                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-github"/></svg>
+                              <a href="https://github.com/Shiyuki99/swap" target="_blank" rel="noopener"
+                                 class="link-btn link-btn-code magnetic">
+                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="#i-github" />
+                                 </svg>
                                  Code
                               </a>
                            </div>
@@ -897,19 +1774,27 @@
                      <div class="card-content">
                         <div class="card-head">
                            <div class="card-title-wrap">
-                              <img src="dicecam-logo.png" alt="DiceCam app logo" class="project-logo" width="48" height="48" loading="lazy" decoding="async">
+                              <img src="dicecam-logo.png" alt="DiceCam app logo" class="project-logo" width="48"
+                                 height="48" loading="lazy" decoding="async">
                               <div>
                                  <h3 class="card-title">DiceCam</h3>
-                                 <p class="card-desc">An interactive dice application with camera integration, randomization mechanics, and a playful experience.</p>
+                                 <p class="card-desc">An interactive dice application with camera integration,
+                                    randomization mechanics, and a playful experience.</p>
                               </div>
                            </div>
                            <div class="card-links">
-                              <a href="https://diceapp.vercel.app" target="_blank" rel="noopener" class="link-btn link-btn-live magnetic">
-                                 <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-external"/></svg>
+                              <a href="https://diceapp.vercel.app" target="_blank" rel="noopener"
+                                 class="link-btn link-btn-live magnetic">
+                                 <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="#i-external" />
+                                 </svg>
                                  Live
                               </a>
-                              <a href="https://github.com/Shiyuki99/dicecam" target="_blank" rel="noopener" class="link-btn link-btn-code magnetic">
-                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-github"/></svg>
+                              <a href="https://github.com/Shiyuki99/dicecam" target="_blank" rel="noopener"
+                                 class="link-btn link-btn-code magnetic">
+                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="#i-github" />
+                                 </svg>
                                  Code
                               </a>
                            </div>
@@ -930,15 +1815,20 @@
                      <div class="card-content">
                         <div class="card-head">
                            <div class="card-title-wrap">
-                              <img src="autostore_icon.png" alt="AutoStoreDZ logo" class="project-logo" width="48" height="48" loading="lazy" decoding="async">
+                              <img src="autostore_icon.png" alt="AutoStoreDZ logo" class="project-logo" width="48"
+                                 height="48" loading="lazy" decoding="async">
                               <div>
                                  <h3 class="card-title">AutoStoreDZ</h3>
-                                 <p class="card-desc">An automated store bot for seamless purchasing — includes a testing chat interface to explore the workflow.</p>
+                                 <p class="card-desc">An automated store bot for seamless purchasing — includes a
+                                    testing chat interface to explore the workflow.</p>
                               </div>
                            </div>
                            <div class="card-links">
-                              <a href="https://autostoredz.online" target="_blank" rel="noopener" class="link-btn link-btn-live magnetic">
-                                 <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-external"/></svg>
+                              <a href="https://autostoredz.online" target="_blank" rel="noopener"
+                                 class="link-btn link-btn-live magnetic">
+                                 <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="#i-external" />
+                                 </svg>
                                  Live
                               </a>
                            </div>
@@ -960,16 +1850,22 @@
                         <div class="card-head">
                            <div class="card-title-wrap">
                               <div class="icon-tile">
-                                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-shield"/></svg>
+                                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="#i-shield" />
+                                 </svg>
                               </div>
                               <div>
                                  <h3 class="card-title">Password Manager</h3>
-                                 <p class="card-desc">A secure password management tool with encryption, storage, and retrieval of credentials.</p>
+                                 <p class="card-desc">A secure password management tool with encryption, storage, and
+                                    retrieval of credentials.</p>
                               </div>
                            </div>
                            <div class="card-links">
-                              <a href="https://github.com/Shiyuki99/Password-Manager" target="_blank" rel="noopener" class="link-btn link-btn-code magnetic">
-                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-github"/></svg>
+                              <a href="https://github.com/Shiyuki99/Password-Manager" target="_blank" rel="noopener"
+                                 class="link-btn link-btn-code magnetic">
+                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="#i-github" />
+                                 </svg>
                                  Code
                               </a>
                            </div>
@@ -991,16 +1887,22 @@
                         <div class="card-head">
                            <div class="card-title-wrap">
                               <div class="icon-tile">
-                                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-heart"/></svg>
+                                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="#i-heart" />
+                                 </svg>
                               </div>
                               <div>
                                  <h3 class="card-title">Heart Disease Prediction</h3>
-                                 <p class="card-desc">Machine learning model for predicting heart disease risk based on clinical parameters and patient data.</p>
+                                 <p class="card-desc">Machine learning model for predicting heart disease risk based on
+                                    clinical parameters and patient data.</p>
                               </div>
                            </div>
                            <div class="card-links">
-                              <a href="https://github.com/Shiyuki99/Heart_disease" target="_blank" rel="noopener" class="link-btn link-btn-code magnetic">
-                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-github"/></svg>
+                              <a href="https://github.com/Shiyuki99/Heart_disease" target="_blank" rel="noopener"
+                                 class="link-btn link-btn-code magnetic">
+                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="#i-github" />
+                                 </svg>
                                  Code
                               </a>
                            </div>
@@ -1022,16 +1924,22 @@
                         <div class="card-head">
                            <div class="card-title-wrap">
                               <div class="icon-tile">
-                                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-blocks"/></svg>
+                                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="#i-blocks" />
+                                 </svg>
                               </div>
                               <div>
                                  <h3 class="card-title">Blockchain Showcase</h3>
-                                 <p class="card-desc">A simple visual demonstration of blockchain fundamentals — hashing, chaining, and consensus concepts.</p>
+                                 <p class="card-desc">A simple visual demonstration of blockchain fundamentals —
+                                    hashing, chaining, and consensus concepts.</p>
                               </div>
                            </div>
                            <div class="card-links">
-                              <a href="https://github.com/Shiyuki99/simple-blockchain-showcase" target="_blank" rel="noopener" class="link-btn link-btn-code magnetic">
-                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-github"/></svg>
+                              <a href="https://github.com/Shiyuki99/simple-blockchain-showcase" target="_blank"
+                                 rel="noopener" class="link-btn link-btn-code magnetic">
+                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="#i-github" />
+                                 </svg>
                                  Code
                               </a>
                            </div>
@@ -1053,16 +1961,22 @@
                         <div class="card-head">
                            <div class="card-title-wrap">
                               <div class="icon-tile">
-                                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-landmark"/></svg>
+                                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="#i-landmark" />
+                                 </svg>
                               </div>
                               <div>
                                  <h3 class="card-title">Banking System</h3>
-                                 <p class="card-desc">A simulated banking system handling accounts, transactions, and balance management with proper validation.</p>
+                                 <p class="card-desc">A simulated banking system handling accounts, transactions, and
+                                    balance management with proper validation.</p>
                               </div>
                            </div>
                            <div class="card-links">
-                              <a href="https://github.com/Shiyuki99/Banking-System" target="_blank" rel="noopener" class="link-btn link-btn-code magnetic">
-                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-github"/></svg>
+                              <a href="https://github.com/Shiyuki99/Banking-System" target="_blank" rel="noopener"
+                                 class="link-btn link-btn-code magnetic">
+                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                                    <use href="#i-github" />
+                                 </svg>
                                  Code
                               </a>
                            </div>
@@ -1086,7 +2000,8 @@
                <div class="about-text">
                   <span class="section-label" data-reveal style="margin-bottom:1rem;">About</span>
                   <h2 class="section-title" style="margin-bottom:1.5rem;">
-                     <span class="st-mask"><span class="st-inner" data-split-line>A bit about me<span class="text-red">.</span></span></span>
+                     <span class="st-mask"><span class="st-inner" data-split-line>A bit about me<span
+                              class="text-red">.</span></span></span>
                   </h2>
                   <p data-reveal>
                      I'm a developer who enjoys building things that live on the internet — whether
@@ -1137,7 +2052,8 @@
                <span class="section-label" data-reveal>Get in Touch</span>
                <h2 class="contact-title" aria-label="Let's build something.">
                   <span class="ct-line"><span class="ct-inner" data-ct-line>LET'S BUILD</span></span>
-                  <span class="ct-line"><span class="ct-inner" data-ct-line>SOMETHING<span class="text-red">.</span></span></span>
+                  <span class="ct-line"><span class="ct-inner" data-ct-line>SOMETHING<span
+                           class="text-red">.</span></span></span>
                </h2>
                <p class="contact-sub" data-reveal>
                   I'm always open to new opportunities, collaborations, or just a good conversation.
@@ -1146,16 +2062,21 @@
                <div class="contact-cards" data-reveal>
                   <a href="https://github.com/Shiyuki99" target="_blank" rel="noopener" class="contact-card magnetic">
                      <div class="contact-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-github"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                           <use href="#i-github" />
+                        </svg>
                      </div>
                      <div class="contact-card-meta">
                         <div class="contact-card-label">GitHub</div>
                         <div class="contact-card-value">@Shiyuki99</div>
                      </div>
                   </a>
-                  <a href="https://www.linkedin.com/in/mohammed-islam-foudi/" target="_blank" rel="noopener" class="contact-card magnetic">
+                  <a href="https://www.linkedin.com/in/mohammed-islam-foudi/" target="_blank" rel="noopener"
+                     class="contact-card magnetic">
                      <div class="contact-icon">
-                        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-linkedin"/></svg>
+                        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                           <use href="#i-linkedin" />
+                        </svg>
                      </div>
                      <div class="contact-card-meta">
                         <div class="contact-card-label">LinkedIn</div>
@@ -1177,8 +2098,12 @@
 
    <!-- Ambient audio toggle -->
    <button id="audioToggle" aria-label="Toggle ambient audio" aria-pressed="false" title="Ambient audio">
-      <svg class="icon-on" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-vol-on"/></svg>
-      <svg class="icon-off" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><use href="#i-vol-off"/></svg>
+      <svg class="icon-on" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+         <use href="#i-vol-on" />
+      </svg>
+      <svg class="icon-off" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+         <use href="#i-vol-off" />
+      </svg>
    </button>
 
    <!-- Libraries -->
@@ -1213,10 +2138,10 @@
             cursor: {
                followSpeed: 0.22,        // cube smoothing (seconds-based quickTo duration factor)
                dotSpeed: 0.12,
-               fragmentChance: 0.24,     // probability per qualifying mousemove
-               fragmentMinDist: 16,      // px the cursor must travel before a fragment may spawn
-               fragmentLife: [0.38, 0.8],// seconds [min, max]
-               fragmentMax: 22,          // max simultaneously alive fragments
+               fragmentChance: 0.6,      // probability per qualifying mousemove
+               fragmentMinDist: 6,       // px the cursor must travel before a fragment may spawn
+               fragmentLife: [0.7, 1.5], // seconds [min, max] — slow fade
+               fragmentMax: 40,          // max simultaneously alive fragments
             },
             hero: {
                scrambleGlyphs: '!<>-_\\/[]{}=+*^?#01',
@@ -1412,26 +2337,31 @@
 
             const el = document.createElement('div');
             el.className = 'glitch-fragment';
-            const w = rand(2, 6), h = pick([w, w * 0.5, w * 2, 2]);
+            const w = rand(4, 14), h = pick([w, w * 0.4, w * 1.8, 3]);
             el.style.width = w + 'px';
             el.style.height = h + 'px';
             el.style.background = pick([
                CONFIG.colors.red, CONFIG.colors.redDeep,
-               'rgba(229,62,62,0.55)', 'rgba(255,255,255,0.6)',
+               'rgba(229,62,62,0.75)', 'rgba(255,255,255,0.8)',
             ]);
+            el.style.boxShadow = '0 0 6px rgba(229,62,62,0.35)';
             el.style.left = x + 'px';
             el.style.top = y + 'px';
             document.body.appendChild(el);
 
             const life = rand(CONFIG.cursor.fragmentLife[0], CONFIG.cursor.fragmentLife[1]);
-            const spread = opts.spread || 26;
-            const flickers = 3 + ((Math.random() * 4) | 0);
+            const spread = opts.spread || 30;
+            const flickers = 2 + ((Math.random() * 3) | 0);
             gsap.timeline({
                onComplete: () => { el.remove(); fragmentState.live--; },
             })
+               // brief opaque flicker burst, then a slow linear fade-out (the "trail" feel)
                .fromTo(el, { opacity: 1 }, {
-                  opacity: 0, duration: life, ease: 'steps(' + flickers + ')',
+                  opacity: 0.85, duration: life * 0.18, ease: 'steps(' + flickers + ')',
                }, 0)
+               .to(el, {
+                  opacity: 0, duration: life * 0.82, ease: 'sine.in',
+               }, life * 0.18)
                .to(el, {
                   x: rand(-spread, spread), y: rand(-spread, spread),
                   rotation: rand(-80, 80), duration: life, ease: 'power1.out',
@@ -1462,7 +2392,7 @@
                // Randomized fragment generation — never a continuous trail.
                const dist = Math.hypot(e.clientX - lastFx, e.clientY - lastFy);
                if (seen && dist > CONFIG.cursor.fragmentMinDist &&
-                   Math.random() < CONFIG.cursor.fragmentChance) {
+                  Math.random() < CONFIG.cursor.fragmentChance) {
                   spawnFragment(e.clientX + rand(-4, 4), e.clientY + rand(-4, 4));
                   lastFx = e.clientX; lastFy = e.clientY;
                } else if (!seen) {
