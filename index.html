@@ -19,10 +19,11 @@
 
    <!-- Progressive enhancement flag + animation failsafe -->
    <script>
-      document.documentElement.classList.add('js');
+      document.documentElement.classList.add('js', 'loading');
       window.__animFailsafe = setTimeout(function () {
          if (window.__booted) return;
          document.documentElement.classList.add('no-anim');
+         document.documentElement.classList.remove('loading');
          var label = document.getElementById('heroLabel');
          if (label && !label.textContent) label.textContent = 'FULL-STACK DEVELOPER';
       }, 4500);
@@ -47,6 +48,81 @@
       }
 
       /* ============================================================
+         LOADING SCREEN — light, theme-matched, exits into the hero boot
+         ============================================================ */
+      html.loading:not(.no-anim) body {
+         overflow: hidden;
+      }
+
+      #loader {
+         position: fixed;
+         inset: 0;
+         z-index: 5000;
+         background: var(--black);
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         transition: transform 0.7s cubic-bezier(0.65, 0, 0.35, 1),
+            visibility 0s 0.75s;
+      }
+
+      #loader.done {
+         transform: translateY(-100%);
+         visibility: hidden;
+      }
+
+      .no-anim #loader {
+         display: none;
+      }
+
+      .loader-inner {
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         gap: 1.1rem;
+      }
+
+      .loader-logo {
+         font-family: var(--font-display);
+         font-size: 1.7rem;
+         font-weight: 600;
+         letter-spacing: 0.02em;
+         color: #fff;
+      }
+
+      .loader-status {
+         font-size: 0.62rem;
+         font-weight: 500;
+         letter-spacing: 0.3em;
+         text-transform: uppercase;
+         color: var(--text-faint);
+         display: flex;
+         gap: 1.2em;
+      }
+
+      #loaderPct {
+         color: var(--red);
+         min-width: 3ch;
+         text-align: right;
+      }
+
+      .loader-bar {
+         width: 168px;
+         height: 1px;
+         background: rgba(255, 255, 255, 0.08);
+         overflow: hidden;
+      }
+
+      #loaderBar {
+         display: block;
+         height: 100%;
+         width: 100%;
+         background: linear-gradient(90deg, var(--red-deep), var(--red));
+         transform: scaleX(0);
+         transform-origin: left;
+      }
+
+      /* ============================================================
          BASE
          ============================================================ */
       *,
@@ -59,6 +135,8 @@
 
       html {
          scroll-behavior: smooth;
+         scrollbar-width: thin;
+         scrollbar-color: #333 #0a0a0a;
       }
 
       html.lenis {
@@ -74,7 +152,7 @@
          font-family: var(--font-body);
          background: var(--black);
          color: var(--white);
-         overflow-x: hidden;
+         overflow-x: clip;
          -webkit-font-smoothing: antialiased;
       }
 
@@ -107,6 +185,7 @@
       }
 
       img {
+         -webkit-user-select: none;
          user-select: none;
       }
 
@@ -298,6 +377,11 @@
       #cursor {
          width: 14px;
          height: 14px;
+         will-change: transform;
+      }
+
+      #cursor-dot {
+         will-change: transform;
       }
 
       #cursor .cursor-cube {
@@ -697,6 +781,7 @@
          ============================================================ */
       .hero {
          min-height: 100vh;
+         min-height: 100svh;
          display: flex;
          align-items: center;
          position: relative;
@@ -715,6 +800,65 @@
 
       #hero-canvas.visible {
          opacity: 1;
+      }
+
+      /* Shown when WebGL is unavailable (e.g. LibreWolf) — CSS-only wireframe globe */
+      .globe-fallback {
+         display: none;
+         position: absolute;
+         right: 5%;
+         top: 50%;
+         width: min(40vw, 440px);
+         z-index: 0;
+         opacity: 0;
+         transform: translateY(-50%);
+         transition: opacity 1.6s ease;
+         animation: globe-spin 30s linear infinite;
+      }
+
+      .hero.webgl-off #hero-canvas {
+         display: none;
+      }
+
+      .hero.webgl-off .globe-fallback {
+         display: block;
+      }
+
+      .hero.webgl-off .globe-fallback.visible {
+         opacity: 0.75;
+      }
+
+      @keyframes globe-spin {
+         from {
+            transform: translateY(-50%) rotate(0deg);
+         }
+
+         to {
+            transform: translateY(-50%) rotate(360deg);
+         }
+      }
+
+      @media (max-width: 767px) {
+         .globe-fallback {
+            right: 50%;
+            top: 38%;
+            width: 74vw;
+            transform: translate(50%, -50%);
+         }
+
+         @keyframes globe-spin {
+            from {
+               transform: translate(50%, -50%) rotate(0deg);
+            }
+
+            to {
+               transform: translate(50%, -50%) rotate(360deg);
+            }
+         }
+
+         .hero.webgl-off .globe-fallback.visible {
+            opacity: 0.4;
+         }
       }
 
       .hero-light {
@@ -928,11 +1072,50 @@
          margin-bottom: 3.5rem;
       }
 
-      .project-grid {
-         display: grid;
-         grid-template-columns: 1fr;
-         gap: 1.25rem;
+      /* Card deck — cards stack on top of each other while scrolling */
+      .card-stack {
+         position: relative;
+         max-width: 880px;
+         margin: 0 auto;
          perspective: 1200px;
+      }
+
+      .card-stack .project-card {
+         position: sticky;
+         top: calc(88px + var(--i, 0) * 14px);
+         margin-bottom: 36vh;
+      }
+
+      .card-stack .project-card:last-child {
+         margin-bottom: 8vh;
+      }
+
+      .card-stack .project-card:nth-child(1) {
+         --i: 0;
+      }
+
+      .card-stack .project-card:nth-child(2) {
+         --i: 1;
+      }
+
+      .card-stack .project-card:nth-child(3) {
+         --i: 2;
+      }
+
+      .card-stack .project-card:nth-child(4) {
+         --i: 3;
+      }
+
+      .card-stack .project-card:nth-child(5) {
+         --i: 4;
+      }
+
+      .card-stack .project-card:nth-child(6) {
+         --i: 5;
+      }
+
+      .card-stack .project-card:nth-child(7) {
+         --i: 6;
       }
 
       .project-card {
@@ -952,7 +1135,7 @@
          inset: 0;
          border-radius: 18px;
          z-index: 1;
-         background: linear-gradient(145deg, rgba(26, 26, 26, 0.72) 0%, rgba(12, 12, 12, 0.92) 100%);
+         background: linear-gradient(145deg, rgba(24, 24, 24, 0.97) 0%, rgba(11, 11, 11, 0.98) 100%);
          border: 1px solid var(--border-subtle);
          overflow: hidden;
          transition: border-color 0.5s ease, box-shadow 0.5s ease;
@@ -1451,16 +1634,17 @@
          RESPONSIVE
          ============================================================ */
       @media (min-width: 900px) {
-         .project-grid {
-            grid-template-columns: repeat(2, 1fr);
-         }
-
          .about-grid {
             grid-template-columns: 1fr 1fr;
          }
       }
 
       @media (max-width: 767px) {
+         .card-stack .project-card {
+            top: calc(78px + var(--i, 0) * 10px);
+            margin-bottom: 30vh;
+         }
+
          .nav-links {
             display: none;
          }
@@ -1546,6 +1730,18 @@
 <body>
    <a href="#projects" class="skip-link">Skip to content</a>
 
+   <!-- Loading screen -->
+   <div id="loader" aria-hidden="true">
+      <div class="loader-inner">
+         <div class="loader-logo">M<span class="text-red">.</span>F</div>
+         <div class="loader-status mono">
+            <span id="loaderText">INITIALIZING</span>
+            <span id="loaderPct">000</span>
+         </div>
+         <div class="loader-bar"><span id="loaderBar"></span></div>
+      </div>
+   </div>
+
    <!-- Ambient background layers -->
    <div class="glow-orb orb-1" aria-hidden="true"></div>
    <div class="glow-orb orb-2" aria-hidden="true"></div>
@@ -1595,6 +1791,19 @@
       <!-- ==================== HERO ==================== -->
       <section class="hero" id="hero">
          <canvas id="hero-canvas" aria-hidden="true"></canvas>
+         <svg class="globe-fallback" viewBox="0 0 400 400" aria-hidden="true">
+            <g fill="none" stroke="rgba(229,62,62,0.3)" stroke-width="1">
+               <circle cx="200" cy="200" r="150" />
+               <ellipse cx="200" cy="200" rx="150" ry="58" />
+               <ellipse cx="200" cy="200" rx="150" ry="112" />
+               <ellipse cx="200" cy="200" rx="58" ry="150" />
+               <ellipse cx="200" cy="200" rx="112" ry="150" />
+               <line x1="50" y1="200" x2="350" y2="200" />
+               <line x1="200" y1="50" x2="200" y2="350" />
+            </g>
+            <circle cx="200" cy="50" r="2.5" fill="rgba(229,62,62,0.8)" stroke="none" />
+            <circle cx="318" cy="132" r="2" fill="rgba(255,255,255,0.5)" stroke="none" />
+         </svg>
          <div class="hero-light" aria-hidden="true"></div>
 
          <div class="hero-inner">
@@ -1723,7 +1932,7 @@
                </h2>
             </div>
 
-            <div class="project-grid">
+            <div class="card-stack">
 
                <!-- Swap -->
                <article class="project-card">
@@ -2107,11 +2316,11 @@
    </button>
 
    <!-- Libraries -->
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+   <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
+   <script defer src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
+   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
    <script>
       /* ============================================================
@@ -2225,896 +2434,1156 @@
          }
 
          /* ============================================================
-            03 ENVIRONMENT — library checks & graceful degradation
+            LOADER — library-free progress, hands off to the hero boot.
+            Runs immediately at parse time (no CDN dependency).
             ============================================================ */
-         const hasGSAP = typeof window.gsap !== 'undefined';
-         const hasST = hasGSAP && typeof window.ScrollTrigger !== 'undefined';
-         const hasLenis = typeof window.Lenis !== 'undefined';
-         const hasSplit = typeof window.SplitType !== 'undefined';
-         const hasThree = typeof window.THREE !== 'undefined';
+         const Loader = (() => {
+            const el = $('#loader'), pct = $('#loaderPct'), bar = $('#loaderBar');
+            let current = 0, target = 96, raf = null, done = false;
+            const MIN_DURATION = 900; // never flash — the loader always feels intentional
+            const begunAt = performance.now();
 
-         if (hasST) gsap.registerPlugin(ScrollTrigger);
-
-         // Without GSAP nothing can animate — reveal everything statically and stop.
-         if (!hasGSAP) {
-            document.documentElement.classList.add('no-anim');
-            window.__booted = true;
-            return;
-         }
-
-         const motionOK = !prefersReducedMotion;
-
-         /* ============================================================
-            04 LENIS SMOOTH SCROLL
-            ============================================================ */
-         let lenis = null;
-         if (hasLenis && motionOK) {
-            lenis = new Lenis({ lerp: CONFIG.scroll.lerp, smoothWheel: true });
-            if (hasST) lenis.on('scroll', ScrollTrigger.update);
-            gsap.ticker.add((t) => lenis.raf(t * 1000));
-            gsap.ticker.lagSmoothing(0);
-         }
-
-         function scrollToTarget(target, offset) {
-            if (lenis) lenis.scrollTo(target, { offset: offset ?? -70, duration: 1.2 });
-            else if (typeof target === 'number') window.scrollTo({ top: target, behavior: motionOK ? 'smooth' : 'auto' });
-            else target.scrollIntoView({ behavior: motionOK ? 'smooth' : 'auto' });
-         }
-
-         /* ============================================================
-            05 AMBIENT BACKGROUND — grain tile + drifting particles
-            ============================================================ */
-         function initGrain() {
-            // Generate a small noise tile once, tile it as a background image.
-            const tile = document.createElement('canvas');
-            tile.width = tile.height = 140;
-            const tctx = tile.getContext('2d');
-            const img = tctx.createImageData(140, 140);
-            for (let i = 0; i < img.data.length; i += 4) {
-               const v = (Math.random() * 255) | 0;
-               img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
-               img.data[i + 3] = 255;
+            function render() {
+               pct.textContent = String(Math.round(current)).padStart(3, '0');
+               bar.style.transform = 'scaleX(' + (current / 100).toFixed(3) + ')';
             }
-            tctx.putImageData(img, 0, 0);
-            $('#bg-grain').style.backgroundImage = 'url(' + tile.toDataURL() + ')';
-         }
-
-         function initParticles() {
-            const canvas = $('#bg-particles');
-            const ctx = canvas.getContext('2d');
-            let w, h, raf = null;
-            const COUNT = 34;
-            const dots = [];
-
-            function resize() {
-               w = canvas.width = window.innerWidth;
-               h = canvas.height = window.innerHeight;
-            }
-
-            function spawn(randomY) {
-               return {
-                  x: rand(0, w), y: randomY ? rand(0, h) : h + 10,
-                  r: rand(0.6, 1.7),
-                  vx: rand(-0.06, 0.06), vy: rand(-0.14, -0.04),
-                  a: rand(0.04, 0.13),
-                  red: Math.random() < 0.22,
-               };
-            }
-
             function tick() {
-               ctx.clearRect(0, 0, w, h);
-               for (const d of dots) {
-                  d.x += d.vx; d.y += d.vy;
-                  if (d.y < -10 || d.x < -10 || d.x > w + 10) Object.assign(d, spawn(false));
-                  ctx.globalAlpha = d.a;
-                  ctx.fillStyle = d.red ? CONFIG.colors.red : CONFIG.colors.white;
-                  ctx.fillRect(d.x, d.y, d.r, d.r);
-               }
-               ctx.globalAlpha = 1;
+               current += (target - current) * 0.028;
+               if (target - current < 0.4) current = target;
+               render();
                raf = requestAnimationFrame(tick);
             }
-
-            resize();
-            for (let i = 0; i < COUNT; i++) dots.push(spawn(true));
-            tick();
-            window.addEventListener('resize', resize);
-            document.addEventListener('visibilitychange', () => {
-               if (document.hidden) { cancelAnimationFrame(raf); raf = null; }
-               else if (!raf) tick();
-            });
-         }
-
-         /* ============================================================
-            06 CUSTOM CURSOR + GLITCH FRAGMENTS
-            ============================================================ */
-         const fragmentState = { live: 0 };
-
-         /** Spawn one pixel fragment at (x, y). Used by cursor trail & hero sparks. */
-         function spawnFragment(x, y, opts) {
-            opts = opts || {};
-            if (fragmentState.live >= CONFIG.cursor.fragmentMax) return;
-            fragmentState.live++;
-
-            const el = document.createElement('div');
-            el.className = 'glitch-fragment';
-            const w = rand(4, 14), h = pick([w, w * 0.4, w * 1.8, 3]);
-            el.style.width = w + 'px';
-            el.style.height = h + 'px';
-            el.style.background = pick([
-               CONFIG.colors.red, CONFIG.colors.redDeep,
-               'rgba(229,62,62,0.75)', 'rgba(255,255,255,0.8)',
-            ]);
-            el.style.boxShadow = '0 0 6px rgba(229,62,62,0.35)';
-            el.style.left = x + 'px';
-            el.style.top = y + 'px';
-            document.body.appendChild(el);
-
-            const life = rand(CONFIG.cursor.fragmentLife[0], CONFIG.cursor.fragmentLife[1]);
-            const spread = opts.spread || 30;
-            const flickers = 2 + ((Math.random() * 3) | 0);
-            gsap.timeline({
-               onComplete: () => { el.remove(); fragmentState.live--; },
-            })
-               // brief opaque flicker burst, then a slow linear fade-out (the "trail" feel)
-               .fromTo(el, { opacity: 1 }, {
-                  opacity: 0.85, duration: life * 0.18, ease: 'steps(' + flickers + ')',
-               }, 0)
-               .to(el, {
-                  opacity: 0, duration: life * 0.82, ease: 'sine.in',
-               }, life * 0.18)
-               .to(el, {
-                  x: rand(-spread, spread), y: rand(-spread, spread),
-                  rotation: rand(-80, 80), duration: life, ease: 'power1.out',
-               }, 0);
-         }
-
-         function initCursor() {
-            if (isTouch || !motionOK) return;
-
-            document.documentElement.classList.add('cursor-active');
-            document.body.classList.add('has-custom-cursor');
-
-            const cube = $('#cursor'), dot = $('#cursor-dot');
-            gsap.set([cube, dot], { xPercent: -50, yPercent: -50, x: -100, y: -100 });
-
-            const cubeX = gsap.quickTo(cube, 'x', { duration: CONFIG.cursor.followSpeed, ease: 'power3' });
-            const cubeY = gsap.quickTo(cube, 'y', { duration: CONFIG.cursor.followSpeed, ease: 'power3' });
-            const dotX = gsap.quickTo(dot, 'x', { duration: CONFIG.cursor.dotSpeed, ease: 'power3' });
-            const dotY = gsap.quickTo(dot, 'y', { duration: CONFIG.cursor.dotSpeed, ease: 'power3' });
-
-            let lastFx = 0, lastFy = 0, seen = false;
-
-            window.addEventListener('mousemove', (e) => {
-               cubeX(e.clientX); cubeY(e.clientY);
-               dotX(e.clientX); dotY(e.clientY);
-               if (document.hidden) return;
-
-               // Randomized fragment generation — never a continuous trail.
-               const dist = Math.hypot(e.clientX - lastFx, e.clientY - lastFy);
-               if (seen && dist > CONFIG.cursor.fragmentMinDist &&
-                  Math.random() < CONFIG.cursor.fragmentChance) {
-                  spawnFragment(e.clientX + rand(-4, 4), e.clientY + rand(-4, 4));
-                  lastFx = e.clientX; lastFy = e.clientY;
-               } else if (!seen) {
-                  seen = true; lastFx = e.clientX; lastFy = e.clientY;
-               }
-            }, { passive: true });
-
-            // Interactive proximity states
-            document.addEventListener('mouseover', (e) => {
-               if (e.target.closest('.project-card')) cube.classList.add('hovering-card');
-               if (e.target.closest('a, button')) cube.classList.add('hovering');
-            });
-            document.addEventListener('mouseout', (e) => {
-               if (e.target.closest('.project-card')) cube.classList.remove('hovering-card');
-               if (e.target.closest('a, button')) cube.classList.remove('hovering');
-            });
-            document.addEventListener('mouseleave', () => gsap.to([cube, dot], { opacity: 0, duration: 0.25 }));
-            document.addEventListener('mouseenter', () => gsap.to([cube, dot], { opacity: 1, duration: 0.25 }));
-         }
-
-         /* ============================================================
-            07 HERO THREE.JS — one light wireframe object + dust
-            ============================================================ */
-         function initThree() {
-            if (!CONFIG.three.enabled || !hasThree || !motionOK) return;
-            const canvas = $('#hero-canvas');
-            const hero = $('#hero');
-
-            const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, isTouch ? 1.5 : 2));
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-            camera.position.z = 7;
-
-            // Wireframe icosahedron pair
-            const group = new THREE.Group();
-            scene.add(group);
-            const outer = new THREE.LineSegments(
-               new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(1.9, 1)),
-               new THREE.LineBasicMaterial({ color: 0xE53E3E, transparent: true, opacity: 0.22 })
-            );
-            const inner = new THREE.LineSegments(
-               new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(1.05, 0)),
-               new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.07 })
-            );
-            group.add(outer, inner);
-
-            // Sparse orbital dust
-            const positions = new Float32Array(CONFIG.three.particleCount * 3);
-            for (let i = 0; i < CONFIG.three.particleCount; i++) {
-               const r = rand(2.5, 3.8);
-               const theta = rand(0, Math.PI * 2);
-               const phi = Math.acos(rand(-1, 1));
-               positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-               positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-               positions[i * 3 + 2] = r * Math.cos(phi);
+            function slideAway(onHidden) {
+               el.classList.add('done');
+               document.documentElement.classList.remove('loading');
+               setTimeout(onHidden, 400);
             }
-            const dustGeo = new THREE.BufferGeometry();
-            dustGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({
-               color: 0xE53E3E, size: 0.035, transparent: true, opacity: 0.45,
-            }));
-            scene.add(dust);
-
-            // Faint floor grid
-            const grid = new THREE.GridHelper(26, 34, 0xffffff, 0xffffff);
-            grid.material.transparent = true;
-            grid.material.opacity = 0.03;
-            grid.position.y = -3.4;
-            scene.add(grid);
-
-            // Layout per viewport
-            function layout() {
-               const w = hero.clientWidth, h = hero.clientHeight;
-               renderer.setSize(w, h, false);
-               camera.aspect = w / h;
-               camera.updateProjectionMatrix();
-               if (w < 768) { group.position.set(0.4, 1.1, 0); group.scale.setScalar(0.72); }
-               else { group.position.set(2.7, 0.1, 0); group.scale.setScalar(1); }
-            }
-            layout();
-            window.addEventListener('resize', layout);
-
-            // Mouse parallax — the camera drifts, rotation stays undisturbed
-            let targetCX = 0, targetCY = 0;
-            if (!isTouch) {
-               window.addEventListener('mousemove', (e) => {
-                  targetCX = (e.clientX / window.innerWidth - 0.5) * CONFIG.three.parallaxStrength * 2;
-                  targetCY = -(e.clientY / window.innerHeight - 0.5) * CONFIG.three.parallaxStrength * 2;
-               }, { passive: true });
-            }
-
-            // Render only while the hero is on screen
-            let active = true;
-            if (hasST) {
-               ScrollTrigger.create({
-                  trigger: hero, start: 'top bottom', end: 'bottom top',
-                  onToggle: (self) => { active = self.isActive; },
-               });
-            }
-
-            gsap.ticker.add(() => {
-               if (!active || document.hidden) return;
-               group.rotation.y += CONFIG.three.rotationSpeed;
-               group.rotation.x += CONFIG.three.rotationSpeed * 0.35;
-               inner.rotation.y -= CONFIG.three.rotationSpeed * 1.6;
-               dust.rotation.y -= CONFIG.three.rotationSpeed * 0.5;
-               group.position.y += Math.sin(performance.now() * 0.0006) * 0.0012;
-               camera.position.x = lerp(camera.position.x, targetCX * 2.2, 0.04);
-               camera.position.y = lerp(camera.position.y, targetCY * 2.2, 0.04);
-               camera.lookAt(group.position.x * 0.45, 0, 0);
-               renderer.render(scene, camera);
-            });
-         }
-
-         /* ============================================================
-            08 HERO BOOT SEQUENCE — "system powering on" (~2.5s)
-            ============================================================ */
-         function spawnSparks(chars) {
-            const visible = chars.filter((c) => c.offsetWidth > 0);
-            for (let i = 0; i < 14; i++) {
-               const c = pick(visible);
-               if (!c) break;
-               const r = c.getBoundingClientRect();
-               spawnFragment(r.left + r.width / 2, r.top + r.height / 2, { spread: 90 });
-            }
-         }
-
-         function glitchBurst(el) {
-            el.classList.add('aberration');
-            gsap.timeline({ onComplete: () => el.classList.remove('aberration') })
-               .to(el, { x: -4, skewX: 5, duration: 0.05 })
-               .to(el, { x: 3, skewX: -3, duration: 0.05 })
-               .to(el, { x: -1, skewX: 1.5, duration: 0.05 })
-               .to(el, { x: 0, skewX: 0, duration: 0.09 });
-         }
-
-         /** Fallback reveal if SplitType is unavailable. */
-         function simpleHeroReveal() {
-            gsap.set('.hero-title', { visibility: 'visible' });
-            $('#heroLabel').textContent = CONFIG.hero.labelText;
-            gsap.timeline()
-               .to('.hero-label', { opacity: 1, duration: 0.4 }, 0.05)
-               .to('.hero-kicker', { opacity: 1, duration: 0.5 }, 0.15)
-               .fromTo('.hero-title', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 0.25)
-               .to('.hero-desc', { opacity: 1, duration: 0.6 }, 0.7)
-               .to('.hero-actions', { opacity: 1, duration: 0.6 }, 0.85)
-               .to('.nav', { opacity: 1, duration: 0.6 }, 0.9)
-               .add(() => {
-                  $('#hero-canvas').classList.add('visible');
-                  gsap.to('.scroll-indicator', { opacity: 1, duration: 0.6 });
-               }, 1);
-         }
-
-         function initHeroBoot() {
-            if (!hasSplit) { simpleHeroReveal(); return; }
-
-            const title = $('#heroTitle');
-            const split1 = new SplitType('#heroLine1', { types: 'chars' });
-            const split2 = new SplitType('#heroLine2', { types: 'chars' });
-            const textChars = split1.chars.concat(split2.chars);
-            const period = $('.hero-period');
-            const allChars = textChars.concat([period]);
-
-            gsap.set(title, { visibility: 'visible' });
-            gsap.set(allChars, { opacity: 0 });
-
-            const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-            // 1 · mono label decodes first
-            tl.add(() => {
-               gsap.set('.hero-label', { opacity: 1 });
-               scramble($('#heroLabel'), CONFIG.hero.labelText, { duration: 650 });
-            }, 0.05);
-
-            // 2 · kicker
-            tl.fromTo('.hero-kicker', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5 }, 0.3);
-
-            // 3 · letters assemble + sharpen out of digital noise
-            tl.fromTo(allChars,
-               {
-                  opacity: 0,
-                  x: () => rand(-36, 36), y: () => rand(-26, 26),
-                  rotation: () => rand(-16, 16),
-                  filter: 'blur(8px)',
+            return {
+               begin() {
+                  if (!el || prefersReducedMotion) { this.hideInstant(); return; }
+                  scramble($('#loaderText'), 'INITIALIZING', { duration: 700 });
+                  tick();
                },
-               {
-                  opacity: 1, x: 0, y: 0, rotation: 0, filter: 'blur(0px)',
-                  duration: 0.75,
-                  stagger: { each: CONFIG.hero.charStagger, from: 'random' },
-                  onComplete: () => gsap.set(allChars, { clearProps: 'filter' }),
-               }, 0.5);
-            tl.add(() => scrambleChars(textChars, 0, 34), 0.5);
-            tl.add(() => title.classList.add('aberration'), 0.55);
-            tl.add(() => title.classList.remove('aberration'), 1.45);
-
-            // 4 · scanline sweep
-            tl.fromTo('.hero-scanline', { top: '0%', opacity: 0 },
-               { top: '100%', opacity: 1, duration: 0.45, ease: 'power2.inOut' }, 1.15);
-            tl.to('.hero-scanline', { opacity: 0, duration: 0.15 }, 1.6);
-
-            // 5 · glitch + sparks, then the type locks into place
-            tl.add(() => glitchBurst(title), 1.35);
-            tl.add(() => spawnSparks(textChars), 1.45);
-            tl.fromTo(title, { scale: 1.012 }, { scale: 1, duration: 0.35, ease: 'power2.out' }, 1.55);
-
-            // 6 · supporting content
-            tl.fromTo('.hero-desc', { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.6 }, 1.7);
-            tl.fromTo('.hero-actions', { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.6 }, 1.85);
-            tl.fromTo('.nav', { opacity: 0, y: -14 }, { opacity: 1, y: 0, duration: 0.6 }, 1.9);
-
-            // 7 · idle systems come alive
-            tl.add(() => {
-               $('#hero-canvas').classList.add('visible');
-               gsap.to('.scroll-indicator', { opacity: 1, duration: 0.8 });
-               gsap.to('.hero-light', {
-                  opacity: 1, scale: 1.07, duration: 4.2,
-                  ease: 'sine.inOut', yoyo: true, repeat: -1,
-               });
-            }, 2.05);
-         }
-
-         /** Reduced-motion path: everything simply appears. */
-         function revealStatic() {
-            gsap.set(['.hero-title', '.nav'], { visibility: 'visible', opacity: 1 });
-            gsap.set('.hero-fade', { opacity: 1 });
-            $('#heroLabel').textContent = CONFIG.hero.labelText;
-            $('#hero-canvas').classList.add('visible');
-         }
-
-         /* ============================================================
-            09 SCROLL-DRIVEN ANIMATION (GSAP ScrollTrigger)
-            ============================================================ */
-         function initScrollAnimations() {
-            if (!hasST) return;
-
-            // Hero exit — compress, rise, fade as projects take over
-            gsap.to('.hero-content', {
-               scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom 30%', scrub: true },
-               y: -90, scale: 0.94, opacity: 0.08, ease: 'none',
-            });
-            // (canvas & hero-light are absolute inside .hero — they exit naturally with it)
-            ScrollTrigger.create({
-               trigger: '#hero', start: '12% top',
-               onEnter: () => gsap.to('.scroll-indicator', { opacity: 0, duration: 0.3, overwrite: 'auto' }),
-               onLeaveBack: () => gsap.to('.scroll-indicator', { opacity: 1, duration: 0.3, overwrite: 'auto' }),
-            });
-
-            // Masked line reveals for section titles
-            $$('[data-split-line]').forEach((el) => {
-               gsap.fromTo(el, { yPercent: 115 }, {
-                  yPercent: 0, duration: 1, ease: 'power4.out',
-                  scrollTrigger: { trigger: el, start: 'top 88%', once: true },
-               });
-            });
-
-            // Contact big-type moment
-            $$('[data-ct-line]').forEach((el, i) => {
-               gsap.fromTo(el, { yPercent: 115, skewY: 4 }, {
-                  yPercent: 0, skewY: 0, duration: 1.05, ease: 'power4.out', delay: i * 0.09,
-                  scrollTrigger: { trigger: el, start: 'top 88%', once: true },
-               });
-            });
-
-            // Generic reveals: blur + rise
-            $$('[data-reveal]').forEach((el) => {
-               gsap.fromTo(el,
-                  { opacity: 0, y: CONFIG.reveal.y, filter: 'blur(' + CONFIG.reveal.blur + 'px)' },
-                  {
-                     opacity: 1, y: 0, filter: 'blur(0px)',
-                     duration: CONFIG.reveal.duration, ease: 'power3.out',
-                     scrollTrigger: { trigger: el, start: 'top 88%', once: true },
-                     onComplete: () => gsap.set(el, { clearProps: 'filter' }),
-                  });
-            });
-
-            // Dividers draw themselves
-            $$('.divider').forEach((el) => {
-               gsap.fromTo(el, { scaleX: 0 }, {
-                  scaleX: 1, duration: 1.2, ease: 'power3.inOut',
-                  scrollTrigger: { trigger: el, start: 'top 92%', once: true },
-               });
-            });
-
-            // Project cards unfold into existence
-            gsap.set('.project-card', { opacity: 0, y: 64, rotateX: -13, scale: 0.965, filter: 'blur(10px)' });
-            ScrollTrigger.batch('.project-card', {
-               start: 'top 90%',
-               once: true,
-               onEnter: (batch) => gsap.fromTo(batch,
-                  { opacity: 0, y: 64, rotateX: -13, scale: 0.965, filter: 'blur(10px)' },
-                  {
-                     opacity: 1, y: 0, rotateX: 0, scale: 1, filter: 'blur(0px)',
-                     duration: 1, ease: 'power3.out', stagger: 0.09,
-                     onComplete: () => gsap.set(batch, { clearProps: 'transform,filter' }),
-                  }),
-            });
-
-            // Active nav link tracking
-            $$('main section[id]').forEach((section) => {
-               ScrollTrigger.create({
-                  trigger: section, start: 'top center', end: 'bottom center',
-                  onToggle: (self) => {
-                     if (!self.isActive) return;
-                     $$('.nav-link').forEach((l) =>
-                        l.classList.toggle('active', l.getAttribute('href') === '#' + section.id));
-                  },
-               });
-            });
-
-            // Recalculate once assets settle
-            window.addEventListener('load', () => ScrollTrigger.refresh());
-         }
-
-         /* ============================================================
-            10 NAVIGATION — glass state, mobile menu, anchor scrolling
-            ============================================================ */
-         function initNav() {
-            const nav = $('.nav');
-            const setState = (y) => nav.classList.toggle('scrolled', y > 40);
-            if (lenis) lenis.on('scroll', (e) => setState(e.scroll));
-            else window.addEventListener('scroll', () => setState(window.scrollY), { passive: true });
-
-            const menu = $('#mobileMenu');
-            const burger = $('#burger');
-
-            function closeMenu() {
-               menu.classList.remove('active');
-               burger.classList.remove('open');
-               burger.setAttribute('aria-expanded', 'false');
-               menu.setAttribute('aria-hidden', 'true');
-               if (lenis) lenis.start();
-            }
-            function openMenu() {
-               menu.classList.add('active');
-               burger.classList.add('open');
-               burger.setAttribute('aria-expanded', 'true');
-               menu.setAttribute('aria-hidden', 'false');
-               if (lenis) lenis.stop();
-            }
-
-            burger.addEventListener('click', () =>
-               menu.classList.contains('active') ? closeMenu() : openMenu());
-            document.addEventListener('keydown', (e) => {
-               if (e.key === 'Escape' && menu.classList.contains('active')) closeMenu();
-            });
-
-            // Smooth anchor scrolling
-            $$('a[href^="#"]').forEach((link) => {
-               link.addEventListener('click', (e) => {
-                  const hash = link.getAttribute('href');
-                  e.preventDefault();
-                  closeMenu();
-                  if (hash === '#' || link.hasAttribute('data-scroll-top')) { scrollToTarget(0, 0); return; }
-                  const target = $(hash);
-                  if (target) scrollToTarget(target);
-               });
-            });
-         }
-
-         /* ============================================================
-            11 PROJECT CARDS — tilt, cursor light, orbiting tech tags
-            ============================================================ */
-         function initProjectCard(card) {
-            const inner = $('.card-inner', card);
-            const surface = $('.card-surface', card);
-            const tags = $$('.tag', card);
-            const tagsHome = $('.card-tags', card);
-            const P = CONFIG.projects;
-
-            const tilt = { x: 0, y: 0, tx: 0, ty: 0, lift: 0, liftTarget: 0 };
-            const orbit = {
-               active: false, blend: 0, t: rand(0, Math.PI * 2),
-               cx: 0, cy: 0, rx: 0, ry: 0, origins: [], lastStep: 0,
+               finish(onHidden) {
+                  if (done) return;
+                  done = true;
+                  cancelAnimationFrame(raf);
+                  current = target = 100;
+                  render();
+                  // Respect a minimum on-screen duration, then hold briefly at 100%
+                  // before the slide reveals the hero boot.
+                  const elapsed = performance.now() - begunAt;
+                  const wait = Math.max(0, MIN_DURATION - elapsed) + 220;
+                  setTimeout(() => slideAway(onHidden), wait);
+               },
+               hideInstant() {
+                  done = true;
+                  cancelAnimationFrame(raf);
+                  if (el) el.style.display = 'none';
+                  document.documentElement.classList.remove('loading');
+               },
             };
-            let rafId = null;
+         })();
 
-            /* --- single rAF drives tilt + orbit for this card --- */
-            function loop(now) {
-               const dt = Math.min(now - (orbit.lastStep || now), 50);
-               orbit.lastStep = now;
-
-               tilt.x = lerp(tilt.x, tilt.tx, P.tiltEase);
-               tilt.y = lerp(tilt.y, tilt.ty, P.tiltEase);
-               tilt.lift = lerp(tilt.lift, tilt.liftTarget, P.tiltEase);
-               inner.style.transform =
-                  'translateY(' + (-P.liftPx * tilt.lift).toFixed(2) + 'px)' +
-                  ' rotateX(' + tilt.x.toFixed(3) + 'deg) rotateY(' + tilt.y.toFixed(3) + 'deg)';
-
-               if (orbit.active || orbit.blend > 0.001) {
-                  orbit.t += dt * P.orbitSpeed;
-                  const b = orbit.blend;
-                  tags.forEach((tag, i) => {
-                     const o = orbit.origins[i];
-                     const ang = orbit.t + (i / tags.length) * Math.PI * 2;
-                     const depth = (Math.sin(ang) + 1) / 2; // 0 = far side, 1 = near side
-                     const x = lerp(o.x, orbit.cx + orbit.rx * Math.cos(ang) - o.w / 2, b);
-                     const y = lerp(o.y, orbit.cy + orbit.ry * Math.sin(ang) - o.h / 2, b);
-                     tag.style.transform =
-                        'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)' +
-                        ' scale(' + lerp(1, lerp(0.82, 1.06, depth), b).toFixed(3) + ')';
-                     tag.style.opacity = lerp(1, lerp(0.3, 1, depth), b).toFixed(3);
-                     tag.style.zIndex = depth < 0.5 ? 0 : 2;
-                  });
-               }
-
-               const settled =
-                  Math.abs(tilt.x - tilt.tx) < 0.01 && Math.abs(tilt.y - tilt.ty) < 0.01 &&
-                  Math.abs(tilt.lift - tilt.liftTarget) < 0.01 && orbit.blend <= 0.001;
-               rafId = settled ? null : requestAnimationFrame(loop);
-            }
-            function kick() { if (!rafId) { orbit.lastStep = performance.now(); rafId = requestAnimationFrame(loop); } }
-
-            /* --- orbit lifecycle --- */
-            function startOrbit() {
-               if (isTouch || !motionOK || tags.length === 0) return;
-               if (orbit.active) { // re-entered while blending out — reverse direction
-                  gsap.killTweensOf(orbit);
-                  gsap.to(orbit, { blend: 1, duration: P.orbitBlendIn, ease: 'power2.out' });
-                  kick();
-                  return;
-               }
-               const rect = inner.getBoundingClientRect();
-               orbit.cx = rect.width / 2;
-               orbit.cy = rect.height / 2;
-               orbit.rx = rect.width / 2 + P.orbitPadX;
-               orbit.ry = rect.height / 2 + P.orbitPadY;
-               orbit.origins = tags.map((tag) => {
-                  const r = tag.getBoundingClientRect();
-                  return { x: r.left - rect.left, y: r.top - rect.top, w: r.width, h: r.height };
-               });
-               tags.forEach((tag, i) => {
-                  inner.appendChild(tag); // escape .card-tags so z-index can pass behind the surface
-                  tag.classList.add('orbiting');
-                  tag.style.transform = 'translate(' + orbit.origins[i].x + 'px,' + orbit.origins[i].y + 'px)';
-               });
-               orbit.active = true;
-               gsap.to(orbit, { blend: 1, duration: P.orbitBlendIn, ease: 'power2.out' });
-               kick();
-            }
-
-            function stopOrbit() {
-               if (!orbit.active) return;
-               gsap.killTweensOf(orbit);
-               gsap.to(orbit, {
-                  blend: 0, duration: P.orbitBlendOut, ease: 'power2.inOut',
-                  onComplete: restoreTags,
-               });
-               kick();
-            }
-
-            function restoreTags() {
-               orbit.active = false;
-               tags.forEach((tag) => {
-                  tag.classList.remove('orbiting');
-                  tag.removeAttribute('style');
-                  tagsHome.appendChild(tag); // original order preserved
-               });
-            }
-
-            /* --- pointer events --- */
-            card.addEventListener('mouseenter', () => { tilt.liftTarget = 1; startOrbit(); kick(); });
-            card.addEventListener('mousemove', (e) => {
-               const r = card.getBoundingClientRect();
-               const px = (e.clientX - r.left) / r.width;
-               const py = (e.clientY - r.top) / r.height;
-               tilt.tx = (py - 0.5) * -2 * P.tiltMax;
-               tilt.ty = (px - 0.5) * 2 * P.tiltMax;
-               surface.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
-               surface.style.setProperty('--my', (py * 100).toFixed(1) + '%');
-               kick();
-            });
-            card.addEventListener('mouseleave', () => {
-               tilt.tx = 0; tilt.ty = 0; tilt.liftTarget = 0;
-               stopOrbit(); kick();
-            });
-
-            // Keep orbit geometry correct if the layout shifts mid-hover
-            window.addEventListener('resize', () => {
-               if (!orbit.active) return;
-               const rect = inner.getBoundingClientRect();
-               orbit.cx = rect.width / 2; orbit.cy = rect.height / 2;
-               orbit.rx = rect.width / 2 + P.orbitPadX; orbit.ry = rect.height / 2 + P.orbitPadY;
-            });
-         }
+         Loader.begin();
 
          /* ============================================================
-            12 MAGNETIC BUTTONS + RIPPLE + PRESS
+            Everything below requires the (deferred) CDN libraries.
+            It runs on DOMContentLoaded — deferred scripts execute first,
+            in order — so a slow/hanging CDN can never stall the page.
             ============================================================ */
-         function initMagnetic() {
-            if (isTouch || !motionOK) return;
-            $$('.magnetic').forEach((el) => {
-               const xTo = gsap.quickTo(el, 'x', { duration: 0.4, ease: 'power3' });
-               const yTo = gsap.quickTo(el, 'y', { duration: 0.4, ease: 'power3' });
-               el.addEventListener('mousemove', (e) => {
-                  const r = el.getBoundingClientRect();
-                  xTo((e.clientX - (r.left + r.width / 2)) * CONFIG.magnetic.strength);
-                  yTo((e.clientY - (r.top + r.height / 2)) * CONFIG.magnetic.strength);
-               });
-               el.addEventListener('mouseleave', () => {
-                  xTo(0); yTo(0);
-                  gsap.to(el, { scale: 1, duration: 0.3, ease: 'power2.out' });
-               });
-               el.addEventListener('pointerdown', () => gsap.to(el, { scale: 0.94, duration: 0.14, ease: 'power2.out' }));
-               ['pointerup', 'pointercancel'].forEach((evt) =>
-                  el.addEventListener(evt, () => gsap.to(el, { scale: 1, duration: 0.35, ease: 'elastic.out(1, 0.5)' })));
-            });
-         }
-
-         function initRipple() {
-            $$('.btn, .link-btn, .contact-card').forEach((el) => {
-               el.addEventListener('pointerdown', (e) => {
-                  const r = el.getBoundingClientRect();
-                  const d = Math.max(r.width, r.height) * 2.2;
-                  const ink = document.createElement('span');
-                  ink.className = 'ripple-ink';
-                  ink.style.width = ink.style.height = d + 'px';
-                  ink.style.left = (e.clientX - r.left - d / 2) + 'px';
-                  ink.style.top = (e.clientY - r.top - d / 2) + 'px';
-                  el.appendChild(ink);
-                  setTimeout(() => ink.remove(), 600);
-               });
-            });
-         }
-
-         /* ============================================================
-            13 ABOUT STATS — count up & decode on entry
-            ============================================================ */
-         function initStats() {
-            $$('[data-count]').forEach((el) => {
-               const target = parseInt(el.dataset.count, 10);
-               const suffix = el.dataset.suffix || '';
-               if (!hasST || !motionOK) { el.textContent = target + suffix; return; }
-               ScrollTrigger.create({
-                  trigger: el, start: 'top 88%', once: true,
-                  onEnter: () => {
-                     const state = { v: 0 };
-                     el.textContent = '0' + suffix;
-                     gsap.to(state, {
-                        v: target, duration: 1.4, ease: 'power2.out',
-                        onUpdate: () => { el.textContent = Math.round(state.v) + suffix; },
-                     });
-                  },
-               });
-            });
-
-            $$('[data-scramble-in]').forEach((el) => {
-               const finalText = el.textContent;
-               if (!hasST || !motionOK) return;
-               ScrollTrigger.create({
-                  trigger: el, start: 'top 88%', once: true,
-                  onEnter: () => scramble(el, finalText, { duration: 800 }),
-               });
-            });
-         }
-
-         /* ============================================================
-            14 AMBIENT AUDIO — synthesized deep drone (~3% volume)
-            No audio assets: a WebAudio graph generates everything.
-            ============================================================ */
-         const AudioEngine = {
-            ctx: null, master: null, playing: false,
-
-            build() {
-               const AC = window.AudioContext || window.webkitAudioContext;
-               if (!AC) return false;
-               this.ctx = new AC();
-               this.master = this.ctx.createGain();
-               this.master.gain.value = 0;
-               this.master.connect(this.ctx.destination);
-
-               // Deep drone — two slightly detuned sines beat against each other
-               [55, 55.4].forEach((freq) => {
-                  const osc = this.ctx.createOscillator();
-                  osc.type = 'sine';
-                  osc.frequency.value = freq;
-                  const g = this.ctx.createGain();
-                  g.gain.value = 0.42;
-                  osc.connect(g).connect(this.master);
-                  osc.start();
-               });
-
-               // Sub octave for weight
-               const sub = this.ctx.createOscillator();
-               sub.type = 'sine';
-               sub.frequency.value = 27.5;
-               const subGain = this.ctx.createGain();
-               subGain.gain.value = 0.3;
-               sub.connect(subGain).connect(this.master);
-               sub.start();
-
-               // Room tone — looped brown noise through a lowpass
-               const len = this.ctx.sampleRate * 2;
-               const buffer = this.ctx.createBuffer(1, len, this.ctx.sampleRate);
-               const data = buffer.getChannelData(0);
-               let last = 0;
-               for (let i = 0; i < len; i++) {
-                  const white = Math.random() * 2 - 1;
-                  data[i] = (last + 0.02 * white) / 1.02;
-                  last = data[i];
-                  data[i] *= 3.2;
-               }
-               const noise = this.ctx.createBufferSource();
-               noise.buffer = buffer;
-               noise.loop = true;
-               const lowpass = this.ctx.createBiquadFilter();
-               lowpass.type = 'lowpass';
-               lowpass.frequency.value = 210;
-               const noiseGain = this.ctx.createGain();
-               noiseGain.gain.value = 0.1;
-               noise.connect(lowpass).connect(noiseGain).connect(this.master);
-               noise.start();
-
-               // Slow LFO gives the drone gentle movement
-               const lfo = this.ctx.createOscillator();
-               lfo.type = 'sine';
-               lfo.frequency.value = 0.07;
-               const lfoGain = this.ctx.createGain();
-               lfoGain.gain.value = 0.06;
-               lfo.connect(lfoGain).connect(noiseGain.gain);
-               lfo.start();
-
-               return true;
-            },
-
-            start() {
-               if (!this.ctx && !this.build()) return;
-               this.ctx.resume();
-               gsap.killTweensOf(this.master.gain);
-               gsap.to(this.master.gain, { value: CONFIG.audio.volume, duration: CONFIG.audio.fadeIn, ease: 'sine.out' });
-               this.playing = true;
-            },
-
-            stop() {
-               if (!this.ctx) return;
-               gsap.killTweensOf(this.master.gain);
-               gsap.to(this.master.gain, {
-                  value: 0, duration: 0.6, ease: 'sine.in',
-                  onComplete: () => this.ctx.suspend(),
-               });
-               this.playing = false;
-            },
-         };
-
-         function initAudio() {
-            const btn = $('#audioToggle');
-            const key = CONFIG.audio.storageKey;
-
-            const setUI = (on) => {
-               btn.classList.toggle('playing', on);
-               btn.setAttribute('aria-pressed', String(on));
-            };
-
-            btn.addEventListener('click', (e) => {
-               e.stopPropagation();
-               if (AudioEngine.playing) {
-                  AudioEngine.stop(); setUI(false);
-                  try { localStorage.setItem(key, '1'); } catch (err) { /* private mode */ }
-               } else {
-                  AudioEngine.start(); setUI(true);
-                  try { localStorage.removeItem(key); } catch (err) { /* private mode */ }
-               }
-            });
-
-            // Audio only ever starts after a user interaction, and only if not muted before.
-            let muted = false;
-            try { muted = localStorage.getItem(key) === '1'; } catch (err) { /* private mode */ }
-            if (!muted) {
-               const kick = (e) => {
-                  // Ignore interactions with the toggle itself — its click handler owns that path
-                  if (e.target && e.target.closest && e.target.closest('#audioToggle')) return;
-                  if (!AudioEngine.playing) { AudioEngine.start(); setUI(true); }
-                  window.removeEventListener('pointerdown', kick);
-                  window.removeEventListener('keydown', kick);
-               };
-               window.addEventListener('pointerdown', kick);
-               window.addEventListener('keydown', kick);
-            }
-         }
-
-         /* ============================================================
-            15 INIT
-            ============================================================ */
-         function init() {
-            try { initNav(); } catch (e) { console.warn('nav', e); }
-            try { initRipple(); } catch (e) { console.warn('ripple', e); }
-            try { initAudio(); } catch (e) { console.warn('audio', e); }
-
-            if (!motionOK) {
-               revealStatic();
-               initStats(); // sets final values instantly
+         function start() {
+            // If the failsafe already revealed the page statically, stay static.
+            if (document.documentElement.classList.contains('no-anim')) {
                window.__booted = true;
-               clearTimeout(window.__animFailsafe);
                return;
             }
 
-            try { initGrain(); } catch (e) { console.warn('grain', e); }
-            try { initParticles(); } catch (e) { console.warn('particles', e); }
-            try { initCursor(); } catch (e) { console.warn('cursor', e); }
-            try { initThree(); } catch (e) { console.warn('three', e); }
-            try { initMagnetic(); } catch (e) { console.warn('magnetic', e); }
-            try { $$('.project-card').forEach(initProjectCard); } catch (e) { console.warn('cards', e); }
-            try { initStats(); } catch (e) { console.warn('stats', e); }
-            try { initScrollAnimations(); } catch (e) { console.warn('scroll', e); }
+            /* ============================================================
+               03 ENVIRONMENT — library checks & graceful degradation
+               ============================================================ */
+            const hasGSAP = typeof window.gsap !== 'undefined';
+            const hasST = hasGSAP && typeof window.ScrollTrigger !== 'undefined';
+            const hasLenis = typeof window.Lenis !== 'undefined';
+            const hasSplit = typeof window.SplitType !== 'undefined';
+            const hasThree = typeof window.THREE !== 'undefined';
 
-            // Wait briefly for fonts so the boot typography doesn't swap mid-animation
-            const fontsReady = document.fonts && document.fonts.ready
-               ? document.fonts.ready : Promise.resolve();
-            Promise.race([
-               fontsReady,
-               new Promise((res) => setTimeout(res, 900)),
-            ]).then(() => {
-               try { initHeroBoot(); } catch (e) {
-                  console.warn('boot', e);
-                  simpleHeroReveal();
-               }
+            try { if (hasST) gsap.registerPlugin(ScrollTrigger); }
+            catch (e) { console.warn('registerPlugin', e); }
+
+            // Without GSAP nothing can animate — reveal everything statically and stop.
+            if (!hasGSAP) {
+               document.documentElement.classList.add('no-anim');
+               document.documentElement.classList.remove('loading');
                window.__booted = true;
-               clearTimeout(window.__animFailsafe);
-            });
+               return;
+            }
+
+            const motionOK = !prefersReducedMotion;
+
+            /* ============================================================
+               04 LENIS SMOOTH SCROLL
+               ============================================================ */
+            let lenis = null;
+            // Lenis only on desktop — native touch scroll is smoother on phones
+            // and avoids any touch-event conflict with the custom thumb cursor.
+            if (hasLenis && motionOK && !isTouch) {
+               try {
+                  lenis = new Lenis({ lerp: CONFIG.scroll.lerp, smoothWheel: true });
+                  if (hasST) lenis.on('scroll', ScrollTrigger.update);
+                  gsap.ticker.add((t) => lenis.raf(t * 1000));
+                  gsap.ticker.lagSmoothing(0);
+               } catch (e) {
+                  console.warn('lenis', e);
+                  lenis = null;
+               }
+            }
+
+            function scrollToTarget(target, offset) {
+               if (lenis) lenis.scrollTo(target, { offset: offset ?? -70, duration: 1.2 });
+               else if (typeof target === 'number') window.scrollTo({ top: target, behavior: motionOK ? 'smooth' : 'auto' });
+               else target.scrollIntoView({ behavior: motionOK ? 'smooth' : 'auto' });
+            }
+
+            /* ============================================================
+               05 AMBIENT BACKGROUND — grain tile + drifting particles
+               ============================================================ */
+            function initGrain() {
+               // Generate a small noise tile once, tile it as a background image.
+               const tile = document.createElement('canvas');
+               tile.width = tile.height = 140;
+               const tctx = tile.getContext('2d');
+               const img = tctx.createImageData(140, 140);
+               for (let i = 0; i < img.data.length; i += 4) {
+                  const v = (Math.random() * 255) | 0;
+                  img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
+                  img.data[i + 3] = 255;
+               }
+               tctx.putImageData(img, 0, 0);
+               $('#bg-grain').style.backgroundImage = 'url(' + tile.toDataURL() + ')';
+            }
+
+            function initParticles() {
+               const canvas = $('#bg-particles');
+               const ctx = canvas.getContext('2d');
+               let w, h, raf = null;
+               const COUNT = 34;
+               const dots = [];
+
+               function resize() {
+                  w = canvas.width = window.innerWidth;
+                  h = canvas.height = window.innerHeight;
+               }
+
+               function spawn(randomY) {
+                  return {
+                     x: rand(0, w), y: randomY ? rand(0, h) : h + 10,
+                     r: rand(0.6, 1.7),
+                     vx: rand(-0.06, 0.06), vy: rand(-0.14, -0.04),
+                     a: rand(0.04, 0.13),
+                     red: Math.random() < 0.22,
+                  };
+               }
+
+               function tick() {
+                  ctx.clearRect(0, 0, w, h);
+                  for (const d of dots) {
+                     d.x += d.vx; d.y += d.vy;
+                     if (d.y < -10 || d.x < -10 || d.x > w + 10) Object.assign(d, spawn(false));
+                     ctx.globalAlpha = d.a;
+                     ctx.fillStyle = d.red ? CONFIG.colors.red : CONFIG.colors.white;
+                     ctx.fillRect(d.x, d.y, d.r, d.r);
+                  }
+                  ctx.globalAlpha = 1;
+                  raf = requestAnimationFrame(tick);
+               }
+
+               resize();
+               for (let i = 0; i < COUNT; i++) dots.push(spawn(true));
+               tick();
+               window.addEventListener('resize', resize);
+               document.addEventListener('visibilitychange', () => {
+                  if (document.hidden) { cancelAnimationFrame(raf); raf = null; }
+                  else if (!raf) tick();
+               });
+            }
+
+            /* ============================================================
+               06 CUSTOM CURSOR + GLITCH FRAGMENTS
+               ============================================================ */
+            const fragmentState = { live: 0 };
+
+            /** Spawn one pixel fragment at (x, y). Used by cursor trail & hero sparks. */
+            function spawnFragment(x, y, opts) {
+               opts = opts || {};
+               if (fragmentState.live >= CONFIG.cursor.fragmentMax) return;
+               fragmentState.live++;
+
+               const el = document.createElement('div');
+               el.className = 'glitch-fragment';
+               const w = rand(4, 14), h = pick([w, w * 0.4, w * 1.8, 3]);
+               el.style.width = w + 'px';
+               el.style.height = h + 'px';
+               el.style.background = pick([
+                  CONFIG.colors.red, CONFIG.colors.redDeep,
+                  'rgba(229,62,62,0.75)', 'rgba(255,255,255,0.8)',
+               ]);
+               el.style.boxShadow = '0 0 6px rgba(229,62,62,0.35)';
+               el.style.left = x + 'px';
+               el.style.top = y + 'px';
+               document.body.appendChild(el);
+
+               const life = rand(CONFIG.cursor.fragmentLife[0], CONFIG.cursor.fragmentLife[1]);
+               const spread = opts.spread || 30;
+               const flickers = 2 + ((Math.random() * 3) | 0);
+               gsap.timeline({
+                  onComplete: () => { el.remove(); fragmentState.live--; },
+               })
+                  // brief opaque flicker burst, then a slow linear fade-out (the "trail" feel)
+                  .fromTo(el, { opacity: 1 }, {
+                     opacity: 0.85, duration: life * 0.18, ease: 'steps(' + flickers + ')',
+                  }, 0)
+                  .to(el, {
+                     opacity: 0, duration: life * 0.82, ease: 'sine.in',
+                  }, life * 0.18)
+                  .to(el, {
+                     x: rand(-spread, spread), y: rand(-spread, spread),
+                     rotation: rand(-80, 80), duration: life, ease: 'power1.out',
+                  }, 0);
+            }
+
+            function initCursor() {
+               if (!motionOK) return;
+
+               document.documentElement.classList.add('cursor-active');
+               if (!isTouch) document.body.classList.add('has-custom-cursor');
+
+               const cube = $('#cursor'), dot = $('#cursor-dot');
+               gsap.set([cube, dot], { xPercent: -50, yPercent: -50, x: -100, y: -100, opacity: 0 });
+
+               // One rAF-lerp engine drives both pointer types — identical feel everywhere.
+               const pos = { cx: -100, cy: -100, dx: -100, dy: -100, tx: -100, ty: -100 };
+               let lastFx = 0, lastFy = 0, seen = false, touching = false;
+
+               function aim(x, y) {
+                  pos.tx = x; pos.ty = y;
+                  if (document.hidden) return;
+                  // Randomized fragment generation — never a continuous trail.
+                  const dist = Math.hypot(x - lastFx, y - lastFy);
+                  if (seen && dist > CONFIG.cursor.fragmentMinDist &&
+                     Math.random() < CONFIG.cursor.fragmentChance) {
+                     spawnFragment(x + rand(-4, 4), y + rand(-4, 4));
+                     lastFx = x; lastFy = y;
+                  } else if (!seen) {
+                     seen = true; lastFx = x; lastFy = y;
+                  }
+               }
+
+               gsap.ticker.add((time, deltaMS) => {
+                  // delta-normalized smoothing keeps the feel constant at any frame rate
+                  const step = Math.min(deltaMS / 16.7, 3);
+                  pos.cx = lerp(pos.cx, pos.tx, Math.min(CONFIG.cursor.followSpeed * 2.4 * step, 1));
+                  pos.cy = lerp(pos.cy, pos.ty, Math.min(CONFIG.cursor.followSpeed * 2.4 * step, 1));
+                  pos.dx = lerp(pos.dx, pos.tx, Math.min(0.55 * step, 1));
+                  pos.dy = lerp(pos.dy, pos.ty, Math.min(0.55 * step, 1));
+                  gsap.set(cube, { x: pos.cx, y: pos.cy });
+                  gsap.set(dot, { x: pos.dx, y: pos.dy });
+               });
+
+               if (isTouch) {
+                  // Thumb-follow mode: the cursor appears while the finger slides.
+                  window.addEventListener('touchstart', (e) => {
+                     const t = e.touches[0];
+                     if (!t) return;
+                     touching = true;
+                     pos.tx = pos.cx = pos.dx = t.clientX;
+                     pos.ty = pos.cy = pos.dy = t.clientY;
+                     seen = false;
+                     gsap.to([cube, dot], { opacity: 1, duration: 0.2 });
+                  }, { passive: true });
+                  window.addEventListener('touchmove', (e) => {
+                     const t = e.touches[0];
+                     if (t) aim(t.clientX, t.clientY);
+                  }, { passive: true });
+                  const release = () => {
+                     touching = false;
+                     gsap.to([cube, dot], { opacity: 0, duration: 0.35 });
+                  };
+                  window.addEventListener('touchend', release, { passive: true });
+                  window.addEventListener('touchcancel', release, { passive: true });
+                  return;
+               }
+
+               gsap.to([cube, dot], { opacity: 1, duration: 0.4, delay: 0.4 });
+               window.addEventListener('mousemove', (e) => aim(e.clientX, e.clientY), { passive: true });
+
+               // Interactive proximity states
+               document.addEventListener('mouseover', (e) => {
+                  if (e.target.closest('.project-card')) cube.classList.add('hovering-card');
+                  if (e.target.closest('a, button')) cube.classList.add('hovering');
+               });
+               document.addEventListener('mouseout', (e) => {
+                  if (e.target.closest('.project-card')) cube.classList.remove('hovering-card');
+                  if (e.target.closest('a, button')) cube.classList.remove('hovering');
+               });
+               document.addEventListener('mouseleave', () => gsap.to([cube, dot], { opacity: 0, duration: 0.25 }));
+               document.addEventListener('mouseenter', () => gsap.to([cube, dot], { opacity: 1, duration: 0.25 }));
+            }
+
+            /* ============================================================
+               07 HERO THREE.JS — one light wireframe object + dust
+               Falls back to a CSS/SVG globe when WebGL is unavailable.
+               ============================================================ */
+            function initThree() {
+               const hero = $('#hero');
+               if (!CONFIG.three.enabled || !hasThree || !motionOK) {
+                  if (motionOK) hero.classList.add('webgl-off');
+                  return;
+               }
+               const canvas = $('#hero-canvas');
+
+               let renderer;
+               try {
+                  renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+               } catch (e) {
+                  // WebGL blocked/disabled (e.g. LibreWolf) — show the SVG globe instead
+                  console.warn('webgl unavailable', e);
+                  hero.classList.add('webgl-off');
+                  return;
+               }
+               renderer.setPixelRatio(Math.min(window.devicePixelRatio, isTouch ? 1.5 : 2));
+               const scene = new THREE.Scene();
+               const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+               camera.position.z = 7;
+
+               // Wireframe icosahedron pair
+               const group = new THREE.Group();
+               scene.add(group);
+               const outer = new THREE.LineSegments(
+                  new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(1.9, 1)),
+                  new THREE.LineBasicMaterial({ color: 0xE53E3E, transparent: true, opacity: 0.22 })
+               );
+               const inner = new THREE.LineSegments(
+                  new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(1.05, 0)),
+                  new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.07 })
+               );
+               group.add(outer, inner);
+
+               // Sparse orbital dust
+               const positions = new Float32Array(CONFIG.three.particleCount * 3);
+               for (let i = 0; i < CONFIG.three.particleCount; i++) {
+                  const r = rand(2.5, 3.8);
+                  const theta = rand(0, Math.PI * 2);
+                  const phi = Math.acos(rand(-1, 1));
+                  positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+                  positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+                  positions[i * 3 + 2] = r * Math.cos(phi);
+               }
+               const dustGeo = new THREE.BufferGeometry();
+               dustGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+               const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({
+                  color: 0xE53E3E, size: 0.035, transparent: true, opacity: 0.45,
+               }));
+               scene.add(dust);
+
+               // Faint floor grid
+               const grid = new THREE.GridHelper(26, 34, 0xffffff, 0xffffff);
+               grid.material.transparent = true;
+               grid.material.opacity = 0.03;
+               grid.position.y = -3.4;
+               scene.add(grid);
+
+               // Layout per viewport
+               function layout() {
+                  const w = hero.clientWidth, h = hero.clientHeight;
+                  renderer.setSize(w, h, false);
+                  camera.aspect = w / h;
+                  camera.updateProjectionMatrix();
+                  if (w < 768) { group.position.set(0.4, 1.1, 0); group.scale.setScalar(0.72); }
+                  else { group.position.set(2.7, 0.1, 0); group.scale.setScalar(1); }
+               }
+               layout();
+               window.addEventListener('resize', layout);
+
+               // Pointer parallax — the camera drifts, rotation stays undisturbed
+               let targetCX = 0, targetCY = 0;
+               const aimCamera = (x, y) => {
+                  targetCX = (x / window.innerWidth - 0.5) * CONFIG.three.parallaxStrength * 2;
+                  targetCY = -(y / window.innerHeight - 0.5) * CONFIG.three.parallaxStrength * 2;
+               };
+               if (!isTouch) {
+                  window.addEventListener('mousemove', (e) => aimCamera(e.clientX, e.clientY), { passive: true });
+               } else {
+                  window.addEventListener('touchmove', (e) => {
+                     const t = e.touches[0];
+                     if (t) aimCamera(t.clientX, t.clientY);
+                  }, { passive: true });
+               }
+
+               // Render only while the hero is on screen
+               let active = true;
+               if (hasST) {
+                  ScrollTrigger.create({
+                     trigger: hero, start: 'top bottom', end: 'bottom top',
+                     onToggle: (self) => { active = self.isActive; },
+                  });
+               }
+
+               gsap.ticker.add(() => {
+                  if (!active || document.hidden) return;
+                  group.rotation.y += CONFIG.three.rotationSpeed;
+                  group.rotation.x += CONFIG.three.rotationSpeed * 0.35;
+                  inner.rotation.y -= CONFIG.three.rotationSpeed * 1.6;
+                  dust.rotation.y -= CONFIG.three.rotationSpeed * 0.5;
+                  group.position.y += Math.sin(performance.now() * 0.0006) * 0.0012;
+                  camera.position.x = lerp(camera.position.x, targetCX * 2.2, 0.04);
+                  camera.position.y = lerp(camera.position.y, targetCY * 2.2, 0.04);
+                  camera.lookAt(group.position.x * 0.45, 0, 0);
+                  renderer.render(scene, camera);
+               });
+            }
+
+            /* ============================================================
+               08 HERO BOOT SEQUENCE — "system powering on" (~2.5s)
+               ============================================================ */
+            function spawnSparks(chars) {
+               const visible = chars.filter((c) => c.offsetWidth > 0);
+               for (let i = 0; i < 14; i++) {
+                  const c = pick(visible);
+                  if (!c) break;
+                  const r = c.getBoundingClientRect();
+                  spawnFragment(r.left + r.width / 2, r.top + r.height / 2, { spread: 90 });
+               }
+            }
+
+            function glitchBurst(el) {
+               el.classList.add('aberration');
+               gsap.timeline({ onComplete: () => el.classList.remove('aberration') })
+                  .to(el, { x: -4, skewX: 5, duration: 0.05 })
+                  .to(el, { x: 3, skewX: -3, duration: 0.05 })
+                  .to(el, { x: -1, skewX: 1.5, duration: 0.05 })
+                  .to(el, { x: 0, skewX: 0, duration: 0.09 });
+            }
+
+            /** Fallback reveal if SplitType is unavailable. */
+            function simpleHeroReveal() {
+               gsap.set('.hero-title', { visibility: 'visible' });
+               $('#heroLabel').textContent = CONFIG.hero.labelText;
+               gsap.timeline()
+                  .to('.hero-label', { opacity: 1, duration: 0.4 }, 0.05)
+                  .to('.hero-kicker', { opacity: 1, duration: 0.5 }, 0.15)
+                  .fromTo('.hero-title', { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, 0.25)
+                  .to('.hero-desc', { opacity: 1, duration: 0.6 }, 0.7)
+                  .to('.hero-actions', { opacity: 1, duration: 0.6 }, 0.85)
+                  .to('.nav', { opacity: 1, duration: 0.6 }, 0.9)
+                  .add(() => {
+                     $('#hero-canvas').classList.add('visible');
+                     const globe = $('.globe-fallback');
+                     if (globe) globe.classList.add('visible');
+                     gsap.to('.scroll-indicator', { opacity: 1, duration: 0.6 });
+                  }, 1);
+            }
+
+            function initHeroBoot() {
+               if (!hasSplit) { simpleHeroReveal(); return; }
+
+               const title = $('#heroTitle');
+               const split1 = new SplitType('#heroLine1', { types: 'chars' });
+               const split2 = new SplitType('#heroLine2', { types: 'chars' });
+               const textChars = split1.chars.concat(split2.chars);
+               const period = $('.hero-period');
+               const allChars = textChars.concat([period]);
+
+               gsap.set(title, { visibility: 'visible' });
+               gsap.set(allChars, { opacity: 0 });
+
+               const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+               // 1 · mono label decodes first
+               tl.add(() => {
+                  gsap.set('.hero-label', { opacity: 1 });
+                  scramble($('#heroLabel'), CONFIG.hero.labelText, { duration: 650 });
+               }, 0.05);
+
+               // 2 · kicker
+               tl.fromTo('.hero-kicker', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5 }, 0.3);
+
+               // 3 · letters assemble + sharpen out of digital noise
+               tl.fromTo(allChars,
+                  {
+                     opacity: 0,
+                     x: () => rand(-36, 36), y: () => rand(-26, 26),
+                     rotation: () => rand(-16, 16),
+                     filter: 'blur(8px)',
+                  },
+                  {
+                     opacity: 1, x: 0, y: 0, rotation: 0, filter: 'blur(0px)',
+                     duration: 0.75,
+                     stagger: { each: CONFIG.hero.charStagger, from: 'random' },
+                     onComplete: () => gsap.set(allChars, { clearProps: 'filter' }),
+                  }, 0.5);
+               tl.add(() => scrambleChars(textChars, 0, 34), 0.5);
+               tl.add(() => title.classList.add('aberration'), 0.55);
+               tl.add(() => title.classList.remove('aberration'), 1.45);
+
+               // 4 · scanline sweep
+               tl.fromTo('.hero-scanline', { top: '0%', opacity: 0 },
+                  { top: '100%', opacity: 1, duration: 0.45, ease: 'power2.inOut' }, 1.15);
+               tl.to('.hero-scanline', { opacity: 0, duration: 0.15 }, 1.6);
+
+               // 5 · glitch + sparks, then the type locks into place
+               tl.add(() => glitchBurst(title), 1.35);
+               tl.add(() => spawnSparks(textChars), 1.45);
+               tl.fromTo(title, { scale: 1.012 }, { scale: 1, duration: 0.35, ease: 'power2.out' }, 1.55);
+
+               // 6 · supporting content
+               tl.fromTo('.hero-desc', { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.6 }, 1.7);
+               tl.fromTo('.hero-actions', { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.6 }, 1.85);
+               tl.fromTo('.nav', { opacity: 0, y: -14 }, { opacity: 1, y: 0, duration: 0.6 }, 1.9);
+
+               // 7 · idle systems come alive
+               tl.add(() => {
+                  $('#hero-canvas').classList.add('visible');
+                  const globe = $('.globe-fallback');
+                  if (globe) globe.classList.add('visible');
+                  gsap.to('.scroll-indicator', { opacity: 1, duration: 0.8 });
+                  gsap.to('.hero-light', {
+                     opacity: 1, scale: 1.07, duration: 4.2,
+                     ease: 'sine.inOut', yoyo: true, repeat: -1,
+                  });
+               }, 2.05);
+            }
+
+            /** Reduced-motion path: everything simply appears. */
+            function revealStatic() {
+               gsap.set(['.hero-title', '.nav'], { visibility: 'visible', opacity: 1 });
+               gsap.set('.hero-fade', { opacity: 1 });
+               $('#heroLabel').textContent = CONFIG.hero.labelText;
+               $('#hero-canvas').classList.add('visible');
+               const globe = $('.globe-fallback');
+               if (globe) globe.classList.add('visible');
+            }
+
+            /* ============================================================
+               09 SCROLL-DRIVEN ANIMATION (GSAP ScrollTrigger)
+               ============================================================ */
+            function initScrollAnimations() {
+               if (!hasST) return;
+
+               // Hero exit — compress, rise, fade as projects take over
+               gsap.to('.hero-content', {
+                  scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom 30%', scrub: true },
+                  y: -90, scale: 0.94, opacity: 0.08, ease: 'none',
+               });
+               // (canvas & hero-light are absolute inside .hero — they exit naturally with it)
+               ScrollTrigger.create({
+                  trigger: '#hero', start: '12% top',
+                  onEnter: () => gsap.to('.scroll-indicator', { opacity: 0, duration: 0.3, overwrite: 'auto' }),
+                  onLeaveBack: () => gsap.to('.scroll-indicator', { opacity: 1, duration: 0.3, overwrite: 'auto' }),
+               });
+
+               // Masked line reveals for section titles
+               $$('[data-split-line]').forEach((el) => {
+                  gsap.fromTo(el, { yPercent: 115 }, {
+                     yPercent: 0, duration: 1, ease: 'power4.out',
+                     scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+                  });
+               });
+
+               // Contact big-type moment
+               $$('[data-ct-line]').forEach((el, i) => {
+                  gsap.fromTo(el, { yPercent: 115, skewY: 4 }, {
+                     yPercent: 0, skewY: 0, duration: 1.05, ease: 'power4.out', delay: i * 0.09,
+                     scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+                  });
+               });
+
+               // Generic reveals: blur + rise
+               $$('[data-reveal]').forEach((el) => {
+                  gsap.fromTo(el,
+                     { opacity: 0, y: CONFIG.reveal.y, filter: 'blur(' + CONFIG.reveal.blur + 'px)' },
+                     {
+                        opacity: 1, y: 0, filter: 'blur(0px)',
+                        duration: CONFIG.reveal.duration, ease: 'power3.out',
+                        scrollTrigger: { trigger: el, start: 'top 88%', once: true },
+                        onComplete: () => gsap.set(el, { clearProps: 'filter' }),
+                     });
+               });
+
+               // Dividers draw themselves
+               $$('.divider').forEach((el) => {
+                  gsap.fromTo(el, { scaleX: 0 }, {
+                     scaleX: 1, duration: 1.2, ease: 'power3.inOut',
+                     scrollTrigger: { trigger: el, start: 'top 92%', once: true },
+                  });
+               });
+
+               // Project deck — each card unfolds once as it enters, then sticks;
+               // the previous card sinks back (scale + dim) as the next covers it.
+               const deckCards = $$('.card-stack .project-card');
+               deckCards.forEach((card, i) => {
+                  gsap.fromTo(card,
+                     { opacity: 0, y: 70, rotateX: -14, filter: 'blur(8px)' },
+                     {
+                        opacity: 1, y: 0, rotateX: 0, filter: 'blur(0px)',
+                        duration: 1, ease: 'power3.out',
+                        scrollTrigger: { trigger: card, start: 'top 88%', once: true },
+                        onComplete: () => gsap.set(card, { clearProps: 'filter' }),
+                     });
+
+                  if (i < deckCards.length - 1) {
+                     // As the next card covers this one, it sinks back.
+                     // Scale-only on the parent — the covered card's surface is
+                     // opaque, so the recede reads as depth without a competing
+                     // opacity tween (which clashes with the reveal's opacity).
+                     gsap.to(card, {
+                        scale: 0.93, ease: 'none',
+                        scrollTrigger: {
+                           trigger: deckCards[i + 1],
+                           start: 'top 95%',
+                           end: 'top 30%',
+                           scrub: true,
+                        },
+                     });
+                  }
+               });
+
+               // Active nav link tracking
+               $$('main section[id]').forEach((section) => {
+                  ScrollTrigger.create({
+                     trigger: section, start: 'top center', end: 'bottom center',
+                     onToggle: (self) => {
+                        if (!self.isActive) return;
+                        $$('.nav-link').forEach((l) =>
+                           l.classList.toggle('active', l.getAttribute('href') === '#' + section.id));
+                     },
+                  });
+               });
+
+               // Recalculate once assets settle
+               window.addEventListener('load', () => ScrollTrigger.refresh());
+            }
+
+            /* ============================================================
+               10 NAVIGATION — glass state, mobile menu, anchor scrolling
+               ============================================================ */
+            function initNav() {
+               const nav = $('.nav');
+               const setState = (y) => nav.classList.toggle('scrolled', y > 40);
+               if (lenis) lenis.on('scroll', (e) => setState(e.scroll));
+               else window.addEventListener('scroll', () => setState(window.scrollY), { passive: true });
+
+               const menu = $('#mobileMenu');
+               const burger = $('#burger');
+
+               function closeMenu() {
+                  menu.classList.remove('active');
+                  burger.classList.remove('open');
+                  burger.setAttribute('aria-expanded', 'false');
+                  menu.setAttribute('aria-hidden', 'true');
+                  if (lenis) lenis.start();
+               }
+               function openMenu() {
+                  menu.classList.add('active');
+                  burger.classList.add('open');
+                  burger.setAttribute('aria-expanded', 'true');
+                  menu.setAttribute('aria-hidden', 'false');
+                  if (lenis) lenis.stop();
+               }
+
+               burger.addEventListener('click', () =>
+                  menu.classList.contains('active') ? closeMenu() : openMenu());
+               document.addEventListener('keydown', (e) => {
+                  if (e.key === 'Escape' && menu.classList.contains('active')) closeMenu();
+               });
+
+               // Smooth anchor scrolling
+               $$('a[href^="#"]').forEach((link) => {
+                  link.addEventListener('click', (e) => {
+                     const hash = link.getAttribute('href');
+                     e.preventDefault();
+                     closeMenu();
+                     if (hash === '#' || link.hasAttribute('data-scroll-top')) { scrollToTarget(0, 0); return; }
+                     const target = $(hash);
+                     if (target) scrollToTarget(target);
+                  });
+               });
+            }
+
+            /* ============================================================
+               11 PROJECT CARDS — tilt, cursor light, orbiting tech tags
+               ============================================================ */
+            function initProjectCard(card) {
+               const inner = $('.card-inner', card);
+               const surface = $('.card-surface', card);
+               const tags = $$('.tag', card);
+               const tagsHome = $('.card-tags', card);
+               const P = CONFIG.projects;
+
+               const tilt = { x: 0, y: 0, tx: 0, ty: 0, lift: 0, liftTarget: 0 };
+               const orbit = {
+                  active: false, blend: 0, t: rand(0, Math.PI * 2),
+                  cx: 0, cy: 0, rx: 0, ry: 0, origins: [], lastStep: 0,
+               };
+               let rafId = null;
+
+               /* --- single rAF drives tilt + orbit for this card --- */
+               function loop(now) {
+                  const dt = Math.min(now - (orbit.lastStep || now), 50);
+                  orbit.lastStep = now;
+
+                  tilt.x = lerp(tilt.x, tilt.tx, P.tiltEase);
+                  tilt.y = lerp(tilt.y, tilt.ty, P.tiltEase);
+                  tilt.lift = lerp(tilt.lift, tilt.liftTarget, P.tiltEase);
+                  inner.style.transform =
+                     'translateY(' + (-P.liftPx * tilt.lift).toFixed(2) + 'px)' +
+                     ' rotateX(' + tilt.x.toFixed(3) + 'deg) rotateY(' + tilt.y.toFixed(3) + 'deg)';
+
+                  if (orbit.active || orbit.blend > 0.001) {
+                     orbit.t += dt * P.orbitSpeed;
+                     const b = orbit.blend;
+                     tags.forEach((tag, i) => {
+                        const o = orbit.origins[i];
+                        const ang = orbit.t + (i / tags.length) * Math.PI * 2;
+                        const depth = (Math.sin(ang) + 1) / 2; // 0 = far side, 1 = near side
+                        const x = lerp(o.x, orbit.cx + orbit.rx * Math.cos(ang) - o.w / 2, b);
+                        const y = lerp(o.y, orbit.cy + orbit.ry * Math.sin(ang) - o.h / 2, b);
+                        tag.style.transform =
+                           'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)' +
+                           ' scale(' + lerp(1, lerp(0.82, 1.06, depth), b).toFixed(3) + ')';
+                        tag.style.opacity = lerp(1, lerp(0.3, 1, depth), b).toFixed(3);
+                        tag.style.zIndex = depth < 0.5 ? 0 : 2;
+                     });
+                  }
+
+                  const settled =
+                     Math.abs(tilt.x - tilt.tx) < 0.01 && Math.abs(tilt.y - tilt.ty) < 0.01 &&
+                     Math.abs(tilt.lift - tilt.liftTarget) < 0.01 && orbit.blend <= 0.001;
+                  rafId = settled ? null : requestAnimationFrame(loop);
+               }
+               function kick() { if (!rafId) { orbit.lastStep = performance.now(); rafId = requestAnimationFrame(loop); } }
+
+               /* --- orbit lifecycle --- */
+               function startOrbit() {
+                  if (isTouch || !motionOK || tags.length === 0) return;
+                  if (orbit.active) { // re-entered while blending out — reverse direction
+                     gsap.killTweensOf(orbit);
+                     gsap.to(orbit, { blend: 1, duration: P.orbitBlendIn, ease: 'power2.out' });
+                     kick();
+                     return;
+                  }
+                  const rect = inner.getBoundingClientRect();
+                  orbit.cx = rect.width / 2;
+                  orbit.cy = rect.height / 2;
+                  orbit.rx = rect.width / 2 + P.orbitPadX;
+                  orbit.ry = rect.height / 2 + P.orbitPadY;
+                  orbit.origins = tags.map((tag) => {
+                     const r = tag.getBoundingClientRect();
+                     return { x: r.left - rect.left, y: r.top - rect.top, w: r.width, h: r.height };
+                  });
+                  tags.forEach((tag, i) => {
+                     inner.appendChild(tag); // escape .card-tags so z-index can pass behind the surface
+                     tag.classList.add('orbiting');
+                     tag.style.transform = 'translate(' + orbit.origins[i].x + 'px,' + orbit.origins[i].y + 'px)';
+                  });
+                  orbit.active = true;
+                  gsap.to(orbit, { blend: 1, duration: P.orbitBlendIn, ease: 'power2.out' });
+                  kick();
+               }
+
+               function stopOrbit() {
+                  if (!orbit.active) return;
+                  gsap.killTweensOf(orbit);
+                  gsap.to(orbit, {
+                     blend: 0, duration: P.orbitBlendOut, ease: 'power2.inOut',
+                     onComplete: restoreTags,
+                  });
+                  kick();
+               }
+
+               function restoreTags() {
+                  orbit.active = false;
+                  tags.forEach((tag) => {
+                     tag.classList.remove('orbiting');
+                     tag.removeAttribute('style');
+                     tagsHome.appendChild(tag); // original order preserved
+                  });
+               }
+
+               /* --- pointer events --- */
+               card.addEventListener('mouseenter', () => { tilt.liftTarget = 1; startOrbit(); kick(); });
+               card.addEventListener('mousemove', (e) => {
+                  const r = card.getBoundingClientRect();
+                  const px = (e.clientX - r.left) / r.width;
+                  const py = (e.clientY - r.top) / r.height;
+                  tilt.tx = (py - 0.5) * -2 * P.tiltMax;
+                  tilt.ty = (px - 0.5) * 2 * P.tiltMax;
+                  surface.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
+                  surface.style.setProperty('--my', (py * 100).toFixed(1) + '%');
+                  kick();
+               });
+               card.addEventListener('mouseleave', () => {
+                  tilt.tx = 0; tilt.ty = 0; tilt.liftTarget = 0;
+                  stopOrbit(); kick();
+               });
+
+               // Keep orbit geometry correct if the layout shifts mid-hover
+               window.addEventListener('resize', () => {
+                  if (!orbit.active) return;
+                  const rect = inner.getBoundingClientRect();
+                  orbit.cx = rect.width / 2; orbit.cy = rect.height / 2;
+                  orbit.rx = rect.width / 2 + P.orbitPadX; orbit.ry = rect.height / 2 + P.orbitPadY;
+               });
+            }
+
+            /* ============================================================
+               12 MAGNETIC BUTTONS + RIPPLE + PRESS
+               ============================================================ */
+            function initMagnetic() {
+               if (isTouch || !motionOK) return;
+               $$('.magnetic').forEach((el) => {
+                  const xTo = gsap.quickTo(el, 'x', { duration: 0.4, ease: 'power3' });
+                  const yTo = gsap.quickTo(el, 'y', { duration: 0.4, ease: 'power3' });
+                  el.addEventListener('mousemove', (e) => {
+                     const r = el.getBoundingClientRect();
+                     xTo((e.clientX - (r.left + r.width / 2)) * CONFIG.magnetic.strength);
+                     yTo((e.clientY - (r.top + r.height / 2)) * CONFIG.magnetic.strength);
+                  });
+                  el.addEventListener('mouseleave', () => {
+                     xTo(0); yTo(0);
+                     gsap.to(el, { scale: 1, duration: 0.3, ease: 'power2.out' });
+                  });
+                  el.addEventListener('pointerdown', () => gsap.to(el, { scale: 0.94, duration: 0.14, ease: 'power2.out' }));
+                  ['pointerup', 'pointercancel'].forEach((evt) =>
+                     el.addEventListener(evt, () => gsap.to(el, { scale: 1, duration: 0.35, ease: 'elastic.out(1, 0.5)' })));
+               });
+            }
+
+            function initRipple() {
+               $$('.btn, .link-btn, .contact-card').forEach((el) => {
+                  el.addEventListener('pointerdown', (e) => {
+                     const r = el.getBoundingClientRect();
+                     const d = Math.max(r.width, r.height) * 2.2;
+                     const ink = document.createElement('span');
+                     ink.className = 'ripple-ink';
+                     ink.style.width = ink.style.height = d + 'px';
+                     ink.style.left = (e.clientX - r.left - d / 2) + 'px';
+                     ink.style.top = (e.clientY - r.top - d / 2) + 'px';
+                     el.appendChild(ink);
+                     setTimeout(() => ink.remove(), 600);
+                  });
+               });
+            }
+
+            /* ============================================================
+               13 ABOUT STATS — count up & decode on entry
+               ============================================================ */
+            function initStats() {
+               $$('[data-count]').forEach((el) => {
+                  const target = parseInt(el.dataset.count, 10);
+                  const suffix = el.dataset.suffix || '';
+                  if (!hasST || !motionOK) { el.textContent = target + suffix; return; }
+                  ScrollTrigger.create({
+                     trigger: el, start: 'top 88%', once: true,
+                     onEnter: () => {
+                        const state = { v: 0 };
+                        el.textContent = '0' + suffix;
+                        gsap.to(state, {
+                           v: target, duration: 1.4, ease: 'power2.out',
+                           onUpdate: () => { el.textContent = Math.round(state.v) + suffix; },
+                        });
+                     },
+                  });
+               });
+
+               $$('[data-scramble-in]').forEach((el) => {
+                  const finalText = el.textContent;
+                  if (!hasST || !motionOK) return;
+                  ScrollTrigger.create({
+                     trigger: el, start: 'top 88%', once: true,
+                     onEnter: () => scramble(el, finalText, { duration: 800 }),
+                  });
+               });
+            }
+
+            /* ============================================================
+               14 AMBIENT AUDIO — generative piece in the spirit of
+               "Flying Waters" (calm pads, plucked pentatonic melody,
+               water droplets, deep reverb). 100% synthesized WebAudio,
+               no assets, ~3% master volume.
+               ============================================================ */
+            const AudioEngine = {
+               ctx: null, master: null, playing: false,
+               timer: null, nextChordAt: 0, nextNoteAt: 0, nextDropAt: 0,
+               chordIdx: 0, noteIdx: 2,
+
+               // D major — hopeful, watery loop: Dmaj9 → Bm7 → Gadd9 → Asus2
+               CHORDS: [
+                  [146.83, 185.00, 220.00, 329.63],
+                  [123.47, 146.83, 185.00, 220.00],
+                  [98.00, 123.47, 146.83, 220.00],
+                  [110.00, 138.59, 164.81, 246.94],
+               ],
+               PENTA: [293.66, 329.63, 369.99, 440.00, 493.88, 587.33], // D E F# A B D
+               CHORD_LEN: 8,
+
+               build() {
+                  const AC = window.AudioContext || window.webkitAudioContext;
+                  if (!AC) return false;
+                  const ctx = this.ctx = new AC();
+
+                  // Master chain: master gain → gentle compressor → out
+                  this.master = ctx.createGain();
+                  this.master.gain.value = 0;
+                  const comp = ctx.createDynamicsCompressor();
+                  comp.threshold.value = -24; comp.knee.value = 18;
+                  comp.ratio.value = 3; comp.attack.value = 0.01; comp.release.value = 0.3;
+                  this.master.connect(comp).connect(ctx.destination);
+
+                  // Generated convolution reverb (2.8s exponential-decay impulse)
+                  const irLen = Math.floor(ctx.sampleRate * 2.8);
+                  const ir = ctx.createBuffer(2, irLen, ctx.sampleRate);
+                  for (let ch = 0; ch < 2; ch++) {
+                     const d = ir.getChannelData(ch);
+                     for (let i = 0; i < irLen; i++) {
+                        d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / irLen, 2.6);
+                     }
+                  }
+                  this.verb = ctx.createConvolver();
+                  this.verb.buffer = ir;
+                  const verbGain = ctx.createGain();
+                  verbGain.gain.value = 0.55;
+                  this.verb.connect(verbGain).connect(this.master);
+
+                  // Feedback delay for the plucks (dotted-eighth feel)
+                  this.delay = ctx.createDelay(1);
+                  this.delay.delayTime.value = 0.42;
+                  const fb = ctx.createGain(); fb.gain.value = 0.32;
+                  const fbFilter = ctx.createBiquadFilter();
+                  fbFilter.type = 'lowpass'; fbFilter.frequency.value = 1800;
+                  this.delay.connect(fb).connect(fbFilter).connect(this.delay);
+                  const delayOut = ctx.createGain(); delayOut.gain.value = 0.28;
+                  this.delay.connect(delayOut).connect(this.verb);
+
+                  // Instrument buses
+                  this.padBus = ctx.createGain(); this.padBus.gain.value = 0.5;
+                  this.padBus.connect(this.master); this.padBus.connect(this.verb);
+                  this.pluckBus = ctx.createGain(); this.pluckBus.gain.value = 0.6;
+                  this.pluckBus.connect(this.master);
+                  this.pluckBus.connect(this.delay);
+                  this.pluckBus.connect(this.verb);
+
+                  return true;
+               },
+
+               /** Warm slow-attack pad voice for one chord. */
+               pad(freqs, when, dur) {
+                  const ctx = this.ctx;
+                  freqs.forEach((f) => {
+                     [-2, 2].forEach((cents) => {
+                        const osc = ctx.createOscillator();
+                        osc.type = 'triangle';
+                        osc.frequency.value = f;
+                        osc.detune.value = cents;
+                        const g = ctx.createGain();
+                        g.gain.setValueAtTime(0.0001, when);
+                        g.gain.exponentialRampToValueAtTime(0.045, when + dur * 0.45);
+                        g.gain.setValueAtTime(0.045, when + dur * 0.7);
+                        g.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+                        osc.connect(g).connect(this.padBus);
+                        osc.start(when); osc.stop(when + dur + 0.1);
+                     });
+                  });
+                  // soft root, one octave down
+                  const sub = ctx.createOscillator();
+                  sub.type = 'sine'; sub.frequency.value = freqs[0] / 2;
+                  const sg = ctx.createGain();
+                  sg.gain.setValueAtTime(0.0001, when);
+                  sg.gain.exponentialRampToValueAtTime(0.05, when + dur * 0.4);
+                  sg.gain.exponentialRampToValueAtTime(0.0001, when + dur);
+                  sub.connect(sg).connect(this.padBus);
+                  sub.start(when); sub.stop(when + dur + 0.1);
+               },
+
+               /** Plucked music-box voice with a long decay. */
+               pluck(freq, when) {
+                  const ctx = this.ctx;
+                  const body = ctx.createOscillator();
+                  body.type = 'triangle'; body.frequency.value = freq;
+                  const sparkle = ctx.createOscillator();
+                  sparkle.type = 'sine'; sparkle.frequency.value = freq * 2;
+                  const g = ctx.createGain();
+                  const lp = ctx.createBiquadFilter();
+                  lp.type = 'lowpass'; lp.frequency.value = 2600;
+                  g.gain.setValueAtTime(0.0001, when);
+                  g.gain.exponentialRampToValueAtTime(0.2, when + 0.008);
+                  g.gain.exponentialRampToValueAtTime(0.0001, when + 2.4);
+                  const g2 = ctx.createGain(); g2.gain.value = 0.35;
+                  body.connect(g); sparkle.connect(g2).connect(g);
+                  g.connect(lp).connect(this.pluckBus);
+                  body.start(when); body.stop(when + 2.5);
+                  sparkle.start(when); sparkle.stop(when + 2.5);
+               },
+
+               /** Sparse water droplet — a tiny pitch-drop ping into the reverb. */
+               droplet(when) {
+                  const ctx = this.ctx;
+                  const osc = ctx.createOscillator();
+                  osc.type = 'sine';
+                  osc.frequency.setValueAtTime(rand(650, 950), when);
+                  osc.frequency.exponentialRampToValueAtTime(rand(320, 420), when + 0.09);
+                  const g = ctx.createGain();
+                  g.gain.setValueAtTime(0.0001, when);
+                  g.gain.exponentialRampToValueAtTime(0.07, when + 0.01);
+                  g.gain.exponentialRampToValueAtTime(0.0001, when + 0.35);
+                  osc.connect(g).connect(this.verb);
+                  osc.start(when); osc.stop(when + 0.4);
+               },
+
+               /** Lookahead scheduler — runs every 250ms, schedules 0.8s ahead. */
+               tick() {
+                  const ahead = this.ctx.currentTime + 0.8;
+                  while (this.nextChordAt < ahead) {
+                     this.pad(this.CHORDS[this.chordIdx % this.CHORDS.length], this.nextChordAt, this.CHORD_LEN + 1);
+                     this.chordIdx++;
+                     this.nextChordAt += this.CHORD_LEN;
+                  }
+                  while (this.nextNoteAt < ahead) {
+                     if (Math.random() > 0.3) {
+                        this.noteIdx = Math.max(0, Math.min(this.PENTA.length - 1,
+                           this.noteIdx + pick([-2, -1, -1, 1, 1, 2])));
+                        this.pluck(this.PENTA[this.noteIdx], this.nextNoteAt);
+                     }
+                     this.nextNoteAt += rand(1.4, 3.0);
+                  }
+                  while (this.nextDropAt < ahead) {
+                     this.droplet(this.nextDropAt);
+                     this.nextDropAt += rand(6, 14);
+                  }
+               },
+
+               start() {
+                  try {
+                     if (!this.ctx && !this.build()) return;
+                     this.ctx.resume();
+                     if (!this.timer) {
+                        const t0 = this.ctx.currentTime;
+                        this.nextChordAt = t0 + 0.1;
+                        this.nextNoteAt = t0 + 1.4;
+                        this.nextDropAt = t0 + 4;
+                        this.tick();
+                        this.timer = setInterval(() => this.tick(), 250);
+                     }
+                     gsap.killTweensOf(this.master.gain);
+                     gsap.to(this.master.gain, { value: CONFIG.audio.volume, duration: CONFIG.audio.fadeIn, ease: 'sine.out' });
+                     this.playing = true;
+                  } catch (e) { console.warn('audio start', e); }
+               },
+
+               stop() {
+                  if (!this.ctx) return;
+                  gsap.killTweensOf(this.master.gain);
+                  gsap.to(this.master.gain, {
+                     value: 0, duration: 0.6, ease: 'sine.in',
+                     onComplete: () => {
+                        this.ctx.suspend();
+                        clearInterval(this.timer);
+                        this.timer = null;
+                     },
+                  });
+                  this.playing = false;
+               },
+            };
+
+            function initAudio() {
+               const btn = $('#audioToggle');
+               const key = CONFIG.audio.storageKey;
+
+               const setUI = (on) => {
+                  btn.classList.toggle('playing', on);
+                  btn.setAttribute('aria-pressed', String(on));
+               };
+
+               btn.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  if (AudioEngine.playing) {
+                     AudioEngine.stop(); setUI(false);
+                     try { localStorage.setItem(key, '1'); } catch (err) { /* private mode */ }
+                  } else {
+                     AudioEngine.start(); setUI(true);
+                     try { localStorage.removeItem(key); } catch (err) { /* private mode */ }
+                  }
+               });
+
+               // Audio only ever starts after a user interaction, and only if not muted before.
+               let muted = false;
+               try { muted = localStorage.getItem(key) === '1'; } catch (err) { /* private mode */ }
+               if (!muted) {
+                  const kick = (e) => {
+                     // Ignore interactions with the toggle itself — its click handler owns that path
+                     if (e.target && e.target.closest && e.target.closest('#audioToggle')) return;
+                     if (!AudioEngine.playing) { AudioEngine.start(); setUI(true); }
+                     window.removeEventListener('pointerdown', kick);
+                     window.removeEventListener('keydown', kick);
+                  };
+                  window.addEventListener('pointerdown', kick);
+                  window.addEventListener('keydown', kick);
+               }
+            }
+
+            /* ============================================================
+               15 INIT
+               ============================================================ */
+            function init() {
+               try { initNav(); } catch (e) { console.warn('nav', e); }
+               try { initRipple(); } catch (e) { console.warn('ripple', e); }
+               try { initAudio(); } catch (e) { console.warn('audio', e); }
+
+               if (!motionOK) {
+                  Loader.hideInstant();
+                  revealStatic();
+                  initStats(); // sets final values instantly
+                  window.__booted = true;
+                  clearTimeout(window.__animFailsafe);
+                  return;
+               }
+
+               try { initGrain(); } catch (e) { console.warn('grain', e); }
+               try { initParticles(); } catch (e) { console.warn('particles', e); }
+               try { initCursor(); } catch (e) { console.warn('cursor', e); }
+               try { initThree(); } catch (e) { console.warn('three', e); }
+               try { initMagnetic(); } catch (e) { console.warn('magnetic', e); }
+               try { $$('.project-card').forEach(initProjectCard); } catch (e) { console.warn('cards', e); }
+               try { initStats(); } catch (e) { console.warn('stats', e); }
+               try { initScrollAnimations(); } catch (e) { console.warn('scroll', e); }
+
+               // Wait briefly for fonts so the boot typography doesn't swap mid-animation
+               const fontsReady = document.fonts && document.fonts.ready
+                  ? document.fonts.ready : Promise.resolve();
+               Promise.race([
+                  fontsReady,
+                  new Promise((res) => setTimeout(res, 900)),
+               ]).then(() => {
+                  window.__booted = true;
+                  clearTimeout(window.__animFailsafe);
+                  // The loader slides away; the hero boot begins mid-slide.
+                  Loader.finish(() => {
+                     try { initHeroBoot(); } catch (e) {
+                        console.warn('boot', e);
+                        simpleHeroReveal();
+                     }
+                  });
+               });
+            }
+
+            init();
          }
 
-         init();
+         if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', start, { once: true });
+         } else {
+            start();
+         }
       })();
    </script>
 </body>
