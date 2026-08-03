@@ -1,1 +1,5 @@
 .superpowers/
+node_modules/
+dist/
+public/assets/hero_frames/
+public/assets/grain_frames/
