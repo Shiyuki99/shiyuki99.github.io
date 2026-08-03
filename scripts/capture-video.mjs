@@ -2,7 +2,10 @@ import puppeteer from 'puppeteer';
 import ffmpeg from 'fluent-ffmpeg';
 import path from 'path';
 import fs from 'fs';
+import ffmpegStatic from 'ffmpeg-static';
 import { CONFIG } from './config.mjs';
+
+ffmpeg.setFfmpegPath(ffmpegStatic);
 
 // Ensure output directory exists
 fs.mkdirSync(CONFIG.output, { recursive: true });
@@ -28,8 +31,11 @@ export async function captureVideo(sourceDir, sourceFile, settings) {
       `--window-size=${width},${height}`,
       '--no-sandbox',
       '--disable-setuid-sandbox',
-      ...(alpha ? ['--enable-alpha-channel', '--use-gl=swiftshader'] : []),
-      '--disable-gpu', // software rendering for consistency in headless
+      '--enable-webgl',
+      '--ignore-gpu-blocklist',
+      '--use-gl=angle',
+      '--use-angle=swiftshader',
+      ...(alpha ? ['--enable-alpha-channel'] : []),
     ],
   });
 
@@ -45,7 +51,7 @@ export async function captureVideo(sourceDir, sourceFile, settings) {
     });
   }
 
-  await page.goto(fileUrl, { waitUntil: 'networkidle0' });
+  await page.goto(fileUrl, { waitUntil: 'networkidle2', timeout: 30000 });
 
   // Wait for the render source to signal it's ready
   await page.waitForFunction('window.__ready === true', { timeout: 15000 });

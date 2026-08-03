@@ -26,7 +26,8 @@ export async function captureTexture(sourceDir, sourceFile, outputName, settings
       `--window-size=${width},${height}`,
       '--no-sandbox',
       '--disable-setuid-sandbox',
-      '--disable-gpu',
+      '--enable-webgl',
+      '--ignore-gpu-blocklist',
     ],
   });
 
