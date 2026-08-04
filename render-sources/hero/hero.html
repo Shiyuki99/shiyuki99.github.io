@@ -20,7 +20,7 @@
     background: linear-gradient(90deg, transparent, rgba(229,62,62,0.85), transparent);
     box-shadow: 0 0 24px rgba(229,62,62,0.55);
     opacity: 0; pointer-events: none;
-    animation: scan-sweep 8s ease-in-out infinite;
+    animation: scan-sweep 16s ease-in-out infinite;
   }
   @keyframes scan-sweep {
     0%, 100% { top: 0%; opacity: 0; }
@@ -106,7 +106,7 @@
     }, 2050);
 
     // Render loop — runs forever, captured for 8 seconds
-    const rotationSpeed = 0.0006;
+    const rotationSpeed = 0.0003;
     const parallaxStrength = 0.08;
 
     function animate(time) {
