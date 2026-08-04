@@ -19,7 +19,7 @@ fs.mkdirSync(CONFIG.output, { recursive: true });
  * @param {object} settings   — { width, height, duration, fps, alpha }
  */
 export async function captureVideo(sourceDir, sourceFile, settings) {
-  const { width, height, duration, fps, alpha = false } = settings;
+  const { width, height, duration, fps, alpha = false, scale = 1 } = settings;
   const sourcePath = path.join(CONFIG.renderSources, sourceDir, sourceFile);
   const fileUrl = `file://${sourcePath}`;
 
@@ -40,7 +40,7 @@ export async function captureVideo(sourceDir, sourceFile, settings) {
   });
 
   const page = await browser.newPage();
-  await page.setViewport({ width, height, deviceScaleFactor: 1 });
+  await page.setViewport({ width, height, deviceScaleFactor: scale });
 
   // Set transparent background for alpha videos
   if (alpha) {

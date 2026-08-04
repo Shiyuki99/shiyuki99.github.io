@@ -12,6 +12,7 @@ async function main() {
       duration: CONFIG.hero.duration,
       fps: CONFIG.hero.fps,
       alpha: true,
+      scale: CONFIG.hero.scale,
     });
 
     await captureVideo('grain', 'grain.html', {

@@ -6,7 +6,7 @@
 <title>Hero Render Source</title>
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-  body { background: #050505; overflow: hidden; width: 800px; height: 600px; position: relative; }
+  body { background: #050505; overflow: hidden; width: 960px; height: 720px; position: relative; }
   canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
   .hero-light {
     position: absolute; z-index: 0;
@@ -49,7 +49,7 @@
     import * as THREE from 'three';
 
     const canvas = document.getElementById('hero-canvas');
-    const W = 800, H = 600;
+    const W = 960, H = 720;
 
     const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
     renderer.setSize(W, H, false);
@@ -106,20 +106,15 @@
     }, 2050);
 
     // Render loop — runs forever, captured for 8 seconds
-    let startTime = null;
-    const duration = 8000; // ms
-    const rotationSpeed = 0.0016;
-    const parallaxStrength = 0.14;
-    let t = 0;
+    const rotationSpeed = 0.0006;
+    const parallaxStrength = 0.08;
 
     function animate(time) {
-      t += 0.016; // fixed timestep for deterministic replay
-
       group.rotation.y += rotationSpeed;
       group.rotation.x += rotationSpeed * 0.35;
       inner.rotation.y -= rotationSpeed * 1.6;
       dust.rotation.y -= rotationSpeed * 0.5;
-      group.position.y += Math.sin(time * 0.0006) * 0.0012;
+      group.position.y += Math.sin(time * 0.0004) * 0.0012;
 
       // Simulated parallax drift (slight camera sway)
       camera.position.x = Math.sin(time * 0.0003) * parallaxStrength * 2.2;
