@@ -13,7 +13,7 @@ export const CONFIG = {
     width: 960,
     height: 720,
     duration: 8,
-    fps: 60,
+    fps: 30,
     scale: 2,
   },
 

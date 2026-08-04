@@ -1,62 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hero Render Source</title>
-  <style>
-    *,
-    *::before,
-    *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero Render Source</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #050505; overflow: hidden; width: 960px; height: 720px; position: relative; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 
-    body {
-      background: #050505;
-      overflow: hidden;
-      width: 960px;
-      height: 720px;
-      position: relative;
-    }
+  .hero-light {
+    position: absolute; z-index: 0;
+    width: 640px; height: 640px; top: 12%; left: -8%;
+    border-radius: 50%; pointer-events: none;
+    background: radial-gradient(circle, rgba(255,255,255,0.045) 0%, rgba(229,62,62,0.03) 40%, transparent 70%);
+  }
 
-    canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .hero-light {
-      position: absolute;
-      z-index: 0;
-      width: 640px;
-      height: 640px;
-      top: 12%;
-      left: -8%;
-      border-radius: 50%;
-      pointer-events: none;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.045) 0%, rgba(229, 62, 62, 0.03) 40%, transparent 70%);
-      opacity: 0;
-    }
-
-    .scanline {
-      position: absolute;
-      left: -6%;
-      right: -6%;
-      top: 0;
-      height: 2px;
-      z-index: 3;
-      background: linear-gradient(90deg, transparent, rgba(229, 62, 62, 0.85), transparent);
-      box-shadow: 0 0 24px rgba(229, 62, 62, 0.55);
-      opacity: 0;
-      pointer-events: none;
-    }
-  </style>
+  .scanline {
+    position: absolute; left: -6%; right: -6%; top: 0; height: 2px; z-index: 3;
+    background: linear-gradient(90deg, transparent, rgba(229,62,62,0.85), transparent);
+    box-shadow: 0 0 24px rgba(229,62,62,0.55);
+    opacity: 0; pointer-events: none;
+  }
+</style>
 </head>
-
 <body>
   <canvas id="hero-canvas"></canvas>
   <div class="hero-light" id="hero-light"></div>
@@ -65,7 +32,6 @@
   <script type="importmap">
   { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js" } }
   </script>
-
   <script type="module">
     import * as THREE from 'three';
 
@@ -99,7 +65,7 @@
       const r = 2.5 + Math.random() * 1.3;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.acos(Math.random() * 2 - 1);
-      positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+      positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
       positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
       positions[i * 3 + 2] = r * Math.cos(phi);
     }
@@ -119,43 +85,36 @@
     const light = document.getElementById('hero-light');
     const scanline = document.getElementById('scanline');
 
-    // All animation state — step-based, no real-time clock
+    const DURATION = 8000; // ms — must match config
+
     let elapsed = 0;
-    const rotationSpeed = 0.0016;
-    const parallaxStrength = 0.08;
-    const scanlinePeriod = 16000; // every 16 seconds
-    const glowPeriod = 4200;
 
     function stepFrame(dtMs) {
-      const dt = dtMs * 0.001;
       elapsed += dtMs;
+      const t = (elapsed % DURATION) / DURATION; // 0..1 looping
+      const angle = t * Math.PI * 2;
 
-      // Three.js rotation
-      group.rotation.y += rotationSpeed;
-      group.rotation.x += rotationSpeed * 0.35;
-      inner.rotation.y -= rotationSpeed * 1.6;
-      dust.rotation.y -= rotationSpeed * 0.5;
-      group.position.y += Math.sin(elapsed * 0.0004) * 0.0012;
+      // All rotations periodic — seamless loop when elapsed % DURATION = 0
+      group.rotation.y = angle * 0.3;
+      group.rotation.x = Math.sin(angle * 2) * 0.09;
+      group.position.y = Math.sin(angle * 4.5) * 0.08;
+      inner.rotation.y = -angle * 0.5;
+      dust.rotation.y = -angle * 0.15;
 
-      camera.position.x = Math.sin(elapsed * 0.0003) * parallaxStrength * 2.2;
-      camera.position.y = Math.cos(elapsed * 0.0004) * parallaxStrength * 1.8;
+      camera.position.x = Math.sin(angle * 1.7) * 0.22;
+      camera.position.y = Math.cos(angle * 2.2) * 0.18;
       camera.lookAt(group.position.x * 0.45, 0, 0);
 
       renderer.render(scene, camera);
 
-      // Glow breathing (starts after 2s)
-      if (elapsed > 2050) {
-        light.style.opacity = '1';
-        const phase = ((elapsed - 2050) % glowPeriod) / glowPeriod;
-        const breathe = 0.85 + 0.15 * Math.sin(phase * Math.PI * 2);
-        light.style.transform = `scale(${1 + (breathe - 0.85) * 0.47})`;
-        light.style.opacity = String(0.7 + 0.3 * breathe);
-      }
+      // Glow breathing — always on, immediate from frame 1
+      light.style.opacity = String(0.7 + 0.3 * Math.cos(angle * 3));
+      light.style.transform = `scale(${1 + 0.07 * Math.sin(angle * 3)})`;
 
-      // Scanline — sweeps top to bottom over 2.5s, rests
-      const scanPhase = (elapsed % scanlinePeriod);
-      if (scanPhase < 2500) {
-        const p = scanPhase / 2500;
+      // Scanline — sweeps top to bottom over first 2.5s of the 8s loop
+      const sweepDuration = 2500;
+      if (elapsed < sweepDuration) {
+        const p = elapsed / sweepDuration;
         scanline.style.top = (p * 100) + '%';
         scanline.style.opacity = p < 0.15 ? String(p / 0.15) : p > 0.85 ? String((1 - p) / 0.15) : '1';
       } else {
@@ -163,15 +122,9 @@
       }
     }
 
-    // Initial render
     stepFrame(0);
     window.__ready = true;
-
-    // Expose step-based frame advance for Puppeteer
-    window.__stepFrame = (dtMs) => {
-      stepFrame(dtMs);
-    };
+    window.__stepFrame = (dtMs) => stepFrame(dtMs);
   </script>
 </body>
-
 </html>
