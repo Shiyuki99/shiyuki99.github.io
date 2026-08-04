@@ -802,12 +802,6 @@
          height: 100%;
          z-index: 0;
          object-fit: cover;
-         opacity: 0;
-         transition: opacity 1.6s ease;
-      }
-
-      #hero-video.visible {
-         opacity: 1;
       }
 
       .hero-inner {
@@ -957,10 +951,6 @@
       /* Failsafe: force everything visible if animation never ran */
       .no-anim .hero-title {
          visibility: visible !important;
-      }
-
-      .no-anim #hero-video {
-         opacity: 1 !important;
       }
 
       .no-anim .hero-fade,
@@ -1880,7 +1870,7 @@
    <main>
       <!-- ==================== HERO ==================== -->
       <section class="hero" id="hero">
-         <video id="hero-video" src="/assets/hero.webm"
+          <video id="hero-video" src="public/assets/hero.webm"
             autoplay loop muted playsinline
             aria-hidden="true"></video>
 
@@ -2847,7 +2837,6 @@
                   .to('.hero-actions', { opacity: 1, duration: 0.6 }, 0.85)
                   .to('.nav', { opacity: 1, duration: 0.6 }, 0.9)
                    .add(() => {
-                      $('#hero-video').classList.add('visible');
                       gsap.to('.scroll-indicator', { opacity: 1, duration: 0.6 });
                    }, 1);
             }
@@ -2904,9 +2893,8 @@
                tl.fromTo('.hero-actions', { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.6 }, 1.85);
                tl.fromTo('.nav', { opacity: 0, y: -14 }, { opacity: 1, y: 0, duration: 0.6 }, 1.9);
 
-                // 7 · video background fades in
+                // 7 · idle systems come alive
                 tl.add(() => {
-                   $('#hero-video').classList.add('visible');
                    gsap.to('.scroll-indicator', { opacity: 1, duration: 0.8 });
                 }, 2.05);
             }
@@ -2915,8 +2903,7 @@
             function revealStatic() {
                gsap.set(['.hero-title', '.nav'], { visibility: 'visible', opacity: 1 });
                gsap.set('.hero-fade', { opacity: 1 });
-               $('#heroLabel').textContent = CONFIG.hero.labelText;
-                $('#hero-video').classList.add('visible');
+                $('#heroLabel').textContent = CONFIG.hero.labelText;
              }
 
             /* ============================================================
