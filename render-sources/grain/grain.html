@@ -7,13 +7,13 @@
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    background: #050505;
+    background: transparent;
     overflow: hidden;
     width: 640px;
     height: 640px;
     position: relative;
   }
-  canvas { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+  canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 </style>
 </head>
 <body>
@@ -26,50 +26,21 @@
     canvas.height = H;
     const ctx = canvas.getContext('2d');
 
-    const TILE = 140;
-    const noiseCanvas = document.createElement('canvas');
-    noiseCanvas.width = noiseCanvas.height = TILE;
-    const nctx = noiseCanvas.getContext('2d');
-    const imgData = nctx.createImageData(TILE, TILE);
-
-    function generateNoise() {
+    function stepFrame(dtMs) {
+      const imgData = ctx.createImageData(W, H);
       for (let i = 0; i < imgData.data.length; i += 4) {
-        const v = (Math.random() * 255) | 0;
-        imgData.data[i] = imgData.data[i + 1] = imgData.data[i + 2] = v;
-        imgData.data[i + 3] = 255;
+        const v = (Math.random() * 8) | 0;
+        imgData.data[i] = 255;
+        imgData.data[i + 1] = 255;
+        imgData.data[i + 2] = 255;
+        imgData.data[i + 3] = v;
       }
-      nctx.putImageData(imgData, 0, 0);
+      ctx.putImageData(imgData, 0, 0);
     }
 
-    function draw() {
-      generateNoise();
-      ctx.clearRect(0, 0, W, H);
-      // Tile the 140x140 pattern across 640x640 with offsets to simulate the shift animation
-      for (let x = -TILE; x < W; x += TILE) {
-        for (let y = -TILE; y < H; y += TILE) {
-          ctx.drawImage(noiseCanvas, x + (Math.random() * 9 - 4.5), y + (Math.random() * 9 - 4.5));
-        }
-      }
-      // Apply opacity via global composite
-      ctx.fillStyle = '#050505';
-      ctx.globalCompositeOperation = 'destination-out';
-      ctx.globalAlpha = 0.97;
-      ctx.fillRect(0, 0, W, H);
-      ctx.globalCompositeOperation = 'source-over';
-      ctx.globalAlpha = 1;
-    }
-
+    stepFrame(0);
     window.__ready = true;
-
-    // New noise tile every 100ms = 10fps = steps(10) feel
-    setInterval(() => {
-      if (window.__shouldStop) return;
-      draw();
-      window.__frameReady = true;
-      window.__frameCount = (window.__frameCount || 0) + 1;
-    }, 100);
-
-    draw();
+    window.__stepFrame = (dtMs) => stepFrame(dtMs);
   </script>
 </body>
 </html>

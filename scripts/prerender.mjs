@@ -20,7 +20,7 @@ async function main() {
       height: CONFIG.grain.height,
       duration: CONFIG.grain.duration,
       fps: CONFIG.grain.fps,
-      alpha: false,
+      alpha: true,
     });
 
     await captureTexture('cards', 'card.html', 'card-frame.webp', {
