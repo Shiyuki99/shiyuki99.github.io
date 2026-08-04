@@ -25,8 +25,8 @@ export const CONFIG = {
   },
 
   card: {
-    width: 800,
-    height: 500,
+    width: 500,
+    height: 700,
   },
 
   ffmpeg: {
