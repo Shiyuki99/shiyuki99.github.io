@@ -35,6 +35,7 @@ async function main() {
         duration: CONFIG.hero.duration,
         fps: CONFIG.hero.fps,
         alpha: true,
+        scale: CONFIG.hero.scale,
       });
     } else {
       console.log('hero: up to date, skipping');

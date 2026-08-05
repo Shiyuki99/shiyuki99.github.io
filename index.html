@@ -1870,8 +1870,7 @@
    <main>
       <!-- ==================== HERO ==================== -->
       <section class="hero" id="hero">
-          <video id="hero-video" src="public/assets/hero.webm"
-            autoplay loop muted playsinline
+         <video id="hero-video" src="public/assets/hero.webm" autoplay loop muted playsinline
             aria-hidden="true"></video>
 
          <div class="hero-inner">
@@ -1883,8 +1882,8 @@
                      <span class="hero-line" id="heroLine1">Mohammed Islam</span>
                      <span class="hero-line hero-line-dim"><span id="heroLine2">Foudi</span><span
                            class="hero-period text-red" aria-hidden="true">.</span></span>
-                   </h1>
-                </div>
+                  </h1>
+               </div>
                <p class="hero-desc hero-fade">
                   I build things for the web — full-stack apps, automation bots, and everything in
                   between. Clean code, thoughtful design, real solutions.
@@ -2278,8 +2277,8 @@
                <span>Swipe</span>
                <svg class="swipe-hint-arrow" width="30" height="14" viewBox="0 0 30 14" fill="none"
                   xmlns="http://www.w3.org/2000/svg">
-                  <path d="M1 7H27M27 7L20 1M27 7L20 13" stroke="currentColor" stroke-width="1.4"
-                     stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M1 7H27M27 7L20 1M27 7L20 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
+                     stroke-linejoin="round" />
                </svg>
             </div>
          </div>
@@ -2403,7 +2402,7 @@
    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
    <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
    <script defer src="https://cdn.jsdelivr.net/npm/split-type@0.3.4/umd/index.min.js"></script>
-    <script>
+   <script>
       /* ============================================================
          M.F PORTFOLIO — main.js
           Sections:
@@ -2438,7 +2437,7 @@
                labelText: 'FULL-STACK DEVELOPER',
                charStagger: 0.026,       // seconds between char assemblies
             },
-             projects: {
+            projects: {
                tiltMax: 3.2,             // degrees
                tiltEase: 0.11,
                liftPx: 6,
@@ -2581,7 +2580,7 @@
             const hasST = hasGSAP && typeof window.ScrollTrigger !== 'undefined';
             const hasLenis = typeof window.Lenis !== 'undefined';
             const hasSplit = typeof window.SplitType !== 'undefined';
-             try { if (hasST) gsap.registerPlugin(ScrollTrigger); }
+            try { if (hasST) gsap.registerPlugin(ScrollTrigger); }
             catch (e) { console.warn('registerPlugin', e); }
 
             // Without GSAP nothing can animate — reveal everything statically and stop.
@@ -2836,9 +2835,9 @@
                   .to('.hero-desc', { opacity: 1, duration: 0.6 }, 0.7)
                   .to('.hero-actions', { opacity: 1, duration: 0.6 }, 0.85)
                   .to('.nav', { opacity: 1, duration: 0.6 }, 0.9)
-                   .add(() => {
-                      gsap.to('.scroll-indicator', { opacity: 1, duration: 0.6 });
-                   }, 1);
+                  .add(() => {
+                     gsap.to('.scroll-indicator', { opacity: 1, duration: 0.6 });
+                  }, 1);
             }
 
             function initHeroBoot() {
@@ -2883,7 +2882,7 @@
                tl.add(() => title.classList.add('aberration'), 0.55);
                tl.add(() => title.classList.remove('aberration'), 1.45);
 
-                // 4 · glitch + sparks, then the type locks into place
+               // 4 · glitch + sparks, then the type locks into place
                tl.add(() => glitchBurst(title), 1.35);
                tl.add(() => spawnSparks(textChars), 1.45);
                tl.fromTo(title, { scale: 1.012 }, { scale: 1, duration: 0.35, ease: 'power2.out' }, 1.55);
@@ -2893,18 +2892,18 @@
                tl.fromTo('.hero-actions', { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 0.6 }, 1.85);
                tl.fromTo('.nav', { opacity: 0, y: -14 }, { opacity: 1, y: 0, duration: 0.6 }, 1.9);
 
-                // 7 · idle systems come alive
-                tl.add(() => {
-                   gsap.to('.scroll-indicator', { opacity: 1, duration: 0.8 });
-                }, 2.05);
+               // 7 · idle systems come alive
+               tl.add(() => {
+                  gsap.to('.scroll-indicator', { opacity: 1, duration: 0.8 });
+               }, 2.05);
             }
 
             /** Reduced-motion path: everything simply appears. */
             function revealStatic() {
                gsap.set(['.hero-title', '.nav'], { visibility: 'visible', opacity: 1 });
                gsap.set('.hero-fade', { opacity: 1 });
-                $('#heroLabel').textContent = CONFIG.hero.labelText;
-             }
+               $('#heroLabel').textContent = CONFIG.hero.labelText;
+            }
 
             /* ============================================================
                09 SCROLL-DRIVEN ANIMATION (GSAP ScrollTrigger)
@@ -2917,7 +2916,7 @@
                   scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom 30%', scrub: true },
                   y: -90, scale: 0.94, opacity: 0.08, ease: 'none',
                });
-                // (video is absolute inside .hero — exits naturally with it)
+               // (video is absolute inside .hero — exits naturally with it)
                ScrollTrigger.create({
                   trigger: '#hero', start: '12% top',
                   onEnter: () => gsap.to('.scroll-indicator', { opacity: 0, duration: 0.3, overwrite: 'auto' }),
@@ -3686,8 +3685,8 @@
 
                try { initGrain(); } catch (e) { console.warn('grain', e); }
                try { initParticles(); } catch (e) { console.warn('particles', e); }
-                try { initCursor(); } catch (e) { console.warn('cursor', e); }
-                try { initMagnetic(); } catch (e) { console.warn('magnetic', e); }
+               try { initCursor(); } catch (e) { console.warn('cursor', e); }
+               try { initMagnetic(); } catch (e) { console.warn('magnetic', e); }
                try { const deck = $('.card-deck'); if (deck) Deck.init(deck); } catch (e) { console.warn('deck', e); }
                try { initStats(); } catch (e) { console.warn('stats', e); }
                try { initScrollAnimations(); } catch (e) { console.warn('scroll', e); }

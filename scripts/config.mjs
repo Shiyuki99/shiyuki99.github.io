@@ -10,10 +10,11 @@ export const CONFIG = {
   output: path.join(ROOT, 'public', 'assets'),
 
   hero: {
-    width: 960,
-    height: 720,
-    duration: 8,
+    width: 1440,
+    height: 1080,
+    duration: 20,
     fps: 30,
+    scale: 2,
   },
 
   grain: {
