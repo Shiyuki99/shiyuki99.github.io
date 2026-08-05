@@ -256,58 +256,13 @@
 
       #bg-grain {
          position: fixed;
-         top: -100%;
-         left: -100%;
+         inset: 0;
          z-index: 2000;
-         width: 300%;
-         height: 300%;
+         width: 100%;
+         height: 100%;
          pointer-events: none;
          opacity: 0.03;
-         animation: grain-shift 9s steps(10) infinite;
-      }
-
-      @keyframes grain-shift {
-
-         0%,
-         100% {
-            transform: translate(0, 0);
-         }
-
-         10% {
-            transform: translate(-3%, -6%);
-         }
-
-         20% {
-            transform: translate(-9%, 3%);
-         }
-
-         30% {
-            transform: translate(5%, -9%);
-         }
-
-         40% {
-            transform: translate(-3%, 9%);
-         }
-
-         50% {
-            transform: translate(-9%, -4%);
-         }
-
-         60% {
-            transform: translate(6%, 4%);
-         }
-
-         70% {
-            transform: translate(0, 7%);
-         }
-
-         80% {
-            transform: translate(-7%, 0);
-         }
-
-         90% {
-            transform: translate(8%, 2%);
-         }
+         object-fit: cover;
       }
 
       .glow-orb {
@@ -1827,7 +1782,7 @@
    <div class="glow-orb orb-2" aria-hidden="true"></div>
    <canvas id="bg-particles" aria-hidden="true"></canvas>
    <div class="bg-vignette" aria-hidden="true"></div>
-   <div id="bg-grain" aria-hidden="true"></div>
+    <video id="bg-grain" src="public/assets/grain.webm" autoplay loop muted playsinline aria-hidden="true"></video>
 
    <!-- Custom cursor -->
    <div id="cursor" aria-hidden="true">
@@ -2621,18 +2576,7 @@
                05 AMBIENT BACKGROUND — grain tile + drifting particles
                ============================================================ */
             function initGrain() {
-               // Generate a small noise tile once, tile it as a background image.
-               const tile = document.createElement('canvas');
-               tile.width = tile.height = 140;
-               const tctx = tile.getContext('2d');
-               const img = tctx.createImageData(140, 140);
-               for (let i = 0; i < img.data.length; i += 4) {
-                  const v = (Math.random() * 255) | 0;
-                  img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
-                  img.data[i + 3] = 255;
-               }
-               tctx.putImageData(img, 0, 0);
-               $('#bg-grain').style.backgroundImage = 'url(' + tile.toDataURL() + ')';
+               $('#bg-grain').play().catch(() => {});
             }
 
             function initParticles() {
