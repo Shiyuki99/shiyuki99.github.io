@@ -7,7 +7,7 @@
 <style>
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
   body {
-    background: transparent;
+    background: #808080;
     overflow: hidden;
     width: 640px;
     height: 640px;
@@ -29,11 +29,11 @@
     function stepFrame(dtMs) {
       const imgData = ctx.createImageData(W, H);
       for (let i = 0; i < imgData.data.length; i += 4) {
-        const v = (Math.random() * 24) | 0;
-        imgData.data[i] = 255;
-        imgData.data[i + 1] = 255;
-        imgData.data[i + 2] = 255;
-        imgData.data[i + 3] = v;
+        const v = (Math.random() * 255) | 0;
+        imgData.data[i] = v;
+        imgData.data[i + 1] = v;
+        imgData.data[i + 2] = v;
+        imgData.data[i + 3] = 255;
       }
       ctx.putImageData(imgData, 0, 0);
     }

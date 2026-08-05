@@ -47,7 +47,7 @@ async function main() {
         height: CONFIG.grain.height,
         duration: CONFIG.grain.duration,
         fps: CONFIG.grain.fps,
-        alpha: true,
+        alpha: false,
       });
     } else {
       console.log('grain: up to date, skipping');

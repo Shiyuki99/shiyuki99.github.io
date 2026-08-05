@@ -258,6 +258,8 @@
          height: 100%;
          pointer-events: none;
          object-fit: cover;
+         opacity: 0.12;
+         mix-blend-mode: overlay;
       }
 
       .glow-orb {
@@ -947,14 +949,14 @@
          flex-wrap: wrap;
          gap: 1.25rem;
          justify-content: center;
-         max-width: 1080px;
+         max-width: 1140px;
          margin: 0 auto;
          perspective: 1200px;
       }
 
       .project-card {
          position: relative;
-         width: 220px;
+         width: clamp(240px, 28vw, 300px);
          aspect-ratio: 5 / 7;
          cursor: pointer;
          overflow: hidden;
@@ -1224,6 +1226,10 @@
          animation: flicker-scan 0.42s ease-out forwards;
       }
 
+      .project-card.flickering {
+         animation: flicker-pulse 0.42s ease-out forwards;
+      }
+
       @keyframes flicker-scan {
 
          0% {
@@ -1238,6 +1244,26 @@
          100% {
             transform: translateY(calc(100% - 36px));
             opacity: 0;
+         }
+      }
+
+      @keyframes flicker-pulse {
+
+         0% {
+            box-shadow: 0 0 0 1px rgba(229, 62, 62, 0.6) inset,
+                       0 0 24px rgba(229, 62, 62, 0.4);
+            filter: brightness(1.3);
+         }
+
+         35% {
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4) inset,
+                       0 0 34px rgba(255, 255, 255, 0.3);
+            filter: brightness(1.6);
+         }
+
+         100% {
+            box-shadow: 0 0 0 1px rgba(229, 62, 62, 0) inset;
+            filter: brightness(1);
          }
       }
 
@@ -1580,7 +1606,7 @@
 
       @media (max-width: 767px) {
          .project-card {
-            width: min(160px, 42vw);
+            width: min(200px, 46vw);
          }
 
          .nav-links {
@@ -2869,9 +2895,9 @@
                });
             }
 
-            /* ============================================================
+/* ============================================================
                        10B PROJECT CARDS — flicker reveal on click
-                       (lightweight, pure JS — no GSAP, no orbit, no tilt)
+                       (CSS-only flicker — no async canvas, no DOM gate)
                        ============================================================ */
             function initProjectCards() {
                const cards = Array.from($$('.project-card'));
@@ -2891,63 +2917,25 @@
                });
 
                function toggle(card) {
-                  if (card === open) { close(card); open = null; }
-                  else {
-                     if (open) close(open);
-                     openCard(card);
+                  const isOpen = card.classList.contains('is-open');
+                  if (isOpen) {
+                     card.classList.remove('is-open');
+                     open = null;
+                  } else {
+                     if (open) open.classList.remove('is-open');
+                     card.classList.add('is-open');
                      open = card;
                   }
-               }
-
-               function openCard(card) {
-                  if (!motionOK) { card.classList.add('is-open'); return; }
-                  flicker(card, () => card.classList.add('is-open'));
-               }
-
-               function close(card) {
-                  if (!motionOK) { card.classList.remove('is-open'); return; }
-                  flicker(card, () => card.classList.remove('is-open'));
-               }
-
-               /* ---- flicker: canvas of light pixels that fades out ---- */
-               function flicker(card, cb) {
-                  card.classList.add('flickering');
-                  const canvas = document.createElement('canvas');
-                  canvas.style.cssText =
-                     'position:absolute;inset:0;pointer-events:none;z-index:5;mix-blend-mode:screen';
-                  card.appendChild(canvas);
-                  const r = card.getBoundingClientRect();
-                  const w = canvas.width = Math.max(1, Math.round(r.width));
-                  const h = canvas.height = Math.max(1, Math.round(r.height));
-                  const ctx = canvas.getContext('2d');
-                  if (!ctx) { card.classList.remove('flickering'); canvas.remove(); cb(); return; }
-
-                  const DURATION = 380;
-                  const start = performance.now();
-                  let raf;
-                  function frame(now) {
-                     const t = Math.min(1, (now - start) / DURATION);
-                     ctx.clearRect(0, 0, w, h);
-                     if (t >= 1) {
-                        canvas.remove();
-                        card.classList.remove('flickering');
-                        cb();
-                        return;
-                     }
-                     // Quadratic density fade — many pixels early, few at end
-                     const density = ((1 - t) * (1 - t)) * 260 + 22;
-                     for (let i = 0; i < density; i++) {
-                        const x = Math.random() * w;
-                        const y = Math.random() * h;
-                        const sz = Math.random() < 0.08 ? 2 : 1;
-                        const intensity = (0.4 + Math.random() * 0.6) * (1 - t * 0.85);
-                        const tint = Math.random() < 0.18 ? '229,62,62' : '235,235,235';
-                        ctx.fillStyle = 'rgba(' + tint + ',' + intensity.toFixed(2) + ')';
-                        ctx.fillRect(x, y, sz, sz);
-                     }
-                     raf = requestAnimationFrame(frame);
+                  // Kick CSS-only flicker animation via class toggle.
+                  // Reflow ensures animation restarts even if class still set.
+                  card.classList.remove('flickering');
+                  if (motionOK) {
+                     void card.offsetWidth;
+                     card.classList.add('flickering');
+                     // Remove the flicker class once animation ends so it can re-trigger.
+                     const onEnd = () => card.classList.remove('flickering');
+                     card.addEventListener('animationend', onEnd, { once: true });
                   }
-                  raf = requestAnimationFrame(frame);
                }
             }
 
