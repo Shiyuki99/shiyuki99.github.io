@@ -1062,8 +1062,7 @@
          position: absolute;
          inset: 0;
          z-index: 1;
-         background:
-            linear-gradient(155deg, rgba(26, 26, 26, 0.97) 0%, rgba(9, 9, 9, 0.99) 60%);
+         background: url('public/assets/card-frame.webp') center/cover no-repeat;
          border: 1px solid var(--gr-line);
          clip-path: polygon(0 0,
                calc(100% - var(--cut)) 0,
@@ -1075,20 +1074,6 @@
          transition: border-color 0.5s ease, box-shadow 0.5s ease;
       }
 
-      /* faint diagonal fabricated-metal texture */
-      .card-surface::before {
-         content: '';
-         position: absolute;
-         inset: 0;
-         background:
-            repeating-linear-gradient(115deg,
-               rgba(255, 255, 255, 0.015) 0px,
-               rgba(255, 255, 255, 0.015) 1px,
-               transparent 1px,
-               transparent 7px);
-         opacity: 0.5;
-         transition: opacity 0.5s ease;
-      }
 
       /* cursor-follow crimson glow */
       .card-surface::after {
@@ -1110,46 +1095,10 @@
          opacity: 1;
       }
 
-      /* inset second keyline, offset from the outer edge — layered-border read */
-      .card-inner::before {
-         content: '';
-         position: absolute;
-         inset: 7px;
-         z-index: 2;
-         pointer-events: none;
-         border: 1px solid rgba(255, 255, 255, 0.05);
-         clip-path: polygon(0 0,
-               calc(100% - 13px) 0,
-               100% 13px,
-               100% 100%,
-               13px 100%,
-               0 calc(100% - 13px));
-         transition: border-color 0.5s ease;
-      }
 
-      .project-card:hover .card-inner::before {
-         border-color: rgba(229, 62, 62, 0.22);
-      }
+      /* inset second keyline — now in pre-rendered card-frame.webp */
 
-      /* corner brackets — asymmetric, only the cut corners are marked */
-      .card-inner::after {
-         content: '';
-         position: absolute;
-         inset: 0;
-         z-index: 3;
-         pointer-events: none;
-         background:
-            linear-gradient(var(--gr-frame) 0 0) top left / 20px 1px no-repeat,
-            linear-gradient(var(--gr-frame) 0 0) top left / 1px 20px no-repeat,
-            linear-gradient(var(--gr-frame) 0 0) bottom right / 20px 1px no-repeat,
-            linear-gradient(var(--gr-frame) 0 0) bottom right / 1px 20px no-repeat;
-         opacity: 0.55;
-         transition: opacity 0.5s ease;
-      }
-
-      .project-card:hover .card-inner::after {
-         opacity: 1;
-      }
+      /* corner brackets — now in pre-rendered card-frame.webp */
 
       .card-content {
          position: relative;
