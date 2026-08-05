@@ -42,13 +42,9 @@
          --text-faint: rgba(255, 255, 255, 0.35);
          --border-subtle: rgba(255, 255, 255, 0.08);
          --nav-h: 72px;
-         /* Access-card frame system (Projects deck) */
-         --gr-charcoal: #0d0d0d;
-         --gr-graphite: #17171799;
-         --gr-line: rgba(255, 255, 255, 0.10);
+         /* Access-card frame accents */
          --gr-frame: rgba(229, 62, 62, 0.55);
          --gr-frame-dim: rgba(229, 62, 62, 0.16);
-         --metal-red: linear-gradient(135deg, #ff6a5a 0%, #b5261c 45%, #5c0f0a 100%);
          --font-display: 'Space Grotesk', sans-serif;
          --font-body: 'Inter', sans-serif;
          --font-mono: 'IBM Plex Mono', monospace;
@@ -261,7 +257,6 @@
          width: 100%;
          height: 100%;
          pointer-events: none;
-         opacity: 0.03;
          object-fit: cover;
       }
 
@@ -922,17 +917,8 @@
          filter: none !important;
       }
 
-      .no-anim .card-deck {
-         aspect-ratio: auto;
-      }
-
-      .no-anim .card-deck .project-card {
-         position: static;
-         aspect-ratio: 2 / 3;
-         width: 100%;
-         margin-bottom: 1.25rem;
-         transform: none !important;
-      }
+      .no-anim .project-card.is-open .card-front { opacity: 0; }
+      .no-anim .project-card.is-open .card-back { opacity: 1; }
 
       .no-anim .st-inner,
       .no-anim .ct-inner {
@@ -945,7 +931,7 @@
       }
 
       /* ============================================================
-         PROJECTS
+         PROJECTS — row of flicker-reveal cards
          ============================================================ */
       .projects-section {
          padding: 6rem 0 7rem;
@@ -956,256 +942,156 @@
          margin-bottom: 3.5rem;
       }
 
-      /* Card deck — access cards, fan-stacked, drawn one at a time */
-      .card-deck {
-         position: relative;
-         width: min(340px, 82vw);
-         aspect-ratio: 2 / 3;
+      .projects-grid {
+         display: flex;
+         flex-wrap: wrap;
+         gap: 1.25rem;
+         justify-content: center;
+         max-width: 1080px;
          margin: 0 auto;
          perspective: 1200px;
-         cursor: grab;
-         touch-action: pan-y;
       }
 
-      .card-deck.dragging {
-         cursor: grabbing;
-      }
-
-      .card-deck.empty {
-         aspect-ratio: auto;
-         min-height: 0;
-      }
-
-      /* swipe direction hint — small right-pointing arrow that drifts
-         to telegraph "this stack is draggable" before anyone touches it */
-      .swipe-hint {
-         display: flex;
-         align-items: center;
-         justify-content: center;
-         gap: 0.5rem;
-         margin: 1.6rem auto 0;
-         font-size: 0.66rem;
-         letter-spacing: 0.16em;
-         text-transform: uppercase;
-         color: var(--text-faint);
-         transition: opacity 0.6s ease;
-      }
-
-      .swipe-hint.is-hidden {
-         opacity: 0;
-      }
-
-      .swipe-hint-arrow {
-         color: var(--red);
-         animation: swipe-hint-drift 1.6s ease-in-out infinite;
-      }
-
-      @keyframes swipe-hint-drift {
-
-         0%,
-         100% {
-            transform: translateX(0);
-            opacity: 0.55;
-         }
-
-         50% {
-            transform: translateX(7px);
-            opacity: 1;
-         }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-         .swipe-hint-arrow {
-            animation: none;
-         }
-      }
-
-      .card-deck .project-card {
-         position: absolute;
-         inset: 0;
-         width: 100%;
-         height: 100%;
-         transform-origin: center center;
-         transition: box-shadow 0.5s ease;
-         will-change: transform, opacity;
-      }
-
-      .card-deck .project-card.swiping {
-         transition: none;
-      }
-
-      .card-deck .project-card.swiped {
-         pointer-events: none;
-         opacity: 0;
-      }
-
-      .card-deck .project-card:not([data-active]) {
-         pointer-events: none;
-      }
-
-      /* ---- card shell ------------------------------------------------ */
       .project-card {
          position: relative;
-         height: 100%;
-      }
-
-      .card-inner {
-         position: relative;
-         height: 100%;
-         will-change: transform;
-      }
-
-      /* Angular hardware-plate surface — corners cut on the diagonal,
-         two-tone graphite fill, single crimson keyline. */
-      .card-surface {
-         --cut: 20px;
-         position: absolute;
-         inset: 0;
-         z-index: 1;
-         background: url('public/assets/card-frame.webp') center/cover no-repeat;
-         border: 1px solid var(--gr-line);
-         clip-path: polygon(0 0,
-               calc(100% - var(--cut)) 0,
-               100% var(--cut),
-               100% 100%,
-               var(--cut) 100%,
-               0 calc(100% - var(--cut)));
+         width: 220px;
+         aspect-ratio: 5 / 7;
+         cursor: pointer;
          overflow: hidden;
-         transition: border-color 0.5s ease, box-shadow 0.5s ease;
+         background: linear-gradient(155deg, rgba(26, 26, 26, 0.97) 0%, rgba(9, 9, 9, 0.99) 60%);
+         border: 1px solid rgba(255, 255, 255, 0.1);
+         clip-path: polygon(0 0,
+               calc(100% - 16px) 0,
+               100% 16px,
+               100% 100%,
+               16px 100%,
+               0 calc(100% - 16px));
+         transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
       }
 
+      .project-card:hover {
+         border-color: rgba(229, 62, 62, 0.32);
+         box-shadow: 0 24px 48px -18px rgba(0, 0, 0, 0.7), 0 0 44px -12px rgba(229, 62, 62, 0.14);
+         transform: translateY(-3px);
+      }
 
-      /* cursor-follow crimson glow */
-      .card-surface::after {
+      /* faint diagonal metal texture */
+      .project-card::before {
          content: '';
          position: absolute;
          inset: 0;
-         background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%),
-               rgba(229, 62, 62, 0.08), transparent 45%);
-         opacity: 0;
-         transition: opacity 0.5s ease;
+         background: repeating-linear-gradient(115deg,
+               rgba(255, 255, 255, 0.015) 0px,
+               rgba(255, 255, 255, 0.015) 1px,
+               transparent 1px,
+               transparent 7px);
+         opacity: 0.5;
+         pointer-events: none;
       }
 
-      .project-card:hover .card-surface {
-         border-color: rgba(229, 62, 62, 0.32);
-         box-shadow: 0 24px 48px -18px rgba(0, 0, 0, 0.7), 0 0 44px -12px rgba(229, 62, 62, 0.14);
+      /* corner brackets — only on the cut corners */
+      .project-card::after {
+         content: '';
+         position: absolute;
+         inset: 0;
+         pointer-events: none;
+         background:
+            linear-gradient(var(--gr-frame) 0 0) top left / 16px 1px no-repeat,
+            linear-gradient(var(--gr-frame) 0 0) top left / 1px 16px no-repeat,
+            linear-gradient(var(--gr-frame) 0 0) bottom right / 16px 1px no-repeat,
+            linear-gradient(var(--gr-frame) 0 0) bottom right / 1px 16px no-repeat;
+         opacity: 0.55;
+         transition: opacity 0.4s ease;
       }
 
-      .project-card:hover .card-surface::after {
+      .project-card:hover::after {
          opacity: 1;
       }
 
-
-      /* inset second keyline — now in pre-rendered card-frame.webp */
-
-      /* corner brackets — now in pre-rendered card-frame.webp */
-
-      .card-content {
-         position: relative;
-         z-index: 4;
+      /* Card faces — one visible at a time */
+      .card-face {
+         position: absolute;
+         inset: 0;
          display: flex;
          flex-direction: column;
-         height: 100%;
-         padding: 2.5rem 1.7rem 1.6rem;
+         padding: 1.4rem 1.2rem 1.2rem;
+         transition: opacity 0.35s ease;
+         z-index: 1;
       }
 
-      /* serial / index chip — technical marking, top-right */
-      .card-number {
+      .card-front {
+         justify-content: flex-start;
+         gap: 0.6rem;
+      }
+
+      .card-back {
+         opacity: 0;
+         pointer-events: none;
+         z-index: 0;
+      }
+
+      .project-card.is-open .card-front {
+         opacity: 0;
+         pointer-events: none;
+         z-index: 0;
+      }
+
+      .project-card.is-open .card-back {
+         opacity: 1;
+         pointer-events: auto;
+         z-index: 1;
+      }
+
+      /* Card serial number — top-right chip */
+      .card-no {
          position: absolute;
-         top: 14px;
-         right: 20px;
-         z-index: 4;
-         display: flex;
-         align-items: center;
-         gap: 6px;
+         top: 12px;
+         right: 16px;
+         z-index: 3;
          font-family: var(--font-mono);
-         font-size: 0.6rem;
+         font-size: 0.58rem;
          font-weight: 500;
          letter-spacing: 0.14em;
          color: var(--text-faint);
+         display: flex;
+         align-items: center;
+         gap: 6px;
          pointer-events: none;
          user-select: none;
       }
 
-      .card-number::before {
+      .card-no::before {
          content: '';
          width: 6px;
          height: 6px;
          border: 1px solid var(--gr-frame-dim);
          transform: rotate(45deg);
-         transition: border-color 0.5s ease, background 0.5s ease;
+         transition: border-color 0.4s ease, background 0.4s ease;
       }
 
-      .project-card:hover .card-number {
+      .project-card:hover .card-no {
          color: rgba(255, 255, 255, 0.5);
       }
 
-      .project-card:hover .card-number::before {
+      .project-card:hover .card-no::before {
          border-color: var(--red);
          background: rgba(229, 62, 62, 0.5);
       }
 
-      /* card-head only exists to keep the markup's semantic grouping —
-         it's visually dissolved so title, tags, and links can each take
-         their own position in the vertical stack below. */
-      .card-head {
-         display: contents;
-      }
-
-      .card-title-wrap {
-         order: 1;
-         display: flex;
-         flex-direction: column;
-         align-items: flex-start;
-         gap: 0.9rem;
-      }
-
-      .card-title {
-         font-family: var(--font-display);
-         font-size: 1.3rem;
-         font-weight: 500;
-         letter-spacing: 0.01em;
-         margin-bottom: 0.45rem;
-      }
-
-      .card-desc {
-         font-size: 0.8rem;
-         font-weight: 300;
-         color: var(--text-muted);
-         line-height: 1.6;
-         display: -webkit-box;
-         -webkit-box-orient: vertical;
-         -webkit-line-clamp: 5;
-         overflow: hidden;
-      }
-
-      .card-links {
-         order: 3;
-         display: flex;
-         flex-direction: column;
-         gap: 0.55rem;
-         width: 100%;
-         margin-top: 1.1rem;
-      }
-
-      .card-links .link-btn {
-         justify-content: center;
-         width: 100%;
-      }
-
-      .project-logo {
-         width: 46px;
-         height: 46px;
+      /* Front face — icon + title + click hint */
+      .card-icon {
+         width: 42px;
+         height: 42px;
+         flex-shrink: 0;
          object-fit: cover;
          border: 1px solid rgba(255, 255, 255, 0.1);
-         flex-shrink: 0;
          background: rgba(255, 255, 255, 0.05);
-         clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 9px 100%, 0 calc(100% - 9px));
+         clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
       }
 
-      .icon-tile {
-         width: 46px;
-         height: 46px;
+      .card-icon-tile {
+         width: 42px;
+         height: 42px;
          flex-shrink: 0;
          background: rgba(255, 255, 255, 0.05);
          border: 1px solid rgba(255, 255, 255, 0.1);
@@ -1213,25 +1099,93 @@
          align-items: center;
          justify-content: center;
          color: rgba(255, 255, 255, 0.75);
-         clip-path: polygon(0 0, calc(100% - 9px) 0, 100% 9px, 100% 100%, 9px 100%, 0 calc(100% - 9px));
+         clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
          transition: color 0.4s ease, border-color 0.4s ease, background 0.4s ease;
       }
 
-      .project-card:hover .icon-tile {
+      .project-card:hover .card-icon,
+      .project-card:hover .card-icon-tile {
          color: var(--red);
          border-color: rgba(229, 62, 62, 0.32);
          background: rgba(229, 62, 62, 0.08);
       }
 
-      .card-tags {
-         order: 2;
+      .card-front-body {
+         display: flex;
+         flex-direction: column;
+         gap: 0.4rem;
+         margin-top: auto;
+      }
+
+      .card-front-title {
+         font-family: var(--font-display);
+         font-size: 1.15rem;
+         font-weight: 500;
+         letter-spacing: 0.01em;
+      }
+
+      .card-hint {
+         font-family: var(--font-mono);
+         font-size: 0.54rem;
+         letter-spacing: 0.18em;
+         text-transform: uppercase;
+         color: var(--text-faint);
+         transition: color 0.4s ease;
+      }
+
+      .project-card:hover .card-hint {
+         color: var(--red);
+      }
+
+      .project-card.is-open .card-hint {
+         display: none;
+      }
+
+      /* Back face — full content */
+      .card-back-body {
+         display: flex;
+         flex-direction: column;
+         height: 100%;
+         gap: 0.55rem;
+      }
+
+      .card-back-title {
+         font-family: var(--font-display);
+         font-size: 1rem;
+         font-weight: 500;
+         letter-spacing: 0.01em;
+      }
+
+      .card-back-desc {
+         font-size: 0.74rem;
+         font-weight: 300;
+         color: var(--text-muted);
+         line-height: 1.55;
+         display: -webkit-box;
+         -webkit-box-orient: vertical;
+         -webkit-line-clamp: 5;
+         overflow: hidden;
+      }
+
+      .card-back-tags {
          display: flex;
          gap: 0.4rem;
          flex-wrap: wrap;
          margin-top: auto;
-         padding-top: 1rem;
       }
 
+      .card-back-links {
+         display: flex;
+         gap: 0.5rem;
+         margin-top: 0.3rem;
+      }
+
+      .card-back-links .link-btn {
+         flex: 1;
+         justify-content: center;
+      }
+
+      /* Tag — reused for project tech tags */
       .tag {
          display: inline-block;
          padding: 4px 10px;
@@ -1247,32 +1201,44 @@
          clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
       }
 
-      .tag.orbiting {
+      /* Scanline sweep during flicker reveal */
+      .card-scan {
          position: absolute;
-         top: 0;
          left: 0;
-         margin: 0;
+         right: 0;
+         height: 36px;
+         z-index: 6;
          pointer-events: none;
-         will-change: transform, opacity;
-         background: rgba(10, 10, 10, 0.9);
-         border-color: rgba(229, 62, 62, 0.28);
-         color: rgba(255, 255, 255, 0.8);
+         background: linear-gradient(0deg,
+               transparent 0%,
+               rgba(255, 255, 255, 0.12) 35%,
+               rgba(229, 62, 62, 0.32) 50%,
+               rgba(255, 255, 255, 0.12) 65%,
+               transparent 100%);
+         opacity: 0;
+         top: 0;
+         transform: translateY(0);
       }
 
-      /* unlock flash — brief crimson sweep when a card is drawn */
-      .card-flash {
-         position: absolute;
-         inset: 0;
-         z-index: 5;
-         pointer-events: none;
-         background: radial-gradient(circle at 50% 50%, rgba(229, 62, 62, 0.35), transparent 62%);
-         opacity: 0;
-         clip-path: polygon(0 0,
-               calc(100% - 20px) 0,
-               100% 20px,
-               100% 100%,
-               20px 100%,
-               0 calc(100% - 20px));
+      .project-card.flickering .card-scan {
+         animation: flicker-scan 0.42s ease-out forwards;
+      }
+
+      @keyframes flicker-scan {
+
+         0% {
+            transform: translateY(0);
+            opacity: 0;
+         }
+
+         20% {
+            opacity: 1;
+         }
+
+         100% {
+            transform: translateY(calc(100% - 36px));
+            opacity: 0;
+         }
       }
 
       /* ============================================================
@@ -1613,9 +1579,8 @@
       }
 
       @media (max-width: 767px) {
-         .card-deck {
-            width: min(300px, 78vw);
-            perspective: 800px;
+         .project-card {
+            width: min(160px, 42vw);
          }
 
          .nav-links {
@@ -1634,14 +1599,20 @@
             padding-bottom: 6.5rem;
          }
 
-         .card-content {
-            padding: 1.5rem 1.4rem 1.4rem 1.6rem;
+         .card-face {
+            padding: 1rem 0.9rem 0.9rem;
          }
 
-         .card-number {
-            top: 10px;
-            right: 16px;
-            font-size: 0.56rem;
+         .card-back-title {
+            font-size: 0.92rem;
+         }
+
+         .card-back-desc {
+            font-size: 0.66rem;
+         }
+
+         .card-front-title {
+            font-size: 1rem;
          }
 
          .stats-grid {
@@ -1687,18 +1658,16 @@
          .stat-inner,
          .scroll-indicator .arrow,
          .stat-card::before,
-         .card-deck {
+         .project-card.flickering .card-scan {
             animation: none !important;
-            aspect-ratio: auto;
          }
 
-         .card-deck .project-card {
-            position: static;
-            aspect-ratio: 2 / 3;
-            width: 100%;
-            margin-bottom: 1.25rem;
+         .project-card:hover {
             transform: none !important;
          }
+
+         .project-card.is-open .card-front { opacity: 0; }
+         .project-card.is-open .card-back { opacity: 1; }
 
          *,
          *::before,
@@ -1902,288 +1871,272 @@
                </h2>
             </div>
 
-            <div class="card-deck">
+            <div class="projects-grid">
 
                <!-- Swap -->
-               <article class="project-card">
-                  <div class="card-inner">
-                     <div class="card-surface" aria-hidden="true"></div>
-                     <div class="card-flash" aria-hidden="true"></div>
-                     <span class="card-number" aria-hidden="true">P.01</span>
-                     <div class="card-content">
-                        <div class="card-head">
-                           <div class="card-title-wrap">
-                              <img src="app-icon.png" alt="Swap app logo" class="project-logo" width="48" height="48"
-                                 loading="lazy" decoding="async">
-                              <div>
-                                 <h3 class="card-title">Swap</h3>
-                                 <p class="card-desc">A web-based swap/trading application with real-time interactions
-                                    and a clean user interface.</p>
-                              </div>
-                           </div>
-                           <div class="card-links">
-                              <a href="https://swapapp-web.onrender.com" target="_blank" rel="noopener"
-                                 class="link-btn link-btn-live magnetic">
-                                 <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="#i-external" />
-                                 </svg>
-                                 Live
-                              </a>
-                              <a href="https://github.com/Shiyuki99/swap" target="_blank" rel="noopener"
-                                 class="link-btn link-btn-code magnetic">
-                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="#i-github" />
-                                 </svg>
-                                 Code
-                              </a>
-                           </div>
-                        </div>
-                        <div class="card-tags">
+               <article class="project-card" tabindex="0">
+                  <span class="card-no">P.01</span>
+                  <div class="card-face card-front">
+                     <img src="app-icon.png" alt="" class="card-icon" width="42" height="42" loading="lazy"
+                        decoding="async">
+                     <div class="card-front-body">
+                        <h3 class="card-front-title">Swap</h3>
+                        <span class="card-hint">Tap to open</span>
+                     </div>
+                  </div>
+                  <div class="card-face card-back">
+                     <div class="card-back-body">
+                        <h4 class="card-back-title">Swap</h4>
+                        <p class="card-back-desc">A web-based swap/trading application with real-time interactions and a
+                           clean user interface.</p>
+                        <div class="card-back-tags">
                            <span class="tag">Web App</span>
                            <span class="tag">Full-Stack</span>
                         </div>
+                        <div class="card-back-links">
+                           <a href="https://swapapp-web.onrender.com" target="_blank" rel="noopener"
+                              class="link-btn link-btn-live">
+                              <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+                                 <use href="#i-external" />
+                              </svg>
+                              Live
+                           </a>
+                           <a href="https://github.com/Shiyuki99/swap" target="_blank" rel="noopener"
+                              class="link-btn link-btn-code">
+                              <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                                 <use href="#i-github" />
+                              </svg>
+                              Code
+                           </a>
+                        </div>
                      </div>
                   </div>
+                  <div class="card-scan" aria-hidden="true"></div>
                </article>
 
                <!-- DiceCam -->
-               <article class="project-card">
-                  <div class="card-inner">
-                     <div class="card-surface" aria-hidden="true"></div>
-                     <div class="card-flash" aria-hidden="true"></div>
-                     <span class="card-number" aria-hidden="true">P.02</span>
-                     <div class="card-content">
-                        <div class="card-head">
-                           <div class="card-title-wrap">
-                              <img src="dicecam-logo.png" alt="DiceCam app logo" class="project-logo" width="48"
-                                 height="48" loading="lazy" decoding="async">
-                              <div>
-                                 <h3 class="card-title">DiceCam</h3>
-                                 <p class="card-desc">An interactive dice application with camera integration,
-                                    randomization mechanics, and a playful experience.</p>
-                              </div>
-                           </div>
-                           <div class="card-links">
-                              <a href="https://diceapp.vercel.app" target="_blank" rel="noopener"
-                                 class="link-btn link-btn-live magnetic">
-                                 <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="#i-external" />
-                                 </svg>
-                                 Live
-                              </a>
-                              <a href="https://github.com/Shiyuki99/dicecam" target="_blank" rel="noopener"
-                                 class="link-btn link-btn-code magnetic">
-                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="#i-github" />
-                                 </svg>
-                                 Code
-                              </a>
-                           </div>
-                        </div>
-                        <div class="card-tags">
+               <article class="project-card" tabindex="0">
+                  <span class="card-no">P.02</span>
+                  <div class="card-face card-front">
+                     <img src="dicecam-logo.png" alt="" class="card-icon" width="42" height="42" loading="lazy"
+                        decoding="async">
+                     <div class="card-front-body">
+                        <h3 class="card-front-title">DiceCam</h3>
+                        <span class="card-hint">Tap to open</span>
+                     </div>
+                  </div>
+                  <div class="card-face card-back">
+                     <div class="card-back-body">
+                        <h4 class="card-back-title">DiceCam</h4>
+                        <p class="card-back-desc">An interactive dice application with camera integration, randomization
+                           mechanics, and a playful experience.</p>
+                        <div class="card-back-tags">
                            <span class="tag">Web App</span>
                            <span class="tag">Camera API</span>
                         </div>
+                        <div class="card-back-links">
+                           <a href="https://diceapp.vercel.app" target="_blank" rel="noopener"
+                              class="link-btn link-btn-live">
+                              <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+                                 <use href="#i-external" />
+                              </svg>
+                              Live
+                           </a>
+                           <a href="https://github.com/Shiyuki99/dicecam" target="_blank" rel="noopener"
+                              class="link-btn link-btn-code">
+                              <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                                 <use href="#i-github" />
+                              </svg>
+                              Code
+                           </a>
+                        </div>
                      </div>
                   </div>
+                  <div class="card-scan" aria-hidden="true"></div>
                </article>
 
                <!-- AutoStoreDZ -->
-               <article class="project-card">
-                  <div class="card-inner">
-                     <div class="card-surface" aria-hidden="true"></div>
-                     <div class="card-flash" aria-hidden="true"></div>
-                     <span class="card-number" aria-hidden="true">P.03</span>
-                     <div class="card-content">
-                        <div class="card-head">
-                           <div class="card-title-wrap">
-                              <img src="autostore_icon.png" alt="AutoStoreDZ logo" class="project-logo" width="48"
-                                 height="48" loading="lazy" decoding="async">
-                              <div>
-                                 <h3 class="card-title">AutoStoreDZ</h3>
-                                 <p class="card-desc">An automated store bot for seamless purchasing — includes a
-                                    testing chat interface to explore the workflow.</p>
-                              </div>
-                           </div>
-                           <div class="card-links">
-                              <a href="https://autostoredz.online" target="_blank" rel="noopener"
-                                 class="link-btn link-btn-live magnetic">
-                                 <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="#i-external" />
-                                 </svg>
-                                 Live
-                              </a>
-                           </div>
-                        </div>
-                        <div class="card-tags">
+               <article class="project-card" tabindex="0">
+                  <span class="card-no">P.03</span>
+                  <div class="card-face card-front">
+                     <img src="autostore_icon.png" alt="" class="card-icon" width="42" height="42" loading="lazy"
+                        decoding="async">
+                     <div class="card-front-body">
+                        <h3 class="card-front-title">AutoStoreDZ</h3>
+                        <span class="card-hint">Tap to open</span>
+                     </div>
+                  </div>
+                  <div class="card-face card-back">
+                     <div class="card-back-body">
+                        <h4 class="card-back-title">AutoStoreDZ</h4>
+                        <p class="card-back-desc">An automated store bot for seamless purchasing — includes a testing chat
+                           interface to explore the workflow.</p>
+                        <div class="card-back-tags">
                            <span class="tag">Bot</span>
                            <span class="tag">Automation</span>
                         </div>
+                        <div class="card-back-links">
+                           <a href="https://autostoredz.online" target="_blank" rel="noopener"
+                              class="link-btn link-btn-live">
+                              <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
+                                 <use href="#i-external" />
+                              </svg>
+                              Live
+                           </a>
+                        </div>
                      </div>
                   </div>
+                  <div class="card-scan" aria-hidden="true"></div>
                </article>
 
                <!-- Password Manager -->
-               <article class="project-card">
-                  <div class="card-inner">
-                     <div class="card-surface" aria-hidden="true"></div>
-                     <div class="card-flash" aria-hidden="true"></div>
-                     <span class="card-number" aria-hidden="true">P.04</span>
-                     <div class="card-content">
-                        <div class="card-head">
-                           <div class="card-title-wrap">
-                              <div class="icon-tile">
-                                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="#i-shield" />
-                                 </svg>
-                              </div>
-                              <div>
-                                 <h3 class="card-title">Password Manager</h3>
-                                 <p class="card-desc">A secure password management tool with encryption, storage, and
-                                    retrieval of credentials.</p>
-                              </div>
-                           </div>
-                           <div class="card-links">
-                              <a href="https://github.com/Shiyuki99/Password-Manager" target="_blank" rel="noopener"
-                                 class="link-btn link-btn-code magnetic">
-                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="#i-github" />
-                                 </svg>
-                                 Code
-                              </a>
-                           </div>
-                        </div>
-                        <div class="card-tags">
+               <article class="project-card" tabindex="0">
+                  <span class="card-no">P.04</span>
+                  <div class="card-face card-front">
+                     <div class="card-icon-tile">
+                        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                           <use href="#i-shield" />
+                        </svg>
+                     </div>
+                     <div class="card-front-body">
+                        <h3 class="card-front-title">Password Manager</h3>
+                        <span class="card-hint">Tap to open</span>
+                     </div>
+                  </div>
+                  <div class="card-face card-back">
+                     <div class="card-back-body">
+                        <h4 class="card-back-title">Password Manager</h4>
+                        <p class="card-back-desc">A secure password management tool with encryption, storage, and
+                           retrieval of credentials.</p>
+                        <div class="card-back-tags">
                            <span class="tag">Security</span>
                            <span class="tag">Encryption</span>
                         </div>
+                        <div class="card-back-links">
+                           <a href="https://github.com/Shiyuki99/Password-Manager" target="_blank" rel="noopener"
+                              class="link-btn link-btn-code">
+                              <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                                 <use href="#i-github" />
+                              </svg>
+                              Code
+                           </a>
+                        </div>
                      </div>
                   </div>
+                  <div class="card-scan" aria-hidden="true"></div>
                </article>
 
                <!-- Heart Disease Prediction -->
-               <article class="project-card">
-                  <div class="card-inner">
-                     <div class="card-surface" aria-hidden="true"></div>
-                     <div class="card-flash" aria-hidden="true"></div>
-                     <span class="card-number" aria-hidden="true">P.05</span>
-                     <div class="card-content">
-                        <div class="card-head">
-                           <div class="card-title-wrap">
-                              <div class="icon-tile">
-                                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="#i-heart" />
-                                 </svg>
-                              </div>
-                              <div>
-                                 <h3 class="card-title">Heart Disease Prediction</h3>
-                                 <p class="card-desc">Machine learning model for predicting heart disease risk based on
-                                    clinical parameters and patient data.</p>
-                              </div>
-                           </div>
-                           <div class="card-links">
-                              <a href="https://github.com/Shiyuki99/Heart_disease" target="_blank" rel="noopener"
-                                 class="link-btn link-btn-code magnetic">
-                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="#i-github" />
-                                 </svg>
-                                 Code
-                              </a>
-                           </div>
-                        </div>
-                        <div class="card-tags">
+               <article class="project-card" tabindex="0">
+                  <span class="card-no">P.05</span>
+                  <div class="card-face card-front">
+                     <div class="card-icon-tile">
+                        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                           <use href="#i-heart" />
+                        </svg>
+                     </div>
+                     <div class="card-front-body">
+                        <h3 class="card-front-title">Heart Disease Prediction</h3>
+                        <span class="card-hint">Tap to open</span>
+                     </div>
+                  </div>
+                  <div class="card-face card-back">
+                     <div class="card-back-body">
+                        <h4 class="card-back-title">Heart Disease Prediction</h4>
+                        <p class="card-back-desc">Machine learning model for predicting heart disease risk based on
+                           clinical parameters and patient data.</p>
+                        <div class="card-back-tags">
                            <span class="tag">Python</span>
                            <span class="tag">Machine Learning</span>
                         </div>
+                        <div class="card-back-links">
+                           <a href="https://github.com/Shiyuki99/Heart_disease" target="_blank" rel="noopener"
+                              class="link-btn link-btn-code">
+                              <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                                 <use href="#i-github" />
+                              </svg>
+                              Code
+                           </a>
+                        </div>
                      </div>
                   </div>
+                  <div class="card-scan" aria-hidden="true"></div>
                </article>
 
                <!-- Blockchain Showcase -->
-               <article class="project-card">
-                  <div class="card-inner">
-                     <div class="card-surface" aria-hidden="true"></div>
-                     <div class="card-flash" aria-hidden="true"></div>
-                     <span class="card-number" aria-hidden="true">P.06</span>
-                     <div class="card-content">
-                        <div class="card-head">
-                           <div class="card-title-wrap">
-                              <div class="icon-tile">
-                                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="#i-blocks" />
-                                 </svg>
-                              </div>
-                              <div>
-                                 <h3 class="card-title">Blockchain Showcase</h3>
-                                 <p class="card-desc">A simple visual demonstration of blockchain fundamentals —
-                                    hashing, chaining, and consensus concepts.</p>
-                              </div>
-                           </div>
-                           <div class="card-links">
-                              <a href="https://github.com/Shiyuki99/simple-blockchain-showcase" target="_blank"
-                                 rel="noopener" class="link-btn link-btn-code magnetic">
-                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="#i-github" />
-                                 </svg>
-                                 Code
-                              </a>
-                           </div>
-                        </div>
-                        <div class="card-tags">
+               <article class="project-card" tabindex="0">
+                  <span class="card-no">P.06</span>
+                  <div class="card-face card-front">
+                     <div class="card-icon-tile">
+                        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                           <use href="#i-blocks" />
+                        </svg>
+                     </div>
+                     <div class="card-front-body">
+                        <h3 class="card-front-title">Blockchain Showcase</h3>
+                        <span class="card-hint">Tap to open</span>
+                     </div>
+                  </div>
+                  <div class="card-face card-back">
+                     <div class="card-back-body">
+                        <h4 class="card-back-title">Blockchain Showcase</h4>
+                        <p class="card-back-desc">A simple visual demonstration of blockchain fundamentals — hashing,
+                           chaining, and consensus concepts.</p>
+                        <div class="card-back-tags">
                            <span class="tag">Blockchain</span>
                            <span class="tag">Educational</span>
                         </div>
+                        <div class="card-back-links">
+                           <a href="https://github.com/Shiyuki99/simple-blockchain-showcase" target="_blank"
+                              rel="noopener" class="link-btn link-btn-code">
+                              <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                                 <use href="#i-github" />
+                              </svg>
+                              Code
+                           </a>
+                        </div>
                      </div>
                   </div>
+                  <div class="card-scan" aria-hidden="true"></div>
                </article>
 
                <!-- Banking System -->
-               <article class="project-card">
-                  <div class="card-inner">
-                     <div class="card-surface" aria-hidden="true"></div>
-                     <div class="card-flash" aria-hidden="true"></div>
-                     <span class="card-number" aria-hidden="true">P.07</span>
-                     <div class="card-content">
-                        <div class="card-head">
-                           <div class="card-title-wrap">
-                              <div class="icon-tile">
-                                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="#i-landmark" />
-                                 </svg>
-                              </div>
-                              <div>
-                                 <h3 class="card-title">Banking System</h3>
-                                 <p class="card-desc">A simulated banking system handling accounts, transactions, and
-                                    balance management with proper validation.</p>
-                              </div>
-                           </div>
-                           <div class="card-links">
-                              <a href="https://github.com/Shiyuki99/Banking-System" target="_blank" rel="noopener"
-                                 class="link-btn link-btn-code magnetic">
-                                 <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
-                                    <use href="#i-github" />
-                                 </svg>
-                                 Code
-                              </a>
-                           </div>
-                        </div>
-                        <div class="card-tags">
+               <article class="project-card" tabindex="0">
+                  <span class="card-no">P.07</span>
+                  <div class="card-face card-front">
+                     <div class="card-icon-tile">
+                        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                           <use href="#i-landmark" />
+                        </svg>
+                     </div>
+                     <div class="card-front-body">
+                        <h3 class="card-front-title">Banking System</h3>
+                        <span class="card-hint">Tap to open</span>
+                     </div>
+                  </div>
+                  <div class="card-face card-back">
+                     <div class="card-back-body">
+                        <h4 class="card-back-title">Banking System</h4>
+                        <p class="card-back-desc">A simulated banking system handling accounts, transactions, and balance
+                           management with proper validation.</p>
+                        <div class="card-back-tags">
                            <span class="tag">System Design</span>
                            <span class="tag">Backend</span>
                         </div>
+                        <div class="card-back-links">
+                           <a href="https://github.com/Shiyuki99/Banking-System" target="_blank" rel="noopener"
+                              class="link-btn link-btn-code">
+                              <svg width="13" height="13" viewBox="0 0 24 24" aria-hidden="true">
+                                 <use href="#i-github" />
+                              </svg>
+                              Code
+                           </a>
+                        </div>
                      </div>
                   </div>
+                  <div class="card-scan" aria-hidden="true"></div>
                </article>
 
-            </div>
-
-            <div class="swipe-hint mono" id="swipe-hint" aria-hidden="true">
-               <span>Swipe</span>
-               <svg class="swipe-hint-arrow" width="30" height="14" viewBox="0 0 30 14" fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path d="M1 7H27M27 7L20 1M27 7L20 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"
-                     stroke-linejoin="round" />
-               </svg>
             </div>
          </div>
       </section>
@@ -2917,351 +2870,85 @@
             }
 
             /* ============================================================
-                       10B DECK — playing-card fan + swipe-to-discard engine
-                       (pointer, touch, and keyboard — no scroll dependency)
+                       10B PROJECT CARDS — flicker reveal on click
+                       (lightweight, pure JS — no GSAP, no orbit, no tilt)
                        ============================================================ */
-            const Deck = {
-               cards: [], total: 0, topIdx: -1,
-               active: false, dragX: 0, startX: 0, startY: 0,
+            function initProjectCards() {
+               const cards = Array.from($$('.project-card'));
+               let open = null;
 
-               init(container) {
-                  this.el = container;
-                  // Reversed so the deck reveals in natural order (01 → 07)
-                  // instead of last-drawn-first.
-                  this.cards = [...container.querySelectorAll('.project-card')].reverse();
-                  this.total = this.cards.length;
-                  this.topIdx = this.total - 1;
-                  if (this.total === 0) return;
-
-                  // Fan layout — alternating subtle rotations + y-offset for depth.
-                  // The top card is flat (rotation 0); cards below fan out.
-                  const fanRots = [3, -2.2, 1.8, -2.5, 0.9, -1.3, 0].slice(-this.total);
-                  this.cards.forEach((card, i) => {
-                     const rot = fanRots[i] || 0;
-                     const yOff = (this.total - 1 - i) * 5;
-                     card.classList.add('deck-card');
-                     card.style.zIndex = i + 1;             // top card = highest z
-                     card.style.setProperty('--fan-rot', rot + 'deg');
-                     card.style.setProperty('--fan-y', yOff + 'px');
-                     gsap.set(card, { rotation: rot, y: yOff, x: 0, scale: 1, opacity: 1 });
-                     if (i === this.topIdx) {
-                        card.setAttribute('data-active', '');
-                        this.activateCard(card);
-                     } else {
-                        card.removeAttribute('data-active');
+               cards.forEach(card => {
+                  card.addEventListener('click', e => {
+                     if (e.target.closest('a, button')) return;
+                     toggle(card);
+                  });
+                  card.addEventListener('keydown', e => {
+                     if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('a')) {
+                        e.preventDefault();
+                        toggle(card);
                      }
                   });
+               });
 
-                  this.el.addEventListener('pointerdown', e => this.onDown(e));
-                  document.addEventListener('keydown', e => this.onKey(e));
-               },
-
-               get topCard() { return this.cards[this.topIdx]; },
-
-               activateCard(card) {
-                  try { initProjectCard(card); } catch (e) { console.warn('card init', e); }
-               },
-
-               onDown(e) {
-                  if (this.active || this.topIdx < 0) return;
-                  if (e.target.closest('a, button')) return;
-                  this.active = true;
-                  this.startX = e.clientX; this.startY = e.clientY;
-                  this.dragX = 0;
-                  this.el.classList.add('dragging');
-                  this.topCard.classList.add('swiping');
-                  if (this.topCard.__stopOrbit) this.topCard.__stopOrbit();
-                  this.hideHint();
-
-                  // Bind move/up to document — more reliable than pointer capture
-                  const onMv = (ev) => this.onMove(ev);
-                  const onUp = (ev) => {
-                     this.onUp(ev);
-                     document.removeEventListener('pointermove', onMv);
-                     document.removeEventListener('pointerup', onUp);
-                  };
-                  document.addEventListener('pointermove', onMv);
-                  document.addEventListener('pointerup', onUp);
-                  e.preventDefault();
-               },
-
-               onMove(e) {
-                  if (!this.active) return;
-                  const dx = e.clientX - this.startX;
-                  const dy = e.clientY - this.startY;
-                  // If more vertical than horizontal, user is scrolling — bow out.
-                  if (Math.abs(dy) > Math.abs(dx) + 10 && Math.abs(dy) > 16) {
-                     this.active = false;
-                     this.el.classList.remove('dragging');
-                     this.springBack();
-                     return;
+               function toggle(card) {
+                  if (card === open) { close(card); open = null; }
+                  else {
+                     if (open) close(open);
+                     openCard(card);
+                     open = card;
                   }
-                  this.dragX = dx;
-                  const clamped = Math.max(-300, Math.min(dx, 300));
-                  const progress = Math.max(0, Math.abs(clamped) / 120);
-                  const baseRot = parseFloat(this.topCard.style.getPropertyValue('--fan-rot')) || 0;
-                  gsap.set(this.topCard, {
-                     x: clamped,
-                     rotation: baseRot + clamped * 0.06,
-                     opacity: 1 - progress * 0.45,
-                  });
-               },
-
-               onUp(e) {
-                  if (!this.active) return;
-                  this.active = false;
-                  this.el.classList.remove('dragging');
-                  if (this.dragX > 100) this.swipeAway();
-                  else if (this.dragX < -100 && this.topIdx < this.total - 1) this.undoLast();
-                  else this.springBack();
-               },
-
-               undoLast() {
-                  this.el.classList.remove('empty');
-                  const note = this.el.querySelector('.deck-note');
-                  if (note) note.remove();
-
-                  const current = this.topIdx >= 0 ? this.topCard : null;
-                  const restoredIdx = this.topIdx + 1;
-                  const restored = this.cards[restoredIdx];
-
-                  // Current card settles back into its resting spot in the fan —
-                  // it isn't discarded, it's simply no longer on top.
-                  if (current) {
-                     current.classList.remove('swiping');
-                     current.removeAttribute('data-active');
-                     if (current.__stopOrbit) current.__stopOrbit();
-                     const curRot = parseFloat(current.style.getPropertyValue('--fan-rot')) || 0;
-                     const curY = parseFloat(current.style.getPropertyValue('--fan-y')) || 0;
-                     gsap.to(current, {
-                        x: 0, y: curY, rotation: curRot, scale: 0.96,
-                        opacity: 1, duration: 0.4, ease: 'power2.inOut',
-                     });
-                  }
-
-                  // Restored card flies back in from the right — the mirror
-                  // image of the swipe that sent it away.
-                  restored.classList.remove('swiped');
-                  restored.setAttribute('data-active', '');
-                  this.topIdx = restoredIdx;
-                  this.activateCard(restored);
-                  gsap.fromTo(restored,
-                     { x: 900, rotation: 26, scale: 0.94, opacity: 0 },
-                     { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1, duration: 0.55, ease: 'power3.out' },
-                  );
-               },
-
-               hideHint() {
-                  const hint = document.getElementById('swipe-hint');
-                  if (hint) hint.classList.add('is-hidden');
-               },
-
-               swipeAway() {
-                  const card = this.topCard;
-                  // A little settle-then-launch beat gives the discard some physical weight
-                  // instead of an instant snap into motion.
-                  gsap.to(card, {
-                     x: 900, rotation: '+=26', scale: 0.94,
-                     opacity: 0, duration: 0.55, ease: 'power2.in',
-                     onComplete: () => {
-                        card.classList.add('swiped');
-                        card.removeAttribute('data-active');
-                        this.topIdx--;
-                        if (this.topIdx >= 0) this.revealNext();
-                        else this.onEmpty();
-                     },
-                  });
-               },
-
-               springBack() {
-                  const card = this.topCard;
-                  const rot = parseFloat(card.style.getPropertyValue('--fan-rot')) || 0;
-                  gsap.to(card, {
-                     x: 0, rotation: rot,
-                     opacity: 1, duration: 0.45, ease: 'elastic.out(1, 0.5)',
-                     onComplete: () => card.classList.remove('swiping'),
-                  });
-               },
-
-               revealNext() {
-                  const next = this.topCard;
-                  next.setAttribute('data-active', '');
-                  this.activateCard(next);
-                  const rot = parseFloat(next.style.getPropertyValue('--fan-rot')) || 0;
-                  const y = parseFloat(next.style.getPropertyValue('--fan-y')) || 0;
-                  gsap.fromTo(next,
-                     { rotation: rot, y: y, scale: 0.94 },
-                     { rotation: 0, y: 0, scale: 1, duration: 0.6, ease: 'power3.out' },
-                  );
-                  // Deliberate unlock flash — a single crimson sweep across the plate,
-                  // timed to land as the card settles rather than as it launches.
-                  const flash = next.querySelector('.card-flash');
-                  if (flash) {
-                     gsap.fromTo(flash,
-                        { opacity: 0 },
-                        {
-                           opacity: 1, duration: 0.22, ease: 'power1.out', delay: 0.08,
-                           yoyo: true, repeat: 1,
-                        },
-                     );
-                  }
-               },
-
-               onEmpty() {
-                  this.el.classList.add('empty');
-                  const note = document.createElement('p');
-                  note.className = 'deck-note mono';
-                  note.textContent = 'All projects cleared.';
-                  note.style.cssText =
-                     'text-align:center;color:rgba(255,255,255,0.2);font-size:0.65rem;padding:2rem 0;';
-                  this.el.appendChild(note);
-               },
-
-               _debugSwipe() { this.dragX = 200; this.swipeAway(); },
-
-               onKey(e) {
-                  if (this.topIdx < 0) return;
-                  if (e.key === 'ArrowRight') {
-                     e.preventDefault();
-                     this.dragX = 200;
-                     this.hideHint();
-                     this.swipeAway();
-                  } else if (e.key === 'ArrowLeft' && this.topIdx < this.total - 1) {
-                     e.preventDefault();
-                     this.hideHint();
-                     this.undoLast();
-                  }
-               },
-            };
-
-            /* ============================================================
-               11 PROJECT CARDS — tilt, cursor light, orbiting tech tags
-               ============================================================ */
-            function initProjectCard(card) {
-               const inner = $('.card-inner', card);
-               const surface = $('.card-surface', card);
-               const tags = $$('.tag', card);
-               const tagsHome = $('.card-tags', card);
-               const P = CONFIG.projects;
-
-               const tilt = { x: 0, y: 0, tx: 0, ty: 0, lift: 0, liftTarget: 0 };
-               const orbit = {
-                  active: false, blend: 0, t: rand(0, Math.PI * 2),
-                  cx: 0, cy: 0, rx: 0, ry: 0, origins: [], lastStep: 0,
-               };
-               let rafId = null;
-
-               /* --- single rAF drives tilt + orbit for this card --- */
-               function loop(now) {
-                  const dt = Math.min(now - (orbit.lastStep || now), 50);
-                  orbit.lastStep = now;
-
-                  tilt.x = lerp(tilt.x, tilt.tx, P.tiltEase);
-                  tilt.y = lerp(tilt.y, tilt.ty, P.tiltEase);
-                  tilt.lift = lerp(tilt.lift, tilt.liftTarget, P.tiltEase);
-                  inner.style.transform =
-                     'translateY(' + (-P.liftPx * tilt.lift).toFixed(2) + 'px)' +
-                     ' rotateX(' + tilt.x.toFixed(3) + 'deg) rotateY(' + tilt.y.toFixed(3) + 'deg)';
-
-                  if (orbit.active || orbit.blend > 0.001) {
-                     orbit.t += dt * P.orbitSpeed;
-                     const b = orbit.blend;
-                     tags.forEach((tag, i) => {
-                        const o = orbit.origins[i];
-                        const ang = orbit.t + (i / tags.length) * Math.PI * 2;
-                        const depth = (Math.sin(ang) + 1) / 2; // 0 = far side, 1 = near side
-                        const x = lerp(o.x, orbit.cx + orbit.rx * Math.cos(ang) - o.w / 2, b);
-                        const y = lerp(o.y, orbit.cy + orbit.ry * Math.sin(ang) - o.h / 2, b);
-                        tag.style.transform =
-                           'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)' +
-                           ' scale(' + lerp(1, lerp(0.82, 1.06, depth), b).toFixed(3) + ')';
-                        tag.style.opacity = lerp(1, lerp(0.3, 1, depth), b).toFixed(3);
-                        tag.style.zIndex = depth < 0.5 ? 0 : 2;
-                     });
-                  }
-
-                  const settled =
-                     Math.abs(tilt.x - tilt.tx) < 0.01 && Math.abs(tilt.y - tilt.ty) < 0.01 &&
-                     Math.abs(tilt.lift - tilt.liftTarget) < 0.01 && orbit.blend <= 0.001;
-                  rafId = settled ? null : requestAnimationFrame(loop);
-               }
-               function kick() { if (!rafId) { orbit.lastStep = performance.now(); rafId = requestAnimationFrame(loop); } }
-
-               /* --- orbit lifecycle --- */
-               function startOrbit() {
-                  if (isTouch || !motionOK || tags.length === 0) return;
-                  if (orbit.active) { // re-entered while blending out — reverse direction
-                     gsap.killTweensOf(orbit);
-                     gsap.to(orbit, { blend: 1, duration: P.orbitBlendIn, ease: 'power2.out' });
-                     kick();
-                     return;
-                  }
-                  const rect = inner.getBoundingClientRect();
-                  orbit.cx = rect.width / 2;
-                  orbit.cy = rect.height / 2;
-                  orbit.rx = rect.width / 2 + P.orbitPadX;
-                  orbit.ry = rect.height / 2 + P.orbitPadY;
-                  orbit.origins = tags.map((tag) => {
-                     const r = tag.getBoundingClientRect();
-                     return { x: r.left - rect.left, y: r.top - rect.top, w: r.width, h: r.height };
-                  });
-                  tags.forEach((tag, i) => {
-                     inner.appendChild(tag); // escape .card-tags so z-index can pass behind the surface
-                     tag.classList.add('orbiting');
-                     tag.style.transform = 'translate(' + orbit.origins[i].x + 'px,' + orbit.origins[i].y + 'px)';
-                  });
-                  orbit.active = true;
-                  gsap.to(orbit, { blend: 1, duration: P.orbitBlendIn, ease: 'power2.out' });
-                  kick();
                }
 
-               function stopOrbit() {
-                  if (!orbit.active) return;
-                  gsap.killTweensOf(orbit);
-                  gsap.to(orbit, {
-                     blend: 0, duration: P.orbitBlendOut, ease: 'power2.inOut',
-                     onComplete: restoreTags,
-                  });
-                  kick();
+               function openCard(card) {
+                  if (!motionOK) { card.classList.add('is-open'); return; }
+                  flicker(card, () => card.classList.add('is-open'));
                }
 
-               function restoreTags() {
-                  orbit.active = false;
-                  tags.forEach((tag) => {
-                     tag.classList.remove('orbiting');
-                     tag.removeAttribute('style');
-                     tagsHome.appendChild(tag); // original order preserved
-                  });
+               function close(card) {
+                  if (!motionOK) { card.classList.remove('is-open'); return; }
+                  flicker(card, () => card.classList.remove('is-open'));
                }
 
-               /* --- pointer events --- */
-               card.addEventListener('mouseenter', () => { tilt.liftTarget = 1; startOrbit(); kick(); });
-               card.addEventListener('mousemove', (e) => {
+               /* ---- flicker: canvas of light pixels that fades out ---- */
+               function flicker(card, cb) {
+                  card.classList.add('flickering');
+                  const canvas = document.createElement('canvas');
+                  canvas.style.cssText =
+                     'position:absolute;inset:0;pointer-events:none;z-index:5;mix-blend-mode:screen';
+                  card.appendChild(canvas);
                   const r = card.getBoundingClientRect();
-                  const px = (e.clientX - r.left) / r.width;
-                  const py = (e.clientY - r.top) / r.height;
-                  tilt.tx = (py - 0.5) * -2 * P.tiltMax;
-                  tilt.ty = (px - 0.5) * 2 * P.tiltMax;
-                  surface.style.setProperty('--mx', (px * 100).toFixed(1) + '%');
-                  surface.style.setProperty('--my', (py * 100).toFixed(1) + '%');
-                  kick();
-               });
-               card.addEventListener('mouseleave', () => {
-                  tilt.tx = 0; tilt.ty = 0; tilt.liftTarget = 0;
-                  stopOrbit(); kick();
-               });
+                  const w = canvas.width = Math.max(1, Math.round(r.width));
+                  const h = canvas.height = Math.max(1, Math.round(r.height));
+                  const ctx = canvas.getContext('2d');
+                  if (!ctx) { card.classList.remove('flickering'); canvas.remove(); cb(); return; }
 
-               // Keep orbit geometry correct if the layout shifts mid-hover
-               window.addEventListener('resize', () => {
-                  if (!orbit.active) return;
-                  const rect = inner.getBoundingClientRect();
-                  orbit.cx = rect.width / 2; orbit.cy = rect.height / 2;
-                  orbit.rx = rect.width / 2 + P.orbitPadX; orbit.ry = rect.height / 2 + P.orbitPadY;
-               });
-
-               // Exposed for the Deck swipe-engine — let it kill orbit while dragging.
-               card.__stopOrbit = stopOrbit;
-               card.__orbit = orbit;
+                  const DURATION = 380;
+                  const start = performance.now();
+                  let raf;
+                  function frame(now) {
+                     const t = Math.min(1, (now - start) / DURATION);
+                     ctx.clearRect(0, 0, w, h);
+                     if (t >= 1) {
+                        canvas.remove();
+                        card.classList.remove('flickering');
+                        cb();
+                        return;
+                     }
+                     // Quadratic density fade — many pixels early, few at end
+                     const density = ((1 - t) * (1 - t)) * 260 + 22;
+                     for (let i = 0; i < density; i++) {
+                        const x = Math.random() * w;
+                        const y = Math.random() * h;
+                        const sz = Math.random() < 0.08 ? 2 : 1;
+                        const intensity = (0.4 + Math.random() * 0.6) * (1 - t * 0.85);
+                        const tint = Math.random() < 0.18 ? '229,62,62' : '235,235,235';
+                        ctx.fillStyle = 'rgba(' + tint + ',' + intensity.toFixed(2) + ')';
+                        ctx.fillRect(x, y, sz, sz);
+                     }
+                     raf = requestAnimationFrame(frame);
+                  }
+                  raf = requestAnimationFrame(frame);
+               }
             }
 
             /* ============================================================
@@ -3580,7 +3267,7 @@
                try { initParticles(); } catch (e) { console.warn('particles', e); }
                try { initCursor(); } catch (e) { console.warn('cursor', e); }
                try { initMagnetic(); } catch (e) { console.warn('magnetic', e); }
-               try { const deck = $('.card-deck'); if (deck) Deck.init(deck); } catch (e) { console.warn('deck', e); }
+               try { initProjectCards(); } catch (e) { console.warn('cards', e); }
                try { initStats(); } catch (e) { console.warn('stats', e); }
                try { initScrollAnimations(); } catch (e) { console.warn('scroll', e); }
 

@@ -1,5 +1,4 @@
 import { captureVideo } from './capture-video.mjs';
-import { captureTexture } from './capture-texture.mjs';
 import { CONFIG } from './config.mjs';
 import path from 'path';
 import fs from 'fs';
@@ -13,7 +12,7 @@ function needsRebuild(sourceDir, sourceFile, outputName) {
   const outputStat = fs.statSync(outputPath);
 
   // Also check if any scripts changed (pipeline code affects output)
-  const scriptFiles = ['prerender.mjs', 'capture-video.mjs', 'capture-texture.mjs', 'config.mjs'];
+  const scriptFiles = ['prerender.mjs', 'capture-video.mjs', 'config.mjs'];
   const scriptsDir = path.join(CONFIG.root, 'scripts');
   for (const sf of scriptFiles) {
     const sp = path.join(scriptsDir, sf);
@@ -52,16 +51,6 @@ async function main() {
       });
     } else {
       console.log('grain: up to date, skipping');
-    }
-
-    if (needsRebuild('cards', 'card.html', 'card-frame.webp')) {
-      console.log('card: source modified, regenerating...');
-      await captureTexture('cards', 'card.html', 'card-frame.webp', {
-        width: CONFIG.card.width,
-        height: CONFIG.card.height,
-      });
-    } else {
-      console.log('card: up to date, skipping');
     }
 
     console.log('\n=== All assets up to date ===');
