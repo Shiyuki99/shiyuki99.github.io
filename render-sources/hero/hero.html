@@ -15,19 +15,11 @@
     border-radius: 50%; pointer-events: none;
     background: radial-gradient(circle, rgba(255,255,255,0.045) 0%, rgba(229,62,62,0.03) 40%, transparent 70%);
   }
-
-  .scanline {
-    position: absolute; left: -6%; right: -6%; top: 0; height: 2px; z-index: 3;
-    background: linear-gradient(90deg, transparent, rgba(229,62,62,0.85), transparent);
-    box-shadow: 0 0 24px rgba(229,62,62,0.55);
-    opacity: 0; pointer-events: none;
-  }
 </style>
 </head>
 <body>
   <canvas id="hero-canvas"></canvas>
   <div class="hero-light" id="hero-light"></div>
-  <div class="scanline" id="scanline"></div>
 
   <script type="importmap">
   { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js" } }
@@ -83,43 +75,31 @@
     scene.add(grid);
 
     const light = document.getElementById('hero-light');
-    const scanline = document.getElementById('scanline');
 
-    const DURATION = 8000; // ms — must match config
+    const DURATION = 8000;
 
     let elapsed = 0;
 
     function stepFrame(dtMs) {
       elapsed += dtMs;
-      const t = (elapsed % DURATION) / DURATION; // 0..1 looping
+      const t = (elapsed % DURATION) / DURATION;
       const angle = t * Math.PI * 2;
 
-      // All rotations periodic — seamless loop when elapsed % DURATION = 0
-      group.rotation.y = angle * 0.3;
-      group.rotation.x = Math.sin(angle * 2) * 0.09;
-      group.position.y = Math.sin(angle * 4.5) * 0.08;
-      inner.rotation.y = -angle * 0.5;
-      dust.rotation.y = -angle * 0.15;
+      // All motions periodic: angle goes 0→2π, sin/cos always loop seamlessly
+      group.rotation.y = angle;
+      group.rotation.x = Math.sin(angle * 2) * 0.08;
+      group.position.y = Math.sin(angle * 3) * 0.06;
+      inner.rotation.y = -angle * 2;
+      dust.rotation.y = -angle * 0.3;
 
-      camera.position.x = Math.sin(angle * 1.7) * 0.22;
-      camera.position.y = Math.cos(angle * 2.2) * 0.18;
+      camera.position.x = Math.sin(angle * 1.7) * 0.2;
+      camera.position.y = Math.cos(angle * 2.2) * 0.16;
       camera.lookAt(group.position.x * 0.45, 0, 0);
 
       renderer.render(scene, camera);
 
-      // Glow breathing — always on, immediate from frame 1
       light.style.opacity = String(0.7 + 0.3 * Math.cos(angle * 3));
       light.style.transform = `scale(${1 + 0.07 * Math.sin(angle * 3)})`;
-
-      // Scanline — sweeps top to bottom over first 2.5s of the 8s loop
-      const sweepDuration = 2500;
-      if (elapsed < sweepDuration) {
-        const p = elapsed / sweepDuration;
-        scanline.style.top = (p * 100) + '%';
-        scanline.style.opacity = p < 0.15 ? String(p / 0.15) : p > 0.85 ? String((1 - p) / 0.15) : '1';
-      } else {
-        scanline.style.opacity = '0';
-      }
     }
 
     stepFrame(0);

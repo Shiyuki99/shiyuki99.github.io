@@ -14,7 +14,6 @@ export const CONFIG = {
     height: 720,
     duration: 8,
     fps: 30,
-    scale: 2,
   },
 
   grain: {
