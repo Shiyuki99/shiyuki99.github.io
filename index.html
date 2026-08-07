@@ -933,7 +933,7 @@
       }
 
       /* ============================================================
-         PROJECTS — row of flicker-reveal cards
+         PROJECTS — row of tile-dissolve cards
          ============================================================ */
       .projects-section {
          padding: 6rem 0 7rem;
@@ -1082,26 +1082,28 @@
 
       /* Front face — icon + title + click hint */
       .card-icon {
-         width: 42px;
-         height: 42px;
+         width: 54px;
+         height: 54px;
+         padding: 4px;
          flex-shrink: 0;
          object-fit: cover;
-         border: 1px solid rgba(255, 255, 255, 0.1);
-         background: rgba(255, 255, 255, 0.05);
-         clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+         border: 2px solid rgba(255, 255, 255, 0.18);
+         background: rgba(255, 255, 255, 0.06);
+         clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
+         filter: contrast(1.1) saturate(1.2);
       }
 
       .card-icon-tile {
-         width: 42px;
-         height: 42px;
+         width: 54px;
+         height: 54px;
          flex-shrink: 0;
-         background: rgba(255, 255, 255, 0.05);
-         border: 1px solid rgba(255, 255, 255, 0.1);
+         background: rgba(255, 255, 255, 0.06);
+         border: 2px solid rgba(255, 255, 255, 0.18);
          display: flex;
          align-items: center;
          justify-content: center;
-         color: rgba(255, 255, 255, 0.75);
-         clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+         color: rgba(255, 255, 255, 0.8);
+         clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
          transition: color 0.4s ease, border-color 0.4s ease, background 0.4s ease;
       }
 
@@ -1203,73 +1205,21 @@
          clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
       }
 
-      /* Scanline sweep during flicker reveal */
-      .card-scan {
+      /* Canvas tile-dissolve overlay — sits on top during transition */
+      .card-dissolve {
          position: absolute;
-         left: 0;
-         right: 0;
-         height: 36px;
-         z-index: 6;
+         inset: 0;
+         z-index: 10;
          pointer-events: none;
-         background: linear-gradient(0deg,
-               transparent 0%,
-               rgba(255, 255, 255, 0.12) 35%,
-               rgba(229, 62, 62, 0.32) 50%,
-               rgba(255, 255, 255, 0.12) 65%,
-               transparent 100%);
-         opacity: 0;
-         top: 0;
-         transform: translateY(0);
+         display: none;
       }
 
-      .project-card.flickering .card-scan {
-         animation: flicker-scan 0.42s ease-out forwards;
+      .card-dissolve-canvas {
+         position: absolute;
+         inset: 0;
+         width: 100%;
+         height: 100%;
       }
-
-      .project-card.flickering {
-         animation: flicker-pulse 0.42s ease-out forwards;
-      }
-
-      @keyframes flicker-scan {
-
-         0% {
-            transform: translateY(0);
-            opacity: 0;
-         }
-
-         20% {
-            opacity: 1;
-         }
-
-         100% {
-            transform: translateY(calc(100% - 36px));
-            opacity: 0;
-         }
-      }
-
-      @keyframes flicker-pulse {
-
-         0% {
-            box-shadow: 0 0 0 1px rgba(229, 62, 62, 0.6) inset,
-                       0 0 24px rgba(229, 62, 62, 0.4);
-            filter: brightness(1.3);
-         }
-
-         35% {
-            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.4) inset,
-                       0 0 34px rgba(255, 255, 255, 0.3);
-            filter: brightness(1.6);
-         }
-
-         100% {
-            box-shadow: 0 0 0 1px rgba(229, 62, 62, 0) inset;
-            filter: brightness(1);
-         }
-      }
-
-      /* ============================================================
-         ABOUT
-         ============================================================ */
       .about-section {
          padding: 2rem 0 7rem;
       }
@@ -1683,8 +1633,7 @@
          .glow-orb,
          .stat-inner,
          .scroll-indicator .arrow,
-         .stat-card::before,
-         .project-card.flickering .card-scan {
+         .stat-card::before {
             animation: none !important;
          }
 
@@ -1903,7 +1852,7 @@
                <article class="project-card" tabindex="0">
                   <span class="card-no">P.01</span>
                   <div class="card-face card-front">
-                     <img src="app-icon.png" alt="" class="card-icon" width="42" height="42" loading="lazy"
+                     <img src="app-icon.png" alt="" class="card-icon" width="54" height="54" loading="lazy"
                         decoding="async">
                      <div class="card-front-body">
                         <h3 class="card-front-title">Swap</h3>
@@ -1937,14 +1886,14 @@
                         </div>
                      </div>
                   </div>
-                  <div class="card-scan" aria-hidden="true"></div>
+<div class="card-dissolve" aria-hidden="true"><canvas class="card-dissolve-canvas"></canvas></div>
                </article>
 
                <!-- DiceCam -->
                <article class="project-card" tabindex="0">
                   <span class="card-no">P.02</span>
                   <div class="card-face card-front">
-                     <img src="dicecam-logo.png" alt="" class="card-icon" width="42" height="42" loading="lazy"
+                     <img src="dicecam-logo.png" alt="" class="card-icon" width="54" height="54" loading="lazy"
                         decoding="async">
                      <div class="card-front-body">
                         <h3 class="card-front-title">DiceCam</h3>
@@ -1978,14 +1927,14 @@
                         </div>
                      </div>
                   </div>
-                  <div class="card-scan" aria-hidden="true"></div>
+                  <div class="card-dissolve" aria-hidden="true"><canvas class="card-dissolve-canvas"></canvas></div>
                </article>
 
                <!-- AutoStoreDZ -->
                <article class="project-card" tabindex="0">
                   <span class="card-no">P.03</span>
                   <div class="card-face card-front">
-                     <img src="autostore_icon.png" alt="" class="card-icon" width="42" height="42" loading="lazy"
+                     <img src="autostore_icon.png" alt="" class="card-icon" width="54" height="54" loading="lazy"
                         decoding="async">
                      <div class="card-front-body">
                         <h3 class="card-front-title">AutoStoreDZ</h3>
@@ -2012,7 +1961,7 @@
                         </div>
                      </div>
                   </div>
-                  <div class="card-scan" aria-hidden="true"></div>
+                  <div class="card-dissolve" aria-hidden="true"><canvas class="card-dissolve-canvas"></canvas></div>
                </article>
 
                <!-- Password Manager -->
@@ -2020,7 +1969,7 @@
                   <span class="card-no">P.04</span>
                   <div class="card-face card-front">
                      <div class="card-icon-tile">
-                        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                        <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
                            <use href="#i-shield" />
                         </svg>
                      </div>
@@ -2049,7 +1998,7 @@
                         </div>
                      </div>
                   </div>
-                  <div class="card-scan" aria-hidden="true"></div>
+                  <div class="card-dissolve" aria-hidden="true"><canvas class="card-dissolve-canvas"></canvas></div>
                </article>
 
                <!-- Heart Disease Prediction -->
@@ -2057,7 +2006,7 @@
                   <span class="card-no">P.05</span>
                   <div class="card-face card-front">
                      <div class="card-icon-tile">
-                        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                        <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
                            <use href="#i-heart" />
                         </svg>
                      </div>
@@ -2086,7 +2035,7 @@
                         </div>
                      </div>
                   </div>
-                  <div class="card-scan" aria-hidden="true"></div>
+                  <div class="card-dissolve" aria-hidden="true"><canvas class="card-dissolve-canvas"></canvas></div>
                </article>
 
                <!-- Blockchain Showcase -->
@@ -2094,7 +2043,7 @@
                   <span class="card-no">P.06</span>
                   <div class="card-face card-front">
                      <div class="card-icon-tile">
-                        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                        <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
                            <use href="#i-blocks" />
                         </svg>
                      </div>
@@ -2123,7 +2072,7 @@
                         </div>
                      </div>
                   </div>
-                  <div class="card-scan" aria-hidden="true"></div>
+                  <div class="card-dissolve" aria-hidden="true"><canvas class="card-dissolve-canvas"></canvas></div>
                </article>
 
                <!-- Banking System -->
@@ -2131,7 +2080,7 @@
                   <span class="card-no">P.07</span>
                   <div class="card-face card-front">
                      <div class="card-icon-tile">
-                        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                        <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
                            <use href="#i-landmark" />
                         </svg>
                      </div>
@@ -2160,7 +2109,7 @@
                         </div>
                      </div>
                   </div>
-                  <div class="card-scan" aria-hidden="true"></div>
+                  <div class="card-dissolve" aria-hidden="true"><canvas class="card-dissolve-canvas"></canvas></div>
                </article>
 
             </div>
@@ -2831,9 +2780,7 @@
                   });
                });
 
-               // Cards are now swipe-driven (see the Deck module below).
-
-               // Active nav link tracking
+               // Scroll-driven nav link active state
                $$('main section[id]').forEach((section) => {
                   ScrollTrigger.create({
                      trigger: section, start: 'top center', end: 'bottom center',
@@ -2896,46 +2843,227 @@
             }
 
 /* ============================================================
-                       10B PROJECT CARDS — flicker reveal on click
-                       (CSS-only flicker — no async canvas, no DOM gate)
+                       10B PROJECT CARDS — canvas tile-dissolve reveal
+                       (state machine: closed → opening → open → closing;
+                        front face rasterized to canvas via foreignObject, no libraries)
                        ============================================================ */
             function initProjectCards() {
                const cards = Array.from($$('.project-card'));
+               const rAF = typeof requestAnimationFrame === 'function';
+               const canCanvas = typeof HTMLCanvasElement !== 'undefined' &&
+                  (() => { try { return !!document.createElement('canvas').getContext('2d'); } catch (e) { return false; } })();
+               const snapCache = new WeakMap();
                let open = null;
+               let busy = null;
 
                cards.forEach(card => {
                   card.addEventListener('click', e => {
                      if (e.target.closest('a, button')) return;
-                     toggle(card);
+                     activate(card);
                   });
                   card.addEventListener('keydown', e => {
                      if ((e.key === 'Enter' || e.key === ' ') && !e.target.closest('a')) {
                         e.preventDefault();
-                        toggle(card);
+                        activate(card);
                      }
                   });
                });
 
-               function toggle(card) {
+               function activate(card) {
+                  if (busy) return; // ignore clicks during animation
+                  if (open && open !== card) {
+                     // one open card max — drop the other instantly
+                     open.classList.remove('is-open');
+                     open = null;
+                  }
                   const isOpen = card.classList.contains('is-open');
-                  if (isOpen) {
+                  if (!rAF || !canCanvas || !motionOK) {
+                     // graceful fallback — instant toggle
+                     if (isOpen) { card.classList.remove('is-open'); open = null; }
+                     else { card.classList.add('is-open'); open = card; }
+                     return;
+                  }
+                  if (isOpen) dissolve(card, 'close');
+                  else dissolve(card, 'open');
+               }
+
+               /* --- rasterize the front face into an <img> via foreignObject --- */
+               function captureFront(card) {
+                  const front = card.querySelector('.card-front');
+                  if (!front) return Promise.resolve(null);
+                  const fonts = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+                  return fonts.then(() => {
+                     const rect = card.getBoundingClientRect();
+                     if (rect.width < 1 || rect.height < 1) return null;
+                     const clone = front.cloneNode(true);
+                     inlineStyles(clone);
+                     inlineSymbols(clone);
+                     const w = Math.round(rect.width), h = Math.round(rect.height);
+                     const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h +
+                        '"><foreignObject width="' + w + '" height="' + h + '">' +
+                        clone.outerHTML + '</foreignObject></svg>';
+                     return new Promise(res => {
+                        const img = new Image();
+                        img.onload = () => res({ img, width: w, height: h });
+                        img.onerror = () => res(null);
+                        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+                     });
+                  });
+               }
+
+               function inlineStyles(root) {
+                  root.querySelectorAll('*').forEach(el => {
+                     const cs = getComputedStyle(el);
+                     for (let i = 0; i < cs.length; i++) {
+                        const p = cs[i];
+                        el.style.setProperty(p, cs.getPropertyValue(p), cs.getPropertyPriority(p));
+                     }
+                  });
+               }
+
+               function inlineSymbols(root) {
+                  root.querySelectorAll('use').forEach(use => {
+                     const href = use.getAttribute('href');
+                     if (!href) return;
+                     const sym = document.querySelector(href);
+                     if (!sym) return;
+                     const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                     g.innerHTML = sym.innerHTML;
+                     use.replaceWith(g);
+                  });
+               }
+
+               /* --- dissolve state machine (open = tiles die, close = tiles rebuild) --- */
+               function dissolve(card, mode) {
+                  const snap = snapCache.get(card);
+                  if (mode === 'close' && !snap) {
+                     // never captured (fallback open) — instant close
                      card.classList.remove('is-open');
                      open = null;
+                     return;
+                  }
+                  busy = card;
+
+                  if (mode === 'open') {
+                     captureFront(card).then(front => {
+                        if (!front) {
+                           card.classList.add('is-open');
+                           open = card;
+                           busy = null;
+                           return;
+                        }
+                        snapCache.set(card, front);
+                        card.classList.add('is-open'); // back fades in underneath the dissolve
+                        startDissolve(card, front, 'open', () => {
+                           busy = null;
+                           open = card;
+                        });
+                     });
                   } else {
-                     if (open) open.classList.remove('is-open');
-                     card.classList.add('is-open');
-                     open = card;
+                     card.classList.add('is-open'); // keep back visible while tiles rebuild the front
+                     startDissolve(card, snap, 'close', () => {
+                        const faces = card.querySelectorAll('.card-face');
+                        faces.forEach(f => f.style.transition = 'none');
+                        card.classList.remove('is-open');
+                        void card.offsetWidth; // instant face swap, no crossfade flash
+                        faces.forEach(f => f.style.transition = '');
+                        busy = null;
+                        open = null;
+                     });
                   }
-                  // Kick CSS-only flicker animation via class toggle.
-                  // Reflow ensures animation restarts even if class still set.
-                  card.classList.remove('flickering');
-                  if (motionOK) {
-                     void card.offsetWidth;
-                     card.classList.add('flickering');
-                     // Remove the flicker class once animation ends so it can re-trigger.
-                     const onEnd = () => card.classList.remove('flickering');
-                     card.addEventListener('animationend', onEnd, { once: true });
+               }
+
+               function startDissolve(card, snap, mode, done) {
+                  const overlay = card.querySelector('.card-dissolve');
+                  const canvas = overlay.querySelector('.card-dissolve-canvas');
+                  const rect = card.getBoundingClientRect();
+                  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                  const W = Math.max(1, Math.round(rect.width));
+                  const H = Math.max(1, Math.round(rect.height));
+                  canvas.width = W * dpr;
+                  canvas.height = H * dpr;
+                  const ctx = canvas.getContext('2d');
+                  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                  overlay.style.display = 'block';
+
+                  const COLS = 20, ROWS = 30;
+                  const tw = W / COLS, th = H / ROWS;
+                  const tiles = [];
+                  for (let r = 0; r < ROWS; r++) {
+                     for (let c = 0; c < COLS; c++) {
+                        tiles.push({
+                           x: c * tw, y: r * th,
+                           delay: Math.random() * 230,                       // 0–230ms stagger
+                           dur: 360 + Math.random() * 100,                   // 360–460ms per tile
+                           dx: (Math.random() * 2 - 1) * (mode === 'open' ? 26 : 5),
+                           dy: (Math.random() * 2 - 1) * (mode === 'open' ? 26 : 5),
+                           rot: (Math.random() * 2 - 1) * (mode === 'open' ? 8 : 3),
+                           scale: mode === 'open' ? 0.2 + Math.random() * 0.3
+                                                  : -0.12 - Math.random() * 0.08,
+                           flare: Math.random() * 0.6,                       // white-brightness wash
+                           blinks: (Math.random() * 3) | 0,                  // flicker count
+                           flickSeed: Math.random() * Math.PI * 2
+                        });
+                     }
                   }
+                  // shuffle for an organic, pattern-free spread
+                  for (let i = tiles.length - 1; i > 0; i--) {
+                     const j = (Math.random() * (i + 1)) | 0;
+                     const t = tiles[i]; tiles[i] = tiles[j]; tiles[j] = t;
+                  }
+
+                  const t0 = performance.now();
+                  const T_MAX = 230 + 460; // max stagger + max tile duration
+                  const easeOut = p => 1 - Math.pow(1 - p, 3);
+
+                  function frame(now) {
+                     const t = now - t0;
+                     if (t >= T_MAX) { finish(); return; }
+                     ctx.clearRect(0, 0, W, H);
+                     for (let i = 0; i < tiles.length; i++) {
+                        const tile = tiles[i];
+                        const p = (t - tile.delay) / tile.dur;
+                        if (p <= 0) continue;
+                        const q = p >= 1 ? 1 : easeOut(p);
+                        // flicker blinks during the first 30% of the tile's life
+                        let flick = 1;
+                        if (p < 0.3 && tile.blinks > 0) {
+                           const fp = (p / 0.3) * tile.blinks;
+                           if ((fp | 0) % 2 === 0) flick = 0.15;
+                        }
+                        const alpha = (mode === 'open' ? 1 - q : q) * flick;
+                        if (alpha <= 0.003) continue;
+                        ctx.save();
+                        ctx.globalAlpha = alpha;
+                        ctx.translate(tile.x + tw / 2, tile.y + th / 2);
+                        ctx.rotate(tile.rot * q * Math.PI / 180);
+                        ctx.scale(1 + tile.scale * q, 1 + tile.scale * q);
+                        ctx.translate(tile.dx * q, tile.dy * q);
+                        ctx.drawImage(snap.img, tile.x, tile.y, tw, th, -tw / 2, -th / 2, tw, th);
+                        if (mode === 'open' && q < 1) {
+                           ctx.globalAlpha = alpha * tile.flare;
+                           ctx.fillStyle = '#fff';
+                           ctx.fillRect(-tw / 2, -th / 2, tw, th);
+                        }
+                        ctx.restore();
+                     }
+                     requestAnimationFrame(frame);
+                  }
+
+                  function finish() {
+                     if (mode === 'close') {
+                        const faces = card.querySelectorAll('.card-face');
+                        faces.forEach(f => f.style.transition = 'none');
+                        card.classList.remove('is-open');
+                        void card.offsetWidth;
+                        faces.forEach(f => f.style.transition = '');
+                     }
+                     overlay.style.display = 'none';
+                     canvas.width = 0; // release the backing store
+                     done();
+                  }
+
+                  requestAnimationFrame(frame);
                }
             }
 
